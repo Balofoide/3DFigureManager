@@ -1,0 +1,126 @@
+import { Button, VerticalBox, TextEdit, LineEdit,TabWidget, GridBox} from "std-widgets.slint";
+
+export component AppWindow inherits Window {
+    in-out property <string> filamento;
+    in-out property <string> material;
+    in-out property <string> tempo;
+    in-out property <string> watts;
+    in-out property <string> energia;
+    in-out property <string> lucro;
+    in-out property <float> total;
+
+    callback request-increase-value();
+
+
+    TabWidget {
+        Tab {
+            title: "First";
+            
+            GridLayout {
+
+                
+
+                Row {
+                    t :=Text{
+                        text: "Preço do Filamento R$: "; 
+                    }
+                    Filamento := LineEdit {
+                        min-width: 30px;
+                        min-height: 20px;
+                        changed text => { root.filamento = self.text }
+            
+                    } 
+                }
+        
+                Row {
+                     Text{
+                        text: "Custo de Material [g] ";    
+                    }
+                    Material := LineEdit {
+                        min-width: 30px;
+                        min-height: 20px;
+                        changed text => { root.material = self.text }
+                    } 
+                }
+        
+                // 
+                    Row {
+                     Text{
+                        text: "Tempo [h] ";
+                    }
+                    Tempo := LineEdit {
+                        min-width: 30px;
+                        min-height: 20px;
+                        changed text => { root.tempo = self.text }
+                    } 
+                }
+        
+        
+                // 
+                Row {
+                     Text{
+                        text: "Watts [w] ";
+                                        
+                    }
+                    Watts := LineEdit {
+                        min-width: 30px;
+                        min-height: 20px;
+                        changed text => { root.watts = self.text }
+                        
+                    } 
+                }
+        
+        
+        
+        
+                // 
+                Row {
+                    Text{
+                        text: "Taxa de Energia por hora R$: ";
+                                        
+                    }
+                    Energia := LineEdit {
+                        min-width: 40px;
+                        min-height: 20px;
+                        changed text => { root.energia = self.text }
+                    } 
+                }
+        
+                Row {
+                    Text{
+                        text: "Lucro %: ";
+                                        
+                    }
+                    Lucro := LineEdit {
+                        min-width: 40px;
+                        min-height: 20px;
+                        changed text => { root.lucro = self.text }
+                    } 
+                }
+            
+        
+                
+        
+                Text {
+                    text: "Tatu: \{root.total}";
+                    
+                }
+        
+                Button {
+                    text: "Calcular";
+                    clicked => {
+                        root.request-increase-value();
+                    }
+                    
+                }
+            }
+        }
+        Tab {
+            title: "Second";
+            Rectangle { background: pink; }
+        }
+
+    }
+    
+    
+}
