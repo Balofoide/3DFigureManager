@@ -1,4 +1,70 @@
-import { Button, VerticalBox, TextEdit, LineEdit,TabWidget, GridBox} from "std-widgets.slint";
+import { Button, VerticalBox, TextEdit, LineEdit,TabWidget, GridBox, HorizontalBox} from "std-widgets.slint";
+
+
+export component  InputField {
+    width: 300px;
+    height: 60px;
+    in property <string> text;
+    in-out property <string> input; 
+
+    HorizontalBox {
+        
+        
+        t :=Text{
+            horizontal-alignment: left;
+            vertical-alignment: center;
+            text: text; 
+        }
+    
+        LineEdit {
+            horizontal-alignment: left;
+            min-width: 100px;
+            min-height: 20px;
+
+            text: root.input; 
+            changed text => {root.input = self.text }
+    
+        } 
+    }
+   
+
+}
+ 
+export component SideButton {
+    in property <string> texto;
+
+    callback clicked;
+
+    width: 100px;
+    height: 40px;
+
+    
+    Rectangle {
+        background: white;
+        border-radius: 10px;
+        drop-shadow-offset-y: 5px;
+        drop-shadow-color: black;
+        drop-shadow-blur: 10px;
+
+        
+        
+        Text {
+            text: root.texto;
+            color: black;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+        }
+
+        TouchArea {
+            clicked => {
+                root.clicked();
+            }
+        }
+    }
+
+
+}
+
 
 export component AppWindow inherits Window {
     in-out property <string> filamento;
@@ -10,117 +76,167 @@ export component AppWindow inherits Window {
     in-out property <float> total;
 
     callback request-increase-value();
+    height: 720px;
+    width: 1250px;
+
+    HorizontalLayout {
 
 
-    TabWidget {
-        Tab {
-            title: "First";
-            
-            GridLayout {
+        Rectangle {
+            background: lightgrey;
+            border-radius: 10px;
+            HorizontalBox {
+                Rectangle {
+                    width: 20%;
+                    background: lightsalmon;
+                    // border-radius: 20px;
 
-                
 
-                Row {
-                    t :=Text{
-                        text: "Preço do Filamento R$: "; 
+
+
+                    HorizontalLayout {
+                        alignment: center;
+                        VerticalBox {
+                            alignment: center;
+                          SideButton {
+                           texto: "Tela 1";
+                            
+                           clicked => {
+                                Tela1.visible = true;
+                                Tela2.visible = false;
+                           }
+                          }
+                          SideButton {
+                            texto: "Tela 2";
+
+                            clicked => {
+                                Tela1.visible = false;
+                                Tela2.visible = true;
+
+                           }
+                           }
+                           SideButton {
+                            texto: "Teste";
+                           }
+                           SideButton {
+                            texto: "Teste";
+                           }
+                            
+    
+                        }
                     }
-                    Filamento := LineEdit {
-                        min-width: 30px;
-                        min-height: 20px;
-                        changed text => { root.filamento = self.text }
-            
-                    } 
+                    
                 }
-        
-                Row {
-                     Text{
-                        text: "Custo de Material [g] ";    
-                    }
-                    Material := LineEdit {
-                        min-width: 30px;
-                        min-height: 20px;
-                        changed text => { root.material = self.text }
-                    } 
-                }
-        
-                // 
-                    Row {
-                     Text{
-                        text: "Tempo [h] ";
-                    }
-                    Tempo := LineEdit {
-                        min-width: 30px;
-                        min-height: 20px;
-                        changed text => { root.tempo = self.text }
-                    } 
-                }
-        
-        
-                // 
-                Row {
-                     Text{
-                        text: "Watts [w] ";
+                Rectangle {
+                    
+                    // background: lightsteelblue;
+                     
+
+                    Tela1 := Rectangle {
+                        visible: true;
+                        // background: lightpink;
+                        // border-radius: 10px;        
+                        HorizontalBox {
+
+                            Rectangle {
+                                background: black;
+                                width: 40%;
+                                border-radius: 20px;
+                                VerticalBox {
+                                    padding-left: 50px;
+                                    alignment: center;
+ 
+                                    Filamento := InputField{
+
+                                        text: "Preço do filamento [R$]:";
+                                        input: root.filamento;
+                                        changed input => { root.filamento = self.input; }    
+                                       }
+                                
+                                       Material := InputField{
+    
+                                        text: "Gasto de Material [g]:";
+                                        input: root.material;
+                                        changed input => { root.material = self.input; } 
+                                       }
+                                       Tempo := InputField{
+    
+                                        text: "Tempo [H]:";
+                                        input: root.tempo;
+                                        changed input => { root.tempo = self.input; } 
+                                       }
+
+                                       Watts := InputField{
+
+                                        text: "Watts [W]";
+                                        input: root.watts;
+                                        changed input => { root.watts = self.input; } 
+                                       }
+
+                                       Energia := InputField{
+                                        text: "Taxa de Energia [R$]:";
+                                        input: root.energia;
+                                        changed input => { root.energia = self.input; } 
+                                       }
+
+                                       Lucro := InputField{
+                                        text: "Lucro [%]:";
+                                        input: root.lucro;
+                                        changed input => { root.lucro = self.input; } 
+                                       }
+
+
+                                       Text {
+                                        text: "Total: \{root.total}";
                                         
-                    }
-                    Watts := LineEdit {
-                        min-width: 30px;
-                        min-height: 20px;
-                        changed text => { root.watts = self.text }
+                                    }
+
+                                    Button {
+                                        
+                                        width: 100px;
+                                        text: "Calcular";
+                                        clicked => {
+                                            root.request-increase-value();
+ 
+                                        }
+                                        
+                                    }
+                                }
+                                
+                            }
+
+                            Rectangle {
+                                background: black;
+                                
+                                border-radius: 20px;
+                            }
+                        }
                         
-                    } 
-                }
-        
-        
-        
-        
-                // 
-                Row {
-                    Text{
-                        text: "Taxa de Energia por hora R$: ";
-                                        
+                        
+                        
+                                    
+                     
+
                     }
-                    Energia := LineEdit {
-                        min-width: 40px;
-                        min-height: 20px;
-                        changed text => { root.energia = self.text }
-                    } 
-                }
-        
-                Row {
-                    Text{
-                        text: "Lucro %: ";
-                                        
+
+                    Tela2 := Rectangle {
+                        visible: false;
+                        background: blue;
+
                     }
-                    Lucro := LineEdit {
-                        min-width: 40px;
-                        min-height: 20px;
-                        changed text => { root.lucro = self.text }
-                    } 
-                }
-            
-        
                 
-        
-                Text {
-                    text: "Tatu: \{root.total}";
-                    
-                }
-        
-                Button {
-                    text: "Calcular";
-                    clicked => {
-                        root.request-increase-value();
-                    }
-                    
                 }
             }
+        
+        
+        
         }
-        Tab {
-            title: "Second";
-            Rectangle { background: pink; }
-        }
-
+    
     }
-    
-    
+
+
+
+
+
+
 }

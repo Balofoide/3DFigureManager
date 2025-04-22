@@ -1,7 +1,7 @@
 // Prevent console window in addition to Slint window in Windows release builds when, e.g., starting the app via file manager. Ignored on other platforms.
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::{error::Error, f64, string};
+use std::{error::Error, f64};
 
 
 
@@ -26,18 +26,24 @@ fn calculator() -> Result<(), Box<dyn Error>>{
     move || {
        
         let ui = ui_handle.unwrap();
-        let mut print_weight: f64= ui.get_material().parse().unwrap();
-        let mut print_time: i32 = ui.get_tempo().parse().unwrap();
-        let mut filament_price: f64 =  ui.get_filamento().parse().unwrap();
+        let print_weight: f64 = ui.get_material().parse().unwrap_or(0.0);
+        let print_time: i32 = ui.get_tempo().parse().unwrap_or(0);
 
-        let mut watts : i64 = ui.get_watts().parse().unwrap();
-        let mut energy_kwh: f64 = ui.get_energia().parse().unwrap();
+        let filament_price: f64 =  ui.get_filamento().parse().unwrap_or(0.0);
 
-        let profit : i64 = ui.get_lucro().parse().unwrap();
+        let watts : i64 = ui.get_watts().parse().unwrap_or(0);
+        let energy_kwh: f64 = ui.get_energia().parse().unwrap_or(0.0);
+
+        let profit : i64 = ui.get_lucro().parse().unwrap_or(0);
         
+        
+
+
+
         let total = total_coust(print_time, watts, energy_kwh, print_weight, filament_price) * (1 as f64 + profit as f64 / 100.0);
 
         ui.set_total(total as f32);
+        
         
         // ui.set_total(total_coust(20,350,1.83,150.0,107.0) as f32);
         
@@ -79,3 +85,8 @@ fn total_coust(time:i32, w:i64, energy_price: f64, object:f64, filament_price:f6
     let total = energy + model;  // custo total
     return total;
 }
+
+ 
+
+
+ 
