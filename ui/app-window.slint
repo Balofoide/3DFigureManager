@@ -1,70 +1,62 @@
-import { Button, VerticalBox, TextEdit, LineEdit,TabWidget, GridBox, HorizontalBox} from "std-widgets.slint";
+import { Button, VerticalBox, TextEdit, LineEdit, HorizontalBox, GridBox } from "std-widgets.slint";
 
+ export struct Database{
+    nome:string,
+    endereco:string,
+    entrega:string,
+ }
+export component Container {
+    in property <color> cor;
+    Rectangle {
+        background: cor;
+        border-radius: 20px;
+        @children
+    }
+}
 
-export component  InputField {
+export component InputField {
     width: 300px;
     height: 60px;
     in property <string> text;
-    in-out property <string> input; 
-
+    in-out property <string> input;
     HorizontalBox {
-        
-        
-        t :=Text{
+        Text {
             horizontal-alignment: left;
             vertical-alignment: center;
-            text: text; 
+            text: text;
         }
-    
         LineEdit {
             horizontal-alignment: left;
             min-width: 100px;
             min-height: 20px;
-
-            text: root.input; 
-            changed text => {root.input = self.text }
-    
-        } 
+            text: root.input;
+            changed text => {root.input = self.text;}
+        }
     }
-   
-
 }
- 
+
 export component SideButton {
     in property <string> texto;
-
     callback clicked;
-
     width: 100px;
     height: 40px;
-
-    
     Rectangle {
         background: white;
         border-radius: 10px;
         drop-shadow-offset-y: 5px;
         drop-shadow-color: black;
         drop-shadow-blur: 10px;
-
-        
-        
         Text {
             text: root.texto;
             color: black;
             horizontal-alignment: center;
             vertical-alignment: center;
         }
-
         TouchArea {
-            clicked => {
-                root.clicked();
-            }
+            clicked => {root.clicked();}
         }
     }
-
-
 }
-
 
 export component AppWindow inherits Window {
     in-out property <string> filamento;
@@ -75,168 +67,143 @@ export component AppWindow inherits Window {
     in-out property <string> lucro;
     in-out property <float> total;
 
-    callback request-increase-value();
+    in-out property <string> nome_cliente;
+    in-out property <string> endereco;
+    in-out property <string> entrega;
+
+    in-out property <[Database]> clients_database;
+
+    callback calcular_preco();
+    callback registrar-cliente();
+ 
+
+    
+
     height: 720px;
     width: 1250px;
 
     HorizontalLayout {
-
-
         Rectangle {
             background: lightgrey;
-            border-radius: 10px;
             HorizontalBox {
-                Rectangle {
-                    width: 20%;
-                    background: lightsalmon;
-                    // border-radius: 20px;
-
-
-
-
-                    HorizontalLayout {
-                        alignment: center;
+                VerticalBox {
+                    Rectangle {
+                        width: 2%;
+                        background: lightsalmon;
+                        border-radius: 20px;
                         VerticalBox {
                             alignment: center;
-                          SideButton {
-                           texto: "Tela 1";
-                            
-                           clicked => {
-                                Tela1.visible = true;
-                                Tela2.visible = false;
-                           }
-                          }
-                          SideButton {
-                            texto: "Tela 2";
-
-                            clicked => {
-                                Tela1.visible = false;
-                                Tela2.visible = true;
-
-                           }
-                           }
-                           SideButton {
-                            texto: "Teste";
-                           }
-                           SideButton {
-                            texto: "Teste";
-                           }
-                            
-    
+                            SideButton {
+                                texto: "Tela 1";
+                                clicked => {
+                                    Tela1.visible = true;
+                                    Tela2.visible = false;
+                                    Tela3.visible = false;
+                                }
+                            }
+                            SideButton {
+                                texto: "Tela 2";
+                                clicked => {
+                                    Tela1.visible = false;
+                                    Tela2.visible = true;
+                                    Tela3.visible = false;
+                                }
+                            }
+                            SideButton {
+                                texto: "Tela 3";
+                                clicked => {
+                                    Tela1.visible = false;
+                                    Tela2.visible = false;
+                                    Tela3.visible = true;
+                                }
+                            }
                         }
                     }
-                    
                 }
                 Rectangle {
-                    
-                    // background: lightsteelblue;
-                     
-
                     Tela1 := Rectangle {
-                        visible: true;
-                        // background: lightpink;
-                        // border-radius: 10px;        
-                        HorizontalBox {
-
-                            Rectangle {
-                                background: black;
-                                width: 40%;
-                                border-radius: 20px;
+                        visible: false;
+                        background: lightpink;
+                        VerticalBox {
+                            alignment: center;
+                            Container {
+                                width: 800px;
+                                cor: black;
                                 VerticalBox {
-                                    padding-left: 50px;
                                     alignment: center;
- 
-                                    Filamento := InputField{
-
-                                        text: "Preço do filamento [R$]:";
-                                        input: root.filamento;
-                                        changed input => { root.filamento = self.input; }    
-                                       }
-                                
-                                       Material := InputField{
-    
-                                        text: "Gasto de Material [g]:";
-                                        input: root.material;
-                                        changed input => { root.material = self.input; } 
-                                       }
-                                       Tempo := InputField{
-    
-                                        text: "Tempo [H]:";
-                                        input: root.tempo;
-                                        changed input => { root.tempo = self.input; } 
-                                       }
-
-                                       Watts := InputField{
-
-                                        text: "Watts [W]";
-                                        input: root.watts;
-                                        changed input => { root.watts = self.input; } 
-                                       }
-
-                                       Energia := InputField{
-                                        text: "Taxa de Energia [R$]:";
-                                        input: root.energia;
-                                        changed input => { root.energia = self.input; } 
-                                       }
-
-                                       Lucro := InputField{
-                                        text: "Lucro [%]:";
-                                        input: root.lucro;
-                                        changed input => { root.lucro = self.input; } 
-                                       }
-
-
-                                       Text {
-                                        text: "Total: \{root.total}";
-                                        
-                                    }
-
+                                    InputField { text: "Preço do filamento [R$]:"; input: root.filamento;   changed input => {root.filamento = self.input;}}
+                                    InputField { text: "Gasto de Material [g]:"; input: root.material;      changed input => {root.material = self.input;}}
+                                    InputField { text: "Tempo [H]:"; input: root.tempo;                     changed input => {root.tempo = self.input;}}
+                                    InputField { text: "Watts [W]"; input: root.watts;                      changed input => {root.watts = self.input;}}
+                                    InputField { text: "Taxa de Energia [R$]:"; input: root.energia;        changed input => {root.energia = self.input;}}
+                                    InputField { text: "Lucro [%]:"; input: root.lucro;                     changed input => {root.lucro = self.input;}}
+                                    Text { text: "Total: \{root.total}"; }
                                     Button {
-                                        
                                         width: 100px;
                                         text: "Calcular";
-                                        clicked => {
-                                            root.request-increase-value();
- 
-                                        }
-                                        
+                                        clicked => {root.calcular_preco();}
                                     }
                                 }
-                                
-                            }
-
-                            Rectangle {
-                                background: black;
-                                
-                                border-radius: 20px;
                             }
                         }
-                        
-                        
-                        
-                                    
-                     
-
                     }
-
                     Tela2 := Rectangle {
                         visible: false;
                         background: blue;
-
+                        VerticalBox {
+                            alignment: center;
+                            Container {
+                                cor: black;
+                                VerticalBox {
+                                    alignment: center;
+                                    InputField { text: "Nome Cliente"; input: root.nome_cliente;    changed input => {root.nome_cliente = self.input;}}
+                                    InputField { text: "Endereço"; input: root.endereco;            changed input => {root.endereco = self.input;}}
+                                    InputField { text: "Data Entrega"; input: root.entrega;         changed input => {root.entrega = self.input;}}
+                                    Button {
+                                        width: 100px;
+                                        text: "Salvar";
+                                        clicked => {
+                                            root.registrar-cliente();
+ 
+                                            debug("Nome cliente: ", root.nome_cliente, "Endereço:", root.endereco, "Entrega:", root.entrega);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
-                
+                    Tela3 := Rectangle {
+                        visible: true;
+                        background: green;
+                        VerticalBox {
+                            alignment: center;
+                            Container {
+                                cor: black;
+                                VerticalBox {
+                                    alignment: center;
+                                
+                                   VerticalBox {
+                                    HorizontalBox {
+                                        // alignment: center;
+                                        Text {text: "=Nome="; horizontal-alignment: left;}
+                                        Text {text: "=Endereço="; horizontal-alignment:  left;}
+                                        Text {text: "=Entrega="; horizontal-alignment: left;}
+                                    }
+                                      for client[index] in root.clients_database: HorizontalBox {
+                                        // alignment: center;
+                                            Text{ text: client.nome; horizontal-alignment: left;   color: white; }
+                                            Text{ text: client.endereco; horizontal-alignment: left; color: white; }
+                                            Text{ text: client.entrega; horizontal-alignment: left;   color: white;}
+                                        }
+                                   }
+
+
+                                }
+                            }
+                        }
+                    }
                 }
             }
-        
-        
-        
         }
-    
     }
-
-
-
-
-
-
 }
