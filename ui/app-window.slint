@@ -1,10 +1,17 @@
-import { Button, VerticalBox, TextEdit, LineEdit, HorizontalBox, GridBox } from "std-widgets.slint";
+import { Button, VerticalBox, TextEdit, LineEdit, HorizontalBox, GridBox, SpinBox, ComboBox } from "std-widgets.slint";
 
  export struct Database{
     nome:string,
     endereco:string,
     entrega:string,
  }
+
+ export struct Impressoras{
+    modelo:string,
+    watts:string,
+ }
+ 
+
 export component Container {
     in property <color> cor;
     Rectangle {
@@ -62,7 +69,7 @@ export component AppWindow inherits Window {
     in-out property <string> filamento;
     in-out property <string> material;
     in-out property <string> tempo;
-    in-out property <string> watts;
+   
     in-out property <string> energia;
     in-out property <string> lucro;
     in-out property <float> total;
@@ -71,10 +78,25 @@ export component AppWindow inherits Window {
     in-out property <string> endereco;
     in-out property <string> entrega;
 
+    
+    
+    in-out property <string> input_modelo;
+    in-out property <string> input_watts;
+
+     
+
+
+    in-out property <[Impressoras]> impressoras;
+
+    in-out property <[string]> impressoras_string;
+
     in-out property <[Database]> clients_database;
+
+    in-out property <string> combobox_selected;
 
     callback calcular_preco();
     callback registrar-cliente();
+    callback registrar-impressora();
  
 
     
@@ -99,6 +121,7 @@ export component AppWindow inherits Window {
                                     Tela1.visible = true;
                                     Tela2.visible = false;
                                     Tela3.visible = false;
+                                    Tela4.visible = false;
                                 }
                             }
                             SideButton {
@@ -107,6 +130,7 @@ export component AppWindow inherits Window {
                                     Tela1.visible = false;
                                     Tela2.visible = true;
                                     Tela3.visible = false;
+                                    Tela4.visible = false;
                                 }
                             }
                             SideButton {
@@ -115,6 +139,16 @@ export component AppWindow inherits Window {
                                     Tela1.visible = false;
                                     Tela2.visible = false;
                                     Tela3.visible = true;
+                                    Tela4.visible = false;
+                                }
+                            }
+                            SideButton {
+                                texto: "Tela 4";
+                                clicked => {
+                                    Tela1.visible = false;
+                                    Tela2.visible = false;
+                                    Tela3.visible = false;
+                                    Tela4.visible = true;
                                 }
                             }
                         }
@@ -134,7 +168,21 @@ export component AppWindow inherits Window {
                                     InputField { text: "Preço do filamento [R$]:"; input: root.filamento;   changed input => {root.filamento = self.input;}}
                                     InputField { text: "Gasto de Material [g]:"; input: root.material;      changed input => {root.material = self.input;}}
                                     InputField { text: "Tempo [H]:"; input: root.tempo;                     changed input => {root.tempo = self.input;}}
-                                    InputField { text: "Watts [W]"; input: root.watts;                      changed input => {root.watts = self.input;}}
+                                    // InputField { text: "Watts [W]"; input: root.watts;                      changed input => {root.watts = self.input;}}
+                                   HorizontalBox {
+                                    alignment: start;
+                                    Text {
+                                        text: "Impressora";
+                                    }
+                                    ComboBox {
+                                        model: impressoras_string;
+                                         
+                                         selected(current-value) => {
+                                            debug("Valor da combobox: ", current-value);
+                                            combobox_selected = current-value;
+                                         }       
+                                    }
+                                   } 
                                     InputField { text: "Taxa de Energia [R$]:"; input: root.energia;        changed input => {root.energia = self.input;}}
                                     InputField { text: "Lucro [%]:"; input: root.lucro;                     changed input => {root.lucro = self.input;}}
                                     Text { text: "Total: \{root.total}"; }
@@ -173,7 +221,7 @@ export component AppWindow inherits Window {
                         }
                     }
                     Tela3 := Rectangle {
-                        visible: true;
+                        visible: false;
                         background: green;
                         VerticalBox {
                             alignment: center;
@@ -202,8 +250,69 @@ export component AppWindow inherits Window {
                             }
                         }
                     }
+                    Tela4 := Rectangle {
+                        visible: false;
+                        
+                        background: gray;
+                        VerticalLayout {
+                           
+                            Container {
+                                cor: white;
+                                
+                                GridBox {
+                                    
+                                   Row{
+                                    Container {
+                                        cor:black;
+                                        VerticalBox {
+                                            InputField { text: "Modelo"; input: root.input_modelo;    changed input => {root.input_modelo = self.input;}}
+
+                                            InputField { text: "Watts"; input: root.input_watts;    changed input => {root.input_watts = self.input;}}
+ 
+                                            Button {
+                                                text: "Salvar";
+                                                clicked => {
+                                                    root.registrar-impressora();
+
+                                                    debug("Nome Modelo:",root.input_modelo, "Watts:",root.input_watts);
+                                                }
+                                            } 
+                                        }
+                                         
+                                        Container {
+                                            cor:black;
+                                            VerticalBox {
+                                            
+                                                
+                                            }
+                                            
+                                        }
+                                         
+                                       }
+                                    }
+                                   
+                                   }
+                                    
+                               
+                            }
+                        }
+                    }
+                    Tela5 := Rectangle{
+                        visible: true;
+                        Container {cor: black;
+                            width: 90%;
+                            height: 90%;
+                            
+
+                        
+                        }
+
+                    }
+                    
+
                 }
             }
         }
     }
 }
+
