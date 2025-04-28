@@ -1,0 +1,101 @@
+import { Button, ComboBox, LineEdit, VerticalBox, HorizontalBox} from "std-widgets.slint";
+import {Theme} from "styling.slint";
+
+export component Container {
+    in property <color> cor;
+    Rectangle {
+        background: cor;
+        border-radius: Theme.borderRadius;
+        padding: Theme.spacing;
+        @children
+    }
+}
+
+export component InputField {
+    in property <string> text;
+    in-out property <string> input;
+    HorizontalBox {
+        spacing: Theme.spacing;
+        Text {
+            text: text;
+            font-size: Theme.fontSizeBody;
+            color: Theme.onBackground;
+        }
+        LineEdit {
+            min-width: 120px;
+            min-height: Theme.inputHeight;
+            text <=> root.input;
+            changed text => {root.input = self.text;}
+        }
+    }
+}
+
+export component SideButton {
+    in property <string> texto;
+    callback clicked;
+    Rectangle {
+        background: Theme.primary;
+        border-radius: Theme.borderRadius;
+        drop-shadow-offset-y: 2px;
+        drop-shadow-color: rgba(0,0,0,0.2);
+        drop-shadow-blur: 8px;
+        HorizontalBox {
+            alignment: center;
+            spacing: Theme.spacing;
+            min-height: Theme.buttonHeight;
+            Text {
+                text: root.texto;
+                font-size: Theme.fontSizeBody;
+                color: Theme.onPrimary;
+            }
+        }
+        TouchArea {
+            clicked => {root.clicked();}
+        }
+    }
+}
+ 
+// components.slint
+ 
+export component OverviewCard {
+    in property <string> title;
+    in property <string> value;
+    in property <string> iconSource;
+
+    Rectangle {
+        background: Theme.surface;
+        border-radius: Theme.borderRadius;
+        drop-shadow-offset-y: 2px;
+        drop-shadow-blur: 8px;
+        padding: Theme.spacing;
+        width: 200px;
+        height: 100px;
+
+        HorizontalBox {
+            spacing: Theme.spacing;
+            alignment: center;
+
+            Image {
+                // source: iconSource;
+                width: 32px;
+                height: 32px;
+            }
+
+            VerticalBox {
+                spacing: 4px;
+                Text {
+                    text: title;
+                    font-size: Theme.fontSizeBody;
+                    color: Theme.onSurface;
+                }
+                Text {
+                    text: value;
+                    font-size: Theme.fontSizeTitle;
+ 
+                    color: Theme.primary;
+                }
+            }
+        }
+    }
+}
+ 

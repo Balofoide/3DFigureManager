@@ -17,6 +17,7 @@ struct JsonClient {
     nome: String,
     endereco: String,
     entrega: String,
+    preco: String,
 }
 
 
@@ -35,13 +36,14 @@ pub fn add_client(ui: &AppWindow, novo_cliente: Database) {
     ui.set_clients_database(ModelRc::new(vec_model));
 }
 
-pub fn save_cliente(nome: String, endereco: String, entrega: String) -> std::io::Result<()> {
+pub fn save_cliente(nome: String, endereco: String, entrega: String,preco:String) -> std::io::Result<()> {
   
 
     let client_data = JsonClient {
         nome,
         endereco,
         entrega,
+        preco,
     };
 
     let mut file = OpenOptions::new()
@@ -59,14 +61,16 @@ pub fn register_client(ui: &AppWindow) {
     let nome_cliente: String = ui.get_nome_cliente().to_string();
     let endereco: String = ui.get_endereco().to_string();
     let entrega: String = ui.get_entrega().to_string();
+    let preco: String = ui.get_total().to_string();
 
-    save_cliente(nome_cliente.clone(), endereco.clone(), entrega.clone())
+    save_cliente(nome_cliente.clone(), endereco.clone(), entrega.clone(),preco.clone())
         .expect("Erro ao salvar os dados do cliente");
 
     let client = Database {
         nome: nome_cliente.into(),
         endereco: endereco.into(),
         entrega: entrega.into(),
+        preco: preco.into(),
     };
 
     add_client(&ui, client);
@@ -89,6 +93,7 @@ pub fn load_clients(ui: &AppWindow) -> std::io::Result<()> {
             nome: json_client.nome.into(),
             endereco: json_client.endereco.into(),
             entrega: json_client.entrega.into(),
+            preco: json_client.preco.into(),
         };
 
         add_client(ui, client);
