@@ -1,0 +1,34 @@
+import { Theme } from "../styling.slint";
+import { Container, SideButton, InputField, OverviewCard } from "../components.slint";
+import {
+    Button, ComboBox, LineEdit,
+    VerticalBox, HorizontalBox, GridBox, ListView
+} from "std-widgets.slint";
+
+import { Database, Impressoras, Estoque-Database } from "../shared.slint";
+
+
+export component printer_screen {
+
+
+    in-out property <string> input_modelo;
+    in-out property <string> input_watts;
+    callback registrar_impressora();
+
+
+
+    Container {
+        cor: Theme.surface;
+        visible: true;
+
+        VerticalBox {
+            spacing: Theme.spacing;
+
+            InputField { text: "Modelo de Impressora"; input <=> root.input_modelo; }
+            InputField { text: "Watts [W]"; input <=> root.input_watts; }
+
+            Button { text: "Salvar Impressora"; clicked => { root.registrar_impressora(); } }
+        }
+    }
+    
+}

@@ -9,15 +9,15 @@ use std::fs::OpenOptions;
 use std::io::BufRead;
 use std::io::BufReader;
 
-use slint::SharedString;
-use crate::{AppWindow, Database,Impressoras};
+ 
+use crate::{AppWindow, Database };
 
 #[derive(serde::Serialize, serde::Deserialize)]
 struct JsonClient {
     nome: String,
     endereco: String,
     entrega: String,
-    preco: String,
+    preco: f32,
 }
 
 
@@ -36,7 +36,7 @@ pub fn add_client(ui: &AppWindow, novo_cliente: Database) {
     ui.set_clients_database(ModelRc::new(vec_model));
 }
 
-pub fn save_cliente(nome: String, endereco: String, entrega: String,preco:String) -> std::io::Result<()> {
+pub fn save_cliente(nome: String, endereco: String, entrega: String,preco:f32) -> std::io::Result<()> {
   
 
     let client_data = JsonClient {
@@ -61,7 +61,7 @@ pub fn register_client(ui: &AppWindow) {
     let nome_cliente: String = ui.get_nome_cliente().to_string();
     let endereco: String = ui.get_endereco().to_string();
     let entrega: String = ui.get_entrega().to_string();
-    let preco: String = ui.get_total().to_string();
+    let preco: f32 = ui.get_total();
 
     save_cliente(nome_cliente.clone(), endereco.clone(), entrega.clone(),preco.clone())
         .expect("Erro ao salvar os dados do cliente");
@@ -74,6 +74,7 @@ pub fn register_client(ui: &AppWindow) {
     };
 
     add_client(&ui, client);
+    
 }
 
 pub fn load_clients(ui: &AppWindow) -> std::io::Result<()> {

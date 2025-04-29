@@ -1,0 +1,248 @@
+import { Theme } from "../styling.slint";
+import { Container, SideButton, InputField, OverviewCard } from "../components.slint";
+import {Button, ComboBox, LineEdit,VerticalBox, HorizontalBox, GridBox, ListView, ScrollView} from "std-widgets.slint";
+
+import { Database, Impressoras, Estoque-Database } from "../shared.slint";
+
+export component calculator_screen {
+    in-out property <string> filamento;
+    in-out property <string> material;
+    in-out property <string> tempo;
+    in-out property <string> energia;
+    in-out property <string> lucro;
+    in-out property <float> total;
+    in-out property <string> nome_cliente;
+    in-out property <string> endereco;
+    in-out property <string> entrega;
+    in-out property <[string]> impressoras_string;
+    in-out property <string> combobox_selected;
+    callback calcular_preco();
+    callback registrar_cliente();
+    callback resetar_inputs();
+    width: 500px;
+    height: 500px;
+    
+    Container {
+        width: parent.width;
+        height: parent.height;
+        cor: white;
+        visible: true;
+
+        
+        
+        VerticalBox {
+            alignment: center;
+            HorizontalBox {
+                alignment: center;
+                GridBox {
+                    width: 90%;
+                    VerticalLayout {
+                        Text {
+                            text: "Novo Pedido";
+                            color: black;
+                            font-weight: 800;
+                            font-size: 40px;
+                        }
+                    }
+                    
+                    Row {
+                        
+                        GridBox {
+                            width: 90%;
+                            spacing: Theme.spacing;
+                            padding: Theme.spacing;
+                            Row {
+                                Container {
+                                    width: 50%;
+                                    cor: white;
+
+                                        VerticalBox {
+                                            padding: Theme.spacing;
+                                            Text {
+                                                text: "Dados do Cliente";
+                                                color: black;
+                                                font-weight: 800;
+                                                font-size: 20px;
+                                            }
+
+                                            VerticalBox {
+                                                alignment: start;
+                                                padding: Theme.spacing;
+                                                InputField {
+                                                    text: "Nome Cliente";
+                                                    input <=> root.nome_cliente;
+                                                }
+
+                                                InputField {
+                                                    text: "Endereço";
+                                                    input <=> root.endereco;
+                                                }
+                                            }
+                                        }
+                                    
+                                }
+
+                                Container {
+                                    width: 50%;
+                                    cor: white;
+                                    VerticalBox {
+                                        padding: Theme.spacing;
+                                        Text {
+                                            text: "Detalhes de Entrega";
+                                            color: black;
+                                            font-weight: 800;
+                                            font-size: 20px;
+                                        }
+                                        VerticalBox {
+                                            padding: Theme.spacing;
+                                        
+
+                                        InputField {
+                                            text: "Data Entrega";
+                                            input <=> root.entrega;
+                                        }
+
+                                        InputField {
+                                            text: "Observação";
+                                            input <=> root.entrega;
+                                        }
+                                    }
+                                    }
+                                }
+                            }
+ 
+                            Row {
+                                Container {
+                                    
+                                    cor: white;
+                                    VerticalBox {
+                                        padding: Theme.spacing;
+                                        Text {
+                                            text: "Detalhes de Impressão"; 
+                                            color: black;
+                                            font-weight: 800;
+                                            font-size: 20px;
+                                        }
+
+                                        VerticalBox {
+                                            padding: Theme.spacing;
+                                            alignment: start;
+                                            InputField {
+                                                text: "Modelo da Figure";
+                                            }
+
+                                            InputField {
+                                                 
+                                                text: "Tempo Estimado [H]";
+                                                input <=> root.tempo;
+                                                changed input => {
+                                                    root.calcular_preco();
+                                                }
+                                            }
+
+                                            VerticalBox {
+                                                Text {
+                                                    text: "Impressora:";
+                                                    color: black;
+                                                    font-size: Theme.fontSizeBody;
+                                                }
+                                                Rectangle {
+                                                    border-radius: 10px;
+                                                    // background: rgba(0,0,0,0.1);
+                                                    drop-shadow-color: rgba(0,0,0,0.2);
+                                                    drop-shadow-blur: 2px;
+                                                    drop-shadow-offset-y: 1px;
+                                                    ComboBox {
+                                                        
+                                                        width: 100%;
+                                                        model: impressoras_string;
+                                                        current-value: "";
+                                                        selected(current-value) => {
+                                                            combobox_selected = current-value;
+                                                        }
+                                                    }
+                                                }
+                                                
+                                            }
+
+                                            InputField {
+                                                text: "Gasto de Material [g]";
+                                                
+                                                input <=> root.material;
+                                                changed input => {
+                                                    root.calcular_preco();
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                Container {
+                                    cor: white;
+                                    VerticalBox {
+                                        padding: Theme.spacing;
+                                        Text {
+                                            text: "Calculo de Custos";
+                                            color: black;
+                                            font-weight: 800;
+                                            font-size: 20px;
+                                        }
+                                        VerticalBox {
+                                            padding: Theme.spacing;                                       
+                                        
+
+                                        InputField {
+                                            text: "Preço do filamento [R$]";
+                                            input <=> root.filamento;
+                                            changed input => {
+                                                root.calcular_preco();
+                                            }
+                                        }
+
+                                        InputField {
+                                            text: "Taxa de Energia [R$]";
+                                            input <=> root.energia;
+                                            changed input => {
+                                                root.calcular_preco();
+                                            }
+                                        }
+
+                                        InputField {
+                                            text: "Lucro [%]";
+                                            input <=> root.lucro;
+                                            changed input => {
+                                                root.calcular_preco();
+                                            }
+                                        }
+
+                                        Text {
+                                            text: "Total: R$ \{root.total.to-fixed(2)}";
+                                            font-weight: 700;
+                                            horizontal-alignment: right;
+                                            font-size: 20px;
+                                            color: Theme.primary;
+                                        }
+                                    }
+                                }
+                                }
+                                VerticalLayout {
+                                    Rectangle{height: 90%;width: 100px;}
+                                    VerticalBox {
+                                        // width: 50%;
+                                        height: 20px;
+                                        SideButton {texto: "Avançar"; clicked => {registrar_cliente(); resetar_inputs()}}
+                                    }
+                                   }
+                            }
+
+                           
+
+                        }
+                    }
+
+                    
+                }
+            }
+        }
+    }
+}

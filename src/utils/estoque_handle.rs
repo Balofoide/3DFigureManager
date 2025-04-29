@@ -16,7 +16,7 @@ use crate::{AppWindow, Estoque_Database};
 struct JsonEstoque {
    material:String,
    quantidade:String,
-   quantidade_total:String,
+   quantidade_total:i32,
    medida: String,
 }
 
@@ -36,7 +36,7 @@ pub fn add_estoque(ui: &AppWindow, novo_cliente: Estoque_Database){
     ui.set_estoque_database(ModelRc::new(vec_model));
 }
 
-pub fn save_estoque(material: String, quantidade:String, quantidade_total:String, medida: String) -> std::io::Result<()> {
+pub fn save_estoque(material: String, quantidade:String, quantidade_total:i32, medida: String) -> std::io::Result<()> {
   
 
     let client_data = JsonEstoque {
@@ -60,7 +60,7 @@ pub fn save_estoque(material: String, quantidade:String, quantidade_total:String
 pub fn register_estoque(ui: &AppWindow) {
     let material: String = ui.get_estoque_material().to_string();
     let quantidade: String = ui.get_estoque_quantidade().to_string();
-    let quantidade_total: String = ui.get_estoque_quantidade_total().to_string();
+    let quantidade_total: i32 = ui.get_estoque_quantidade_total().parse().unwrap_or(0);
     let medida: String = ui.get_estoque_medida().to_string();
 
     save_estoque(material.clone(),quantidade.clone(),quantidade_total.clone(),medida.clone())

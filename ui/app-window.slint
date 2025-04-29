@@ -1,41 +1,21 @@
-// app-window.slint
-import{Theme} from "styling.slint";
-import { Container, SideButton, InputField,OverviewCard } from "components.slint";
-import {
-      
-    Button, ComboBox, LineEdit,
-    VerticalBox, HorizontalBox, GridBox
-} from "std-widgets.slint";
-
-export struct Database {
-    nome: string,
-    endereco: string,
-    entrega: string,
-    preco: string,
-}
-
-export struct Estoque_Database{
-    material:string,
-    quantidade:string,
-    quantidade_total:string,
-    medida:string,
-}
-
-export struct Impressoras {
-    modelo: string,
-    watts: string,
-}
+import { Theme } from "styling.slint";
+import { Container, SideButton, InputField, OverviewCard } from "components.slint";
+import {Button, ComboBox, LineEdit,VerticalBox, HorizontalBox, GridBox, ListView} from "std-widgets.slint";
+import { dashboard_screen } from "screens/dashboard.slint";
+import { calculator_screen } from "screens/product_calculator.slint";
+import { estoque_screen} from "screens/estoque.slint";
+import { Database, Impressoras, Estoque-Database } from "shared.slint";
+import { printer-screen } from "screens/printer.slint";
 
 export component AppWindow inherits Window {
-
     function activate(i: int) {
-        Tela1.visible = (i == 1);
-        Tela2.visible = (i == 2);
-        Tela3.visible = (i == 3);
-        Tela4.visible = (i == 4);
-        Tela5.visible = (i == 5);
+        Calculator_Screen.visible = (i == 1);
+        Estoque_Screen.visible = (i == 2);
+        Printer_Screen.visible = (i == 3);
+ 
+        Dashboard_Screen.visible = (i == 5);
     }
-    
+
     in-out property <string> filamento;
     in-out property <string> material;
     in-out property <string> tempo;
@@ -50,293 +30,105 @@ export component AppWindow inherits Window {
     in-out property <[Impressoras]> impressoras;
     in-out property <[string]> impressoras_string;
     in-out property <[Database]> clients_database;
-
-
-
     in-out property <[Estoque-Database]> estoque_database;
     in-out property <string> estoque_material;
     in-out property <string> estoque_quantidade;
     in-out property <string> estoque_quantidade_total;
     in-out property <string> estoque_medida;
-
-
+    in-out property <float> vendas_total;
     in-out property <string> combobox_selected;
+
     callback calcular_preco();
     callback registrar_cliente();
     callback registrar_impressora();
     callback registrar_estoque();
 
-    width: 1250px;
-    height: 720px;
-
-    
+    width: 1280px;
+    height: 820px;
 
     HorizontalBox {
         spacing: Theme.spacing;
         padding: Theme.spacing;
+        width: parent.width;
+        height: parent.height;
 
         /* --- SIDEBAR --- */
         VerticalBox {
             width: 15%;
             spacing: Theme.spacing;
             padding: Theme.spacing;
-           
 
-            SideButton { texto: "Tela 1"; clicked => {activate(1)} }
-            SideButton { texto: "Tela 2"; clicked => {activate(2)} }
-            SideButton { texto: "Tela 3"; clicked => {activate(3)} }
-            SideButton { texto: "Tela 4"; clicked => {activate(4)} }
-            SideButton { texto: "Tela 5"; clicked => {activate(5)}}
+            SideButton { texto: "Tela 1"; clicked => { activate(1) } }
+            SideButton { texto: "Tela 2"; clicked => { activate(2) } }
+            SideButton { texto: "Tela 3"; clicked => { activate(3) } }
+            SideButton { texto: "Tela 4"; clicked => { activate(4) } }
+            SideButton { texto: "Tela 5"; clicked => { activate(5) } }
         }
 
         /* --- CONTEÚDO PRINCIPAL --- */
         Rectangle {
-            width: 85%;
-            height: 100%;
             background: Theme.background;
-            border-radius: Theme.borderRadius;
             padding: Theme.spacing;
             clip: true;
+            visible: true;
 
-            /* Função auxiliar para alternar telas */
-           
-
-            /* TELA 1: CÁLCULO DE PREÇO */
-            Tela1 := Container { cor: Theme.surface;
-                visible: false;
-
-               SubTela_Cliente := VerticalBox {
+            Calculator_Screen := calculator-screen {
+                width: parent.width;
+                height: parent.height;
                 visible: true;
-                    spacing: Theme.spacing;
+                filamento <=> filamento;
+                material <=> material;
+                tempo <=> tempo;
+                energia <=> energia;
+                lucro <=> lucro;
+                total <=> total;
+                nome_cliente <=> nome_cliente;
+                endereco <=> endereco;
+                entrega <=> entrega;
+                impressoras_string <=> impressoras_string;
+                combobox_selected <=> combobox_selected;
 
-                    InputField { text: "Nome Cliente"; input <=> root.nome_cliente; }
-                    InputField { text: "Endereço"; input <=> root.endereco; }
-                    InputField { text: "Data Entrega"; input <=> root.entrega; }
-
-                    // Button { text: "Salvar Cliente"; clicked => {root.registrar_cliente();} }'
-                    Button {text: "Avançar"; clicked => {SubTela_Cliente.visible = false; SubTela_Total.visible= true;}}
-                }
-
-
-              SubTela_Total :=  VerticalBox {
-                visible: false;
-                    spacing: Theme.spacing;
-
-                    InputField { text: "Preço do filamento [R$]"; input <=> root.filamento; changed input => {root.calcular_preco();} }
-                    InputField { text: "Gasto de Material [g]"; input <=> root.material; changed input => {root.calcular_preco();} }
-                    InputField { text: "Tempo [H]"; input <=> root.tempo; changed input => {root.calcular_preco();}}
-
-                    HorizontalBox {
-                        spacing: Theme.spacing;
-                        Text { text: "Impressora:"; }
-                        ComboBox { model: impressoras_string; current-value:"-Selecione-a-Impressora-"; selected(current-value) => {combobox_selected = current-value} }
-                    }
-
-                    InputField { text: "Taxa de Energia [R$]"; input <=> root.energia; changed input => {root.calcular_preco();} }
-                    InputField { text: "Lucro [%]"; input <=> root.lucro; changed input => {root.calcular_preco();} }
-
-                    Text { 
-                        text: "Total:\{root.total}"; 
-                        font-size: Theme.fontSizeTitle; 
-                        color: Theme.primary;
-                    }
-
-                     
-                    HorizontalBox {
-                        // Button { text: "Calcular"; clicked => {root.calcular_preco();} }
-                    Button {text: "Voltar"; clicked => {SubTela_Cliente.visible = true; SubTela_Total.visible= false;}}
-                    Button {text: "Avançar"; clicked => {SubTela_Cliente.visible = false; SubTela_Total.visible= false; SubTela_Final.visible = true;}}
-                    }
-                    
-                }
-
-            SubTela_Final := VerticalBox{
-                visible: false;
-                spacing: Theme.spacing;
-
-                HorizontalBox {
-                    Text {
-                        text: "Cliente: ";
-                    }
-
-                    Text {
-                        text: nome_cliente;
-                    }
-
-                }
-                
-                HorizontalBox {
-                    Text {
-                        text: "Endereço: ";
-                    }
-
-                    Text {
-                        text: endereco;
-                    }
-
-                }
-                HorizontalBox {
-                    Text {
-                        text: "Data de Entrega: ";
-                    }
-
-                    Text {
-                        text: entrega;
-                    }
-
-                }
-
-                HorizontalBox {
-                    Text {
-                        text: "Preço: ";
-                    }
-
-                    Text {
-                        text: total;
-                    }
-
-                }
-                
-
-                HorizontalBox {
-                Button {text: "Voltar"; clicked => {SubTela_Total.visible= true; SubTela_Final.visible = false;}}
-                Button {text: "Avançar"; clicked => {SubTela_Cliente.visible = false; SubTela_Total.visible= false; SubTela_Final.visible = true; root.registrar_cliente();}}
+                registrar_cliente => { root.registrar_cliente(); activate(5);}
+                calcular_preco => { root.calcular_preco(); }
+                resetar_inputs => {
+                    nome_cliente = "";
+                    tempo = "";
+                    energia = "";
+                    lucro = "";
+                    total = 0;
+                    endereco = "";
+                    entrega = "";
+                    combobox_selected = "";
+                    filamento = 0;
+                    material = 0;
                 }
             }
 
-
-
-
+            Estoque_Screen := estoque-screen{
+                visible: false;
+                estoque_database <=> estoque_database;
+                estoque_material <=> estoque_material;
+                estoque_quantidade <=> estoque_quantidade;
+                estoque_quantidade_total <=> estoque_quantidade_total;
+                estoque_medida <=> estoque_medida;
             }
 
-            /* TELA 2: CADASTRO DE CLIENTE */
-            Tela2 := Container { cor: Theme.surface;
+            Printer_Screen := printer-screen {
                 visible: false;
+                input_modelo <=> input_modelo;
+                input_watts <=> input_watts;
 
-                
-                HorizontalLayout{
-                    VerticalBox {
-                        visible: true;
-                            spacing: Theme.spacing;
-        
-                            InputField { text: "Material"; input <=> root.estoque_material; }
-                            InputField { text: "Quantidade"; input <=> root.estoque_quantidade; }
-                            ComboBox { model: ["g","kg","ml","un"]; current-value:"-Medida-"; selected(current-value) => {estoque_medida = current-value} }
-        
-                            // Button { text: "Salvar Cliente"; clicked => {root.registrar_cliente();} }'
-                            Button {text: "Adicionar"; clicked => {estoque_quantidade_total = estoque_quantidade; registrar_estoque()}}
-                        }
-                        VerticalBox {
-                            visible: true;
-                                // spacing: Theme.spacing;
-            
-                                HorizontalBox {
-                                    // spacing: Theme.spacing;
-                                    Text { text: "Material";    }
-                                    Text { text: "Quantidade";  }
-
-                                }
-                                for product in estoque_database: HorizontalBox {
-                                    spacing: Theme.spacing;
-                                    Text { text: product.material; }
-                                    Text { text: product.quantidade+"/"+product.quantidade-total+product.medida; }
+                registrar_impressora => {
+                    root.registrar_impressora();
+                }
+            }
  
-                                }
-
-                            }
-
-
-                }
-                 
-                
-            }
-
-            /* TELA 3: LISTA DE CLIENTES */
-            Tela3 := Container { cor: Theme.surface;
+            Dashboard_Screen := dashboard-screen {
                 visible: false;
-                VerticalBox {
-                    spacing: Theme.spacing;
-
-                    /* Cabeçalho */
-                    HorizontalBox {
-                        spacing: Theme.spacing;
-                        Text { text: "Nome";    }
-                        Text { text: "Endereço";  }
-                        Text { text: "Entrega";  }
-                        Text { text: "Preço";  }
-                    }
-
-                    /* Linhas */
-                    for client in clients_database: HorizontalBox {
-                        spacing: Theme.spacing;
-                        Text { text: client.nome; }
-                        Text { text: client.endereco; }
-                        Text { text: client.entrega; }
-                        Text { text: "R$"+client.preco ;}
-                    }
-                }
-            }
-
-            /* TELA 4: CADASTRO DE IMPRESSORA */
-            Tela4 := Container { cor: Theme.surface;
-                visible: false;
-                VerticalBox {
-                    spacing: Theme.spacing;
-
-                    InputField { text: "Modelo de Impressora"; input <=> root.input_modelo; }
-                    InputField { text: "Watts [W]"; input <=> root.input_watts; }
-
-                    Button { text: "Salvar Impressora"; clicked => {root.registrar_impressora();} }
-                }
-            }
-
-            /* TELA 5: DASHBOARD */
-            Tela5 := VerticalBox {
-                visible: false;
-                spacing: Theme.spacing;
-
-                /* Menu superior (podem ser abas ou filtros) */
-                HorizontalBox {
-                    spacing: Theme.spacing;
-                    Button { text: "Visão Geral"; }
-                    Button { text: "Vendas"; }
-                    Button { text: "Clientes"; }
-                    Button { text: "Estoque"; }
-                }
-
-                /* Cards de métricas em grade */
-                GridBox {
-                    
-                    spacing: Theme.spacing;
-
-                    Container { cor: Theme.surface;
-                        VerticalBox { spacing: Theme.spacing; alignment: center;
-                            Text { text: "Pedidos"; font-size: Theme.fontSizeTitle; }
-                            Text { text: "\{clients_database.length}"; font-size: Theme.fontSizeTitle; }
-                        }
-                    }
-
-                    Container { cor: Theme.surface;
-                        VerticalBox { spacing: Theme.spacing; alignment: center;
-                            Text { text: "Impressoras"; font-size: Theme.fontSizeTitle; }
-                            Text { text: "\{impressoras.length}"; font-size: Theme.fontSizeTitle; }
-                        }
-                    }
-
-                    Container { cor: Theme.surface;
-                        VerticalBox { spacing: Theme.spacing; alignment: center;
-                            Text { text: "Total Ganho"; font-size: Theme.fontSizeTitle; }
-                            Text { text: "\{root.total}"; font-size: Theme.fontSizeTitle; }
-                        }
-                    }
-
-                    Container { cor: Theme.surface;
-                        VerticalBox { spacing: Theme.spacing; alignment: center;
-                            Text { text: "Lucro Médio"; font-size: Theme.fontSizeTitle; }
-                            Text { text: "\{root.lucro}%"; font-size: Theme.fontSizeTitle; }
-                        }
-                    }
-                }
+                width: parent.width;
+                height: parent.height;
+                clients_database <=> clients_database;
+                vendas_total <=> vendas_total;
             }
         }
     }

@@ -4,9 +4,13 @@ import {Theme} from "styling.slint";
 export component Container {
     in property <color> cor;
     Rectangle {
+        // clip: true;
         background: cor;
         border-radius: Theme.borderRadius;
         padding: Theme.spacing;
+        drop-shadow-color: rgba(0,0,0,0.5);
+        drop-shadow-offset-y: 2px;
+        drop-shadow-blur: 5px;
         @children
     }
 }
@@ -14,19 +18,29 @@ export component Container {
 export component InputField {
     in property <string> text;
     in-out property <string> input;
-    HorizontalBox {
+    
+    VerticalBox {
         spacing: Theme.spacing;
         Text {
             text: text;
             font-size: Theme.fontSizeBody;
             color: Theme.onBackground;
         }
-        LineEdit {
-            min-width: 120px;
-            min-height: Theme.inputHeight;
-            text <=> root.input;
-            changed text => {root.input = self.text;}
+        Rectangle {
+            border-radius: 10px;
+            // background: rgba(0,0,0,0.1);
+            drop-shadow-color: rgba(0,0,0,0.2);
+            drop-shadow-blur: 2px;
+            drop-shadow-offset-y: 1px;
+            LineEdit {
+                width: 100%;
+                // min-width: 120px;
+                min-height: Theme.inputHeight;
+                text <=> root.input;
+                changed text => {root.input = self.text;}
+            }
         }
+        
     }
 }
 
@@ -82,6 +96,7 @@ export component OverviewCard {
             }
 
             VerticalBox {
+          
                 spacing: 4px;
                 Text {
                     text: title;

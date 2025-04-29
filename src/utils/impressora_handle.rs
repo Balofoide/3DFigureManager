@@ -22,7 +22,7 @@ struct JsonImpressora {
 pub fn add_impressora(ui: &AppWindow, novo_imp: Impressoras) {
     // 1. Extrai o modelo atual, clonando seus itens para um VecModel
     let current: ModelRc<Impressoras> = ui.get_impressoras();
-    let mut vec_model = VecModel::default();
+    let vec_model = VecModel::default();
     if let Some(vm) = current.as_any().downcast_ref::<VecModel<Impressoras>>() {
         for imp in vm.iter() {
             vec_model.push(imp.clone());
@@ -38,7 +38,7 @@ pub fn add_impressora(ui: &AppWindow, novo_imp: Impressoras) {
 pub fn convert_impressora(ui: &AppWindow) {
     // 1. Recupera o modelo de Impressoras
     let models: ModelRc<Impressoras> = ui.get_impressoras();
-    let mut labels = VecModel::default();
+    let labels = VecModel::default();
     // 2. Para cada Impressoras, cria uma SharedString "modelo (watts)"
     if let Some(vm) = models.as_any().downcast_ref::<VecModel<Impressoras>>() {
         for imp in vm.iter() {

@@ -1,9 +1,8 @@
 use crate::AppWindow;
  
+ 
 use slint::Model;
-use slint::SharedString;
-use crate::Impressoras;
-
+ 
  
 
 fn filament_coust(coust: f64) -> f64 {
@@ -61,6 +60,7 @@ pub fn calcular_venda(ui: &AppWindow) {
              * (1 as f64 + profit as f64 / 100.0);
 
          ui.set_total(total as f32);
+         
        
     }
 
@@ -81,4 +81,11 @@ pub fn calcular_venda(ui: &AppWindow) {
                 println!("Impressora encontrada: {:?}", impressora);
                 impressora.watts.to_string()
             })
+    }
+
+
+    pub fn total_vendas(ui:&AppWindow) -> f32{
+        
+       return ui.get_clients_database().iter().map(|i| i.preco).sum();
+
     }

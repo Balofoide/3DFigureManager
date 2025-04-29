@@ -1,0 +1,58 @@
+import { Theme } from "../styling.slint";
+import { Container, SideButton, InputField, OverviewCard } from "../components.slint";
+import {
+    Button, ComboBox, LineEdit,
+    VerticalBox, HorizontalBox, GridBox, ListView
+} from "std-widgets.slint";
+
+import { Database, Impressoras, Estoque-Database } from "../shared.slint";
+
+
+
+
+export component estoque_screen {
+
+    
+    in-out property <[Estoque-Database]> estoque_database;
+    in-out property <string> estoque_material;
+    in-out property <string> estoque_quantidade;
+    in-out property <string> estoque_quantidade_total;
+    in-out property <string> estoque_medida;
+
+
+    callback registrar_estoque();
+
+Container {
+    cor: Theme.surface;
+    visible: true;
+
+    HorizontalLayout {
+        VerticalBox {
+            visible: true;
+            spacing: Theme.spacing;
+
+            InputField { text: "Material"; input <=> root.estoque_material; }
+            InputField { text: "Quantidade"; input <=> root.estoque_quantidade; }
+            ComboBox { model: ["g", "kg", "ml", "un"]; current-value: "-Medida-"; selected(current-value) => { estoque_medida = current-value } }
+
+            Button { text: "Adicionar"; clicked => { estoque_quantidade_total = estoque_quantidade; registrar_estoque() } }
+        }
+
+        VerticalBox {
+            visible: true;
+
+            HorizontalBox {
+                Text { text: "Material"; }
+                Text { text: "Quantidade"; }
+            }
+
+            for product in estoque_database: HorizontalBox {
+                spacing: Theme.spacing;
+                Text { text: product.material; }
+                Text { text: product.quantidade + "/" + product.quantidade-total + product.medida; }
+            }
+        }
+    }
+}
+
+}

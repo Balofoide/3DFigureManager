@@ -9,6 +9,7 @@ mod utils;
 use utils::database_handle::load_clients;
 use utils::estoque_handle::load_estoque;
 use utils::impressora_handle::load_impressoras;
+use utils::sell_calculator::total_vendas;
  
 use crate::utils::sell_calculator::calcular_venda;
 use crate::utils::impressora_handle::register_impressora;
@@ -34,6 +35,7 @@ fn callback() -> Result<(), Box<dyn Error>> {
        load_clients(&ui).expect("Erro ao carregar clients");
        load_impressoras(&ui).expect("Erro ao caregar impressoras");
        load_estoque(&ui).expect("Erro ao carregar o estoque");
+       ui.set_vendas_total(total_vendas(&ui));
     }
 
 
@@ -54,8 +56,9 @@ fn callback() -> Result<(), Box<dyn Error>> {
         move || {
             let ui = ui_handle.unwrap();
             register_client(&ui);
-            
+            ui.set_vendas_total(total_vendas(&ui));
         }
+        
 
     });
 
@@ -77,6 +80,7 @@ fn callback() -> Result<(), Box<dyn Error>> {
         move || {
             let ui = ui_handle.unwrap();
             register_estoque(&ui);
+            ui.set_vendas_total(total_vendas(&ui));
     }
 });
      
