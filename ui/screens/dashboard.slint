@@ -1,33 +1,24 @@
 import { Theme } from "../styling.slint";
-import { Container, SideButton, InputField, OverviewCard } from "../components.slint";
+import { Container, SideButton, InputField, OverviewCard} from "../components.slint";
 import {
     Button, ComboBox, LineEdit,
     VerticalBox, HorizontalBox, GridBox, ListView
 } from "std-widgets.slint";
 
 import {Database,Impressoras,Estoque-Database} from "../shared.slint";
-
+ 
 
 export component dashboard_screen {
-   
-    
- 
     in-out property <[Database]> clients_database;
-
+    in-out property <Database> selected_client;
     in-out property <[Estoque-Database]> estoque_database;
- 
-
     in-out property <float> vendas_total;
-
- 
     callback calcular_preco();
     callback registrar_cliente();
     callback registrar_impressora();
     callback registrar_estoque();
- 
-
-
-VerticalBox {
+    callback pedidos();
+    VerticalBox {
     //  height: 700px;
     //  width: 900px;
     visible: true;
@@ -41,22 +32,44 @@ VerticalBox {
 
             HorizontalBox {
                 // max-height: 50px;
-                Text { text: "Dashboard"; color: black; font-weight: 800; font-size: 40px; }
+                Text {
+                        text: "Dashboard";
+                        color: black;
+                        font-weight: 800;
+                        font-size: 40px;
+                    }
 
-                SideButton { texto: "Pedidos"; }
-                SideButton { texto: "Clientes"; }
-                SideButton { texto: "Estoque"; }
-                SideButton { texto: "Impressoras"; }
-                SideButton { texto: "Modelos"; }
-                SideButton { texto: "Financeiro"; }
-            }
+                    SideButton {
+                        texto: "Pedidos";
+                    }
 
-            GridBox {
+                    SideButton {
+                        texto: "Clientes";
+                    }
+
+                    SideButton {
+                        texto: "Estoque";
+                    }
+
+                    SideButton {
+                        texto: "Impressoras";
+                    }
+
+                    SideButton {
+                        texto: "Modelos";
+                    }
+
+                    SideButton {
+                        texto: "Financeiro";
+                    }
+                }
+
+                GridBox {
                 // spacing: Theme.spacing;
  
 
                 Row {
-                    HorizontalBox {
+                        HorizontalBox {
                         // spacing: Theme.spacing;
 
                         VerticalBox {
@@ -66,126 +79,185 @@ VerticalBox {
                                 // spacing: Theme.spacing;
 
                                 Container {
-                                    cor: white;
+                                        cor: white;
+                                        VerticalBox {
+                                            Text {
+                                                text: "Pedidos";
+                                                color: black;
+                                                font-weight: 800;
+                                                font-size: 20px;
+                                                horizontal-alignment: center;
+                                            }
 
-                                    VerticalBox {
-                                        Text {
-                                            text: "Pedidos";
-                                            color: black;
-                                            font-weight: 800;
-                                            font-size: 20px;
-                                            horizontal-alignment: center;
+                                            Text {
+                                                text: "\{root.clients_database.length}";
+                                                color: black;
+                                                horizontal-alignment: center;
+                                                font-weight: 700;
+                                                font-size: 20px;
+                                            }
                                         }
-                                        Text {
-                                            text: "\{root.clients_database.length}";
-                                            color: black;
-                                            horizontal-alignment: center;
-                                            font-weight: 700;
-                                            font-size: 20px;
+                                    }
+
+                                    Container {
+                                        cor: white;
+                                        VerticalBox {
+                                            Text {
+                                                horizontal-alignment: center;
+                                                text: "Resumo de Vendas";
+                                                color: black;
+                                                font-weight: 800;
+                                                font-size: 20px;
+                                            }
+
+                                            HorizontalBox {
+                                                Text {
+                                                    text: "Vendas no mês:";
+                                                    color: black;
+                                                    font-weight: 500;
+                                                    font-size: 15px;
+                                                }
+
+                                                Text {
+                                                    horizontal-alignment: right;
+                                                    text: "0";
+                                                    color: black;
+                                                    font-weight: 500;
+                                                    font-size: 15px;
+                                                }
+                                            }
+
+                                            HorizontalBox {
+                                                Text {
+                                                    text: "Faturamento:";
+                                                    color: black;
+                                                    font-weight: 500;
+                                                    font-size: 15px;
+                                                }
+
+                                                Text {
+                                                    horizontal-alignment: right;
+                                                    text: "R$" + vendas_total.to-fixed(2);
+                                                    color: black;
+                                                    font-weight: 500;
+                                                    font-size: 15px;
+                                                }
+                                            }
                                         }
                                     }
                                 }
 
                                 Container {
                                     cor: white;
-
-                                    VerticalBox {
-                                        Text {
-                                            horizontal-alignment: center;
-                                            text: "Resumo de Vendas";
-                                            color: black;
-                                            font-weight: 800;
-                                            font-size: 20px;
-                                        }
-
-                                        HorizontalBox {
-                                            Text {
-                                                text: "Vendas no mês:";
-                                                color: black;
-                                                font-weight: 500;
-                                                font-size: 15px;
+                                    GridBox {
+                                        Row {
+                                            Container {
+                                                cor: white;
                                             }
-                                            Text {
-                                                horizontal-alignment: right;
-                                                text: "0";
-                                                color: black;
-                                                font-weight: 500;
-                                                font-size: 15px;
+
+                                            Container {
+                                                cor: white;
                                             }
                                         }
 
-                                        HorizontalBox {
-                                            Text {
-                                                text: "Faturamento:";
-                                                color: black;
-                                                font-weight: 500;
-                                                font-size: 15px;
+                                        Row {
+                                            Container {
+                                                cor: white;
                                             }
-                                            Text {
-                                                horizontal-alignment: right;
-                                                text: "R$" + vendas_total.to-fixed(2);
-                                                color: black;
-                                                font-weight: 500;
-                                                font-size: 15px;
+
+                                            Container {
+                                                cor: white;
                                             }
                                         }
-                                    }
-                                }
-                            }
-
-                            Container {
-                                cor: white;
-
-                                GridBox {
-                                    Row {
-                                        Container { cor: white; }
-                                        Container { cor: white; }
-                                    }
-                                    Row {
-                                        Container { cor: white; }
-                                        Container { cor: white; }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    VerticalBox {
+                        VerticalBox {
                         // spacing: Theme.spacing;
 
                         HorizontalBox {
                             // spacing: Theme.spacing;
 
                             Container {
-                                cor: white;
-
-                                VerticalBox {
+                                    cor: white;
+                                    VerticalBox {
                                     // spacing: Theme.spacing;
 
                                     HorizontalBox {
                                         // spacing: Theme.spacing;
-                                        Text { text: "Nome"; color: black; font-weight: 700; horizontal-alignment: center; }
-                                        Text { text: "Entrega"; color: black; font-weight: 700; horizontal-alignment: center; }
-                                        Text { text: "Preço"; color: black; font-weight: 700; horizontal-alignment: center; }
-                                    }
-                                    ListView {
-                                        
-                                        for client in clients_database: HorizontalBox {
+                                        Text {
+                                                text: "Nome";
+                                                color: black;
+                                                font-weight: 700;
+                                                horizontal-alignment: center;
+                                            }
+
+                                            Text {
+                                                text: "Preço";
+                                                color: black;
+                                                font-weight: 700;
+                                                horizontal-alignment: center;
+                                            }
+
+                                            Text {
+                                                text: "Status";
+                                                color: black;
+                                                font-weight: 700;
+                                                horizontal-alignment: center;
+                                            }
+                                        }
+
+                                        ListView {
+                                            height: 85%;
+                                            for client[index] in clients_database: TouchArea {
+                                                clicked => {
+                                                    root.selected_client = root.clients_database[index];
+                                                    pedidos();
+                                                }
                                             // spacing: Theme.spacing;
                                             // padding: Theme.spacing;
                                             Rectangle {
-                                                max-height: 10px;
-                                                // padding: Theme.spacing;
-                                                border-radius: 5px;
-                                                background: rgba(0,0,0,0.05);
-                                                HorizontalBox {
-                                                    Text { text: client.nome; color: black; horizontal-alignment: center; }
-                                                    Text { text: client.entrega; color: black; horizontal-alignment: center; }
-                                                    Text { text: "R$" + client.preco.to-fixed(2); color: black; horizontal-alignment: center; }
+                                                    height: 90%;
+                                                    padding: 8px;
+                                                // border-radius: 5px;
+                                                // drop-shadow-offset-y: 1px;  
+                                                background: rgba(0.5,0,1,0.3);
+                                                    HorizontalBox {
+                                                        alignment: center;
+                                                        Rectangle {
+                                                            width: 25%;
+                                                            Text {
+                                                                text: client.nome;
+                                                                color: black;
+                                                                horizontal-alignment: center;
+                                                                overflow: elide;
+                                                            }
+                                                        }
+
+                                                        Rectangle {
+                                                            width: 25%;
+                                                            Text {
+                                                                text: "R$" + client.preco.to-fixed(2);
+                                                                color: black;
+                                                                horizontal-alignment: center;
+                                                            }
+                                                        }
+
+                                                        Rectangle {
+                                                            width: 25%;
+                                                            Text {
+                                                                text: client.status;
+                                                                color: black;
+                                                                horizontal-alignment: center;
+                                                            }
+                                                        }
+                                                    }
                                                 }
-                                            }                    
+                                            }
                                         }
-                                    }                                               
+                                    }
                                 }
                             }
                         }
@@ -194,5 +266,4 @@ VerticalBox {
             }
         }
     }
-}
 }

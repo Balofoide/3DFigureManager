@@ -1,7 +1,148 @@
-import { Button, ComboBox, LineEdit, VerticalBox, HorizontalBox} from "std-widgets.slint";
+import { Button, ComboBox, LineEdit, VerticalBox, HorizontalBox,ListView} from "std-widgets.slint";
+import { ListView, ScrollView, VerticalBox } from "std-widgets.slint";
+ 
 import {Theme} from "styling.slint";
 
+
+
+
+
+
+export component CustomComboBox {
+    // Modelo e seleção
+    in property <[string]> model: [];
+    in-out property <int> current-index: -1;
+    in-out property <string> current-value: "";
+
+    // Estilos customizáveis
+    in property <color> text-color: black;
+    in property <color> border-color: gray;
+    in property <color> background-color: rgba(0,0,0,0.1);
+    in property <color> popup-background: lightgray;
+    in property <length> option-height: 24px;
+
+    // Callback para notificar seleção
+    callback selected(string);
+
+    // Tamanho do componente
+    width: 350px;
+    height: 30px;
+
+    Rectangle {
+            
+        height: parent.height;
+        width: parent.width;
+         
+        // border-color: root.border-color;
+        // border-width: 1px;
+        border-radius:10px;
+        background: root.background-color;
+
+        VerticalLayout {
+            alignment: center;
+            HorizontalBox {
+                Text {
+                    // horizontal-alignment: left;
+                     
+                    text: root.current-value;
+                    color: root.text-color;
+                    font-size: Theme.fontSizeSmall;
+                   
+                }
+        
+                // Seta de dropdown
+                Text {
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                    text: "▼";
+                    color: root.text-color;
+                    width: 16px;
+                     
+                     
+                }
+                
+                
+            }
+        }
+       
+        // Texto da opção selecionada
+      
+        // Abre o popup ao clicar
+        TouchArea {
+            
+            clicked => {popup.show();}
+        }
+    }
+
+    // Popup com lista de opções
+    popup := PopupWindow {
+        // x: -10px;
+        y: root.height * 0.84;
+        width: root.width ;
+        height: root.height * 2.5;
+
+        VerticalLayout {
+            width: 100%;
+            height: 100%;
+             
+            Rectangle {
+                
+                background: rgba(0,0,0,0.3);
+              
+                // border-top-left-radius: 5px;
+                // border-top-right-radius: 5px;
+                border-bottom-left-radius: 10px;
+                border-bottom-right-radius: 10px;
+
+                ScrollView {
+                
+                    width: parent.width;
+                height: parent.height;
+                   
+                    VerticalBox {
+                        alignment: center;
+                        width: 100%;
+                    // Declaramos `index` para poder usá-lo
+                    for item[index] in root.model: Rectangle {
+                        width: 100%;
+                        border-radius: 10px;
+                        height: root.option-height;
+                        background: root.popup-background;
+        
+                        // Cada opção
+                        Text {
+                            text: item;
+                            color: root.text-color;
+                            x: (parent.width) / 40;
+                            y: parent.height / 6;
+                        }
+        
+                        // Seleção da opção
+                        TouchArea {
+                            callback selected_temp(string);
+                            clicked => {
+                                root.current-index = index;
+                                root.current-value = item;
+                                root.selected(item);
+                                 
+                                popup.close();
+                            }
+                        }
+                    }
+                }
+                }
+                }
+            
+        }
+      
+    }
+}
+
+
+
+
 export component Container {
+    in property <length> borda;
     in property <color> cor;
     Rectangle {
         // clip: true;
@@ -11,6 +152,9 @@ export component Container {
         drop-shadow-color: rgba(0,0,0,0.5);
         drop-shadow-offset-y: 2px;
         drop-shadow-blur: 5px;
+        border-width: 0.4px;
+        
+        border-color: Theme.primary;
         @children
     }
 }
@@ -18,29 +162,31 @@ export component Container {
 export component InputField {
     in property <string> text;
     in-out property <string> input;
-    
     VerticalBox {
         spacing: Theme.spacing;
+
+        /* Rótulo */
         Text {
-            text: text;
+            text: root.text;
             font-size: Theme.fontSizeBody;
             color: Theme.onBackground;
         }
+
+        /* Caixa de fundo personalizada */
         Rectangle {
             border-radius: 10px;
-            // background: rgba(0,0,0,0.1);
-            drop-shadow-color: rgba(0,0,0,0.2);
-            drop-shadow-blur: 2px;
-            drop-shadow-offset-y: 1px;
-            LineEdit {
-                width: 100%;
-                // min-width: 120px;
+            background: rgba(0,0,0,0.1);
+            min-height: Theme.inputHeight + 10px;
+            /* Input de texto de baixo nível */
+            TextInput {
+                vertical-alignment: center;
+                width: parent.width - 15px;
                 min-height: Theme.inputHeight;
                 text <=> root.input;
-                changed text => {root.input = self.text;}
+                font-size: Theme.fontSizeBody;
+                color: Theme.onBackground;
             }
         }
-        
     }
 }
 
@@ -63,8 +209,45 @@ export component SideButton {
                 color: Theme.onPrimary;
             }
         }
+
         TouchArea {
-            clicked => {root.clicked();}
+            clicked => {
+                root.clicked();
+            }
+        }
+    }
+}
+
+export component BaloButton {
+    in property <string> texto;
+   
+    callback clicked;
+    Rectangle {
+        clip: true;
+        background: Theme.primary;
+        border-radius: Theme.borderRadius;
+        drop-shadow-offset-y: 2px;
+        drop-shadow-color: rgba(0,0,0,0.2);
+        drop-shadow-blur: 8px;
+        HorizontalBox {
+            alignment: center;
+            VerticalBox {
+                alignment: center;
+                spacing: Theme.spacing;
+                min-height: Theme.buttonHeight;
+                Text {
+                    text: root.texto;
+                    font-size: Theme.fontSizeBody;
+                    color: Theme.onPrimary;
+                }
+            }
+        }
+        
+
+        TouchArea {
+            clicked => {
+                root.clicked();
+            }
         }
     }
 }
@@ -75,7 +258,6 @@ export component OverviewCard {
     in property <string> title;
     in property <string> value;
     in property <string> iconSource;
-
     Rectangle {
         background: Theme.surface;
         border-radius: Theme.borderRadius;
@@ -84,11 +266,9 @@ export component OverviewCard {
         padding: Theme.spacing;
         width: 200px;
         height: 100px;
-
         HorizontalBox {
             spacing: Theme.spacing;
             alignment: center;
-
             Image {
                 // source: iconSource;
                 width: 32px;
@@ -96,21 +276,21 @@ export component OverviewCard {
             }
 
             VerticalBox {
-          
                 spacing: 4px;
                 Text {
                     text: title;
                     font-size: Theme.fontSizeBody;
                     color: Theme.onSurface;
                 }
+
                 Text {
                     text: value;
                     font-size: Theme.fontSizeTitle;
- 
                     color: Theme.primary;
                 }
             }
         }
     }
-}
+} 
+
  

@@ -1,6 +1,6 @@
 import { Theme } from "styling.slint";
-import { Container, SideButton, InputField, OverviewCard } from "components.slint";
-import {Button, ComboBox, LineEdit,VerticalBox, HorizontalBox, GridBox, ListView} from "std-widgets.slint";
+import { Container, SideButton, InputField, OverviewCard,CustomComboBox} from "components.slint";
+import {Button, ComboBox, LineEdit,VerticalBox, HorizontalBox, GridBox, ListView,StyleMetrics} from "std-widgets.slint";
 import { dashboard_screen } from "screens/dashboard.slint";
 import { calculator_screen } from "screens/product_calculator.slint";
 import { estoque_screen} from "screens/estoque.slint";
@@ -12,10 +12,8 @@ export component AppWindow inherits Window {
         Calculator_Screen.visible = (i == 1);
         Estoque_Screen.visible = (i == 2);
         Printer_Screen.visible = (i == 3);
- 
         Dashboard_Screen.visible = (i == 5);
     }
-
     in-out property <string> filamento;
     in-out property <string> material;
     in-out property <string> tempo;
@@ -25,6 +23,8 @@ export component AppWindow inherits Window {
     in-out property <string> nome_cliente;
     in-out property <string> endereco;
     in-out property <string> entrega;
+    in-out property <string> observacao;
+    in-out property <string> modelo;
     in-out property <string> input_modelo;
     in-out property <string> input_watts;
     in-out property <[Impressoras]> impressoras;
@@ -37,15 +37,20 @@ export component AppWindow inherits Window {
     in-out property <string> estoque_medida;
     in-out property <float> vendas_total;
     in-out property <string> combobox_selected;
-
+    in-out property <string> status;
+    in-out property <Database> selected_client;
+    in-out property <int> filamento_total;
+    in-out property <string> filamento_printer;
     callback calcular_preco();
     callback registrar_cliente();
     callback registrar_impressora();
     callback registrar_estoque();
-
+    callback atualizar_filamento();
+    no-frame: false;
     width: 1280px;
+    combobox-selected: "Teste";
+    full-screen: false;
     height: 820px;
-
     HorizontalBox {
         spacing: Theme.spacing;
         padding: Theme.spacing;
@@ -57,12 +62,40 @@ export component AppWindow inherits Window {
             width: 15%;
             spacing: Theme.spacing;
             padding: Theme.spacing;
+            SideButton {
+                texto: "Tela 1";
+                clicked => {
+                    activate(1)
+                }
+            }
 
-            SideButton { texto: "Tela 1"; clicked => { activate(1) } }
-            SideButton { texto: "Tela 2"; clicked => { activate(2) } }
-            SideButton { texto: "Tela 3"; clicked => { activate(3) } }
-            SideButton { texto: "Tela 4"; clicked => { activate(4) } }
-            SideButton { texto: "Tela 5"; clicked => { activate(5) } }
+            SideButton {
+                texto: "Tela 2";
+                clicked => {
+                    activate(2)
+                }
+            }
+
+            SideButton {
+                texto: "Tela 3";
+                clicked => {
+                    activate(3)
+                }
+            }
+
+            SideButton {
+                texto: "Tela 4";
+                clicked => {
+                    activate(4)
+                }
+            }
+
+            SideButton {
+                texto: "Tela 5";
+                clicked => {
+                    activate(5)
+                }
+            }
         }
 
         /* --- CONTEÚDO PRINCIPAL --- */
@@ -71,11 +104,10 @@ export component AppWindow inherits Window {
             padding: Theme.spacing;
             clip: true;
             visible: true;
-
             Calculator_Screen := calculator-screen {
                 width: parent.width;
                 height: parent.height;
-                visible: true;
+                visible: false;
                 filamento <=> filamento;
                 material <=> material;
                 tempo <=> tempo;
@@ -85,12 +117,25 @@ export component AppWindow inherits Window {
                 nome_cliente <=> nome_cliente;
                 endereco <=> endereco;
                 entrega <=> entrega;
+                clients_database <=> clients_database;
                 impressoras_string <=> impressoras_string;
                 combobox_selected <=> combobox_selected;
-
-                registrar_cliente => { root.registrar_cliente(); activate(5);}
-                calcular_preco => { root.calcular_preco(); }
+                selected_client <=> selected_client;
+                modelo <=> modelo;
+                observacao <=> observacao;
+                status <=> status;
+                registrar_cliente => {
+                    root.registrar_cliente();
+                }
+                calcular_preco => {
+                    root.calcular_preco();
+                }
+                atualizar_filamento => {
+                    root.atualizar_filamento();
+                }
                 resetar_inputs => {
+                    observacao = "";
+                    modelo = "";
                     nome_cliente = "";
                     tempo = "";
                     energia = "";
@@ -104,7 +149,7 @@ export component AppWindow inherits Window {
                 }
             }
 
-            Estoque_Screen := estoque-screen{
+            Estoque_Screen := estoque-screen {
                 visible: false;
                 estoque_database <=> estoque_database;
                 estoque_material <=> estoque_material;
@@ -114,21 +159,29 @@ export component AppWindow inherits Window {
             }
 
             Printer_Screen := printer-screen {
-                visible: false;
+                visible: true;
+                width: parent.width;
+                height: parent.height;
                 input_modelo <=> input_modelo;
                 input_watts <=> input_watts;
-
+                input_filamento <=> filamento_printer;
+                impressoras_database <=> impressoras;
+                filamento_total <=> filamento_total;
                 registrar_impressora => {
                     root.registrar_impressora();
                 }
             }
- 
+
             Dashboard_Screen := dashboard-screen {
                 visible: false;
                 width: parent.width;
                 height: parent.height;
                 clients_database <=> clients_database;
                 vendas_total <=> vendas_total;
+                selected_client <=> selected_client;
+                pedidos => {
+                    activate(1);
+                }
             }
         }
     }

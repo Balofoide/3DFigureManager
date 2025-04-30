@@ -13,9 +13,10 @@ use slint::SharedString;
 use crate::{AppWindow,Impressoras};
 
 #[derive(serde::Serialize, serde::Deserialize)]
-struct JsonImpressora {
-    modelo: String,
-    watts: String,
+pub struct JsonImpressora {
+    pub modelo: String,
+   pub watts: String,
+   pub filamento:i32,
 }
 
 
@@ -54,25 +55,28 @@ pub fn register_impressora(ui: &AppWindow) {
     // 1. Lê os campos de input
     let modelo_txt = ui.get_input_modelo().to_string();
     let watts_txt  = ui.get_input_watts().to_string();
+    let filamento_txt: i32 = ui.get_filamento_printer().parse().unwrap_or(0);
 
     // 2. Cria a struct Impressoras
     let impressora = Impressoras {
         modelo: SharedString::from(modelo_txt.clone()),
         watts:  SharedString::from(watts_txt.clone()),
+        filamento: filamento_txt.clone(),
     };
 
     // 3. Adiciona ao modelo e converte para strings
     add_impressora(ui, impressora);
     convert_impressora(ui);
-    save_impressora(modelo_txt.clone(), watts_txt.clone()).expect("erro ao salvar impressoras");
+    save_impressora(modelo_txt.clone(), watts_txt.clone(),filamento_txt.clone()).expect("erro ao salvar impressoras");
 }
 
-pub fn save_impressora(modelo: String, watts: String) -> std::io::Result<()> {
+pub fn save_impressora(modelo: String, watts: String,filamento:i32) -> std::io::Result<()> {
   
 
     let impressora_data = JsonImpressora {
         modelo,
         watts,
+        filamento,
     };
 
     let mut file = OpenOptions::new()
@@ -102,6 +106,7 @@ pub fn load_impressoras(ui: &AppWindow) -> std::io::Result<()> {
         let impressora = Impressoras {
             modelo: json_impressora.modelo.into(),
             watts: json_impressora.watts.into(),
+            filamento:json_impressora.filamento.into(),
             
         };
 
@@ -114,3 +119,10 @@ pub fn load_impressoras(ui: &AppWindow) -> std::io::Result<()> {
 }
 
 
+pub fn total_filamento(ui:&AppWindow) -> i32{
+        
+    return ui.get_impressoras().iter().map(|i| i.filamento).sum();
+
+ }
+
+ 

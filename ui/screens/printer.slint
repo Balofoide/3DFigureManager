@@ -1,5 +1,5 @@
 import { Theme } from "../styling.slint";
-import { Container, SideButton, InputField, OverviewCard } from "../components.slint";
+import { Container, SideButton, InputField, OverviewCard, BaloButton } from "../components.slint";
 import {
     Button, ComboBox, LineEdit,
     VerticalBox, HorizontalBox, GridBox, ListView
@@ -9,26 +9,235 @@ import { Database, Impressoras, Estoque-Database } from "../shared.slint";
 
 
 export component printer_screen {
-
-
+    in-out property <[Impressoras]> impressoras_database;
     in-out property <string> input_modelo;
     in-out property <string> input_watts;
+    in-out property <string> input_filamento;
+    in-out property <int> filamento_total;
     callback registrar_impressora();
+    Impressoras_Tela :=     VerticalBox {
+        //  height: 700px;
+        //  width: 900px;
+        visible: false;
+        // spacing: Theme.spacing;
+    
+     HorizontalBox {
+            // spacing: Theme.spacing;
+    
+            VerticalBox {
+                // spacing: Theme.spacing;
+    
+                HorizontalBox {
+                    max-height: 50px;
+                    Text {
+                        text: "Impressoras";
+                        color: black;
+                        font-weight: 800;
+                        font-size: 40px;
+                    }
 
+                    SideButton {
+                        texto: "Adicionar\nImpressora";
+                        clicked => {
+                            teste.visible = true;
+                        }
+                    }
+                }
 
+                GridBox {
+                    // spacing: Theme.spacing;
+     
+    
+                    Row {
+                        HorizontalBox {
+                            // spacing: Theme.spacing;
+    
+                            VerticalBox {
+                                // spacing: Theme.spacing;
+    
+                                HorizontalBox {
+                                    // spacing: Theme.spacing;
+    
+                                    Container {
+                                        cor: white;
+                                        width: 20%;
+                                        height: 20%;
+                                        VerticalBox {
+                                            Text {
+                                                text: "Total de Filamento";
+                                                color: black;
+                                                font-weight: 800;
+                                                font-size: 20px;
+                                                horizontal-alignment: center;
+                                            }
 
-    Container {
-        cor: Theme.surface;
-        visible: true;
+                                            Text {
+                                                text: "\{root.filamento_total}g";
+                                                color: black;
+                                                horizontal-alignment: center;
+                                                font-weight: 700;
+                                                font-size: 20px;
+                                            }
+                                        }
+                                    }
+                                }
 
-        VerticalBox {
-            spacing: Theme.spacing;
+                                Container {
+                                    cor: white;
+                                    GridBox {
+                                        Row { }
 
-            InputField { text: "Modelo de Impressora"; input <=> root.input_modelo; }
-            InputField { text: "Watts [W]"; input <=> root.input_watts; }
+                                        Row { }
+                                    }
+                                }
+                            }
+                        }
 
-            Button { text: "Salvar Impressora"; clicked => { root.registrar_impressora(); } }
+                        VerticalBox {
+                            // spacing: Theme.spacing;
+    
+                            HorizontalBox {
+                                // spacing: Theme.spacing;
+    
+                                Container {
+                                    cor: white;
+                                    VerticalBox {
+                                        // spacing: Theme.spacing;
+    
+                                        HorizontalBox {
+                                            // spacing: Theme.spacing;
+                                            Text {
+                                                text: "Modelo";
+                                                color: black;
+                                                font-weight: 700;
+                                                horizontal-alignment: center;
+                                            }
+
+                                            Text {
+                                                text: "Filamento";
+                                                color: black;
+                                                font-weight: 700;
+                                                horizontal-alignment: center;
+                                            }
+                                        }
+
+                                        for printer in impressoras_database: HorizontalBox {
+                                            // spacing: Theme.spacing;
+                                            // padding: Theme.spacing;
+                                            Rectangle {
+                                                max-height: 10px;
+                                                // padding: Theme.spacing;
+                                                border-radius: 5px;
+                                                background: rgba(0,0,0,0.05);
+                                                HorizontalBox {
+                                                    Text {
+                                                        text: printer.modelo;
+                                                        color: black;
+                                                        horizontal-alignment: center;
+                                                    }
+
+                                                    Text {
+                                                        text: printer.filamento;
+                                                        color: black;
+                                                        horizontal-alignment: center;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
+
+    teste := Rectangle {
+        width: 100%;
+        height: 100%;
+        background: white;
+        visible: true;
+        HorizontalBox {
+            // spacing: Theme.spacing;
     
+            VerticalBox {
+                // spacing: Theme.spacing;
+    
+                HorizontalBox {
+                    max-height: 50px;
+                    Text {
+                        text: "Adicionar Impressora";
+                        color: black;
+                        font-weight: 800;
+                        font-size: 40px;
+                    }
+
+                     
+                }
+
+                GridBox {
+                    // spacing: Theme.spacing;
+     
+    
+                    Row {
+                        HorizontalBox {
+                            // spacing: Theme.spacing;
+    
+                            VerticalBox {
+                                // spacing: Theme.spacing;
+                                alignment: center;
+                                HorizontalBox {
+                                    // spacing: Theme.spacing;
+                                    
+                                alignment: center;
+                                     
+                                Container {
+                                    
+                                    width: 50%;
+                                    height: 50%;
+                                        cor:white;
+
+                                        VerticalBox {
+                                            InputField {
+                                                text: "Modelo de Impressora";
+                                                input <=> root.input_modelo;
+                                            }
+    
+                                            InputField {
+                                                text: "Watts [W]";
+                                                input <=> root.input_watts;
+                                            }
+    
+                                            InputField {
+                                                text: "Filamento [g]";
+                                                input <=> root.input_filamento;
+                                            }
+    
+                                            BaloButton {
+                                                width: 50%;
+                                                height: 5%;
+                                                texto: "Adicionar Impressora";
+                                                clicked => {
+                                                    root.registrar_impressora();
+                                                    teste.visible = false;
+                                                    Impressoras_Tela.visible = true;
+                                                }
+                                            }
+                                        }
+                                        
+                                    }
+                                }
+
+                              
+                            }
+                        }
+
+                        
+                    }
+                }
+            }
+        }
+    }
 }

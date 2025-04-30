@@ -18,6 +18,9 @@ struct JsonClient {
     endereco: String,
     entrega: String,
     preco: f32,
+    modelo: String,
+    observacao: String,
+    status: String,
 }
 
 
@@ -36,7 +39,7 @@ pub fn add_client(ui: &AppWindow, novo_cliente: Database) {
     ui.set_clients_database(ModelRc::new(vec_model));
 }
 
-pub fn save_cliente(nome: String, endereco: String, entrega: String,preco:f32) -> std::io::Result<()> {
+pub fn save_cliente(nome: String, endereco: String, entrega: String,preco:f32,modelo:String,observacao:String,status:String) -> std::io::Result<()> {
   
 
     let client_data = JsonClient {
@@ -44,6 +47,9 @@ pub fn save_cliente(nome: String, endereco: String, entrega: String,preco:f32) -
         endereco,
         entrega,
         preco,
+        modelo,
+        observacao,
+        status,
     };
 
     let mut file = OpenOptions::new()
@@ -62,8 +68,11 @@ pub fn register_client(ui: &AppWindow) {
     let endereco: String = ui.get_endereco().to_string();
     let entrega: String = ui.get_entrega().to_string();
     let preco: f32 = ui.get_total();
+    let modelo: String = ui.get_modelo().to_string();
+    let observacao: String = ui.get_observacao().to_string();
+    let status:String = ui.get_status().to_string();
 
-    save_cliente(nome_cliente.clone(), endereco.clone(), entrega.clone(),preco.clone())
+    save_cliente(nome_cliente.clone(), endereco.clone(), entrega.clone(),preco.clone(),modelo.clone(),observacao.clone(),status.clone())
         .expect("Erro ao salvar os dados do cliente");
 
     let client = Database {
@@ -71,6 +80,9 @@ pub fn register_client(ui: &AppWindow) {
         endereco: endereco.into(),
         entrega: entrega.into(),
         preco: preco.into(),
+        modelo: modelo.into(),
+        observacao: observacao.into(),
+        status: status.into(),
     };
 
     add_client(&ui, client);
@@ -95,6 +107,9 @@ pub fn load_clients(ui: &AppWindow) -> std::io::Result<()> {
             endereco: json_client.endereco.into(),
             entrega: json_client.entrega.into(),
             preco: json_client.preco.into(),
+            modelo: json_client.modelo.into(),
+            observacao: json_client.observacao.into(),
+            status: json_client.status.into(),
         };
 
         add_client(ui, client);
