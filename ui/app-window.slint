@@ -41,11 +41,19 @@ export component AppWindow inherits Window {
     in-out property <Database> selected_client;
     in-out property <int> filamento_total;
     in-out property <string> filamento_printer;
+
+    in-out property <string> temp_nome_client;
+    in-out property <string> temp_entrega;
+     
+    in-out property <string> temp_endereco;
+    in-out property <string> temp_observacao;
     callback calcular_preco();
     callback registrar_cliente();
     callback registrar_impressora();
     callback registrar_estoque();
     callback atualizar_filamento();
+    callback editar_cliente();
+    callback excluir_cliente();
     no-frame: false;
     width: 1280px;
     combobox-selected: "Teste";
@@ -104,10 +112,12 @@ export component AppWindow inherits Window {
             padding: Theme.spacing;
             clip: true;
             visible: true;
+
+
             Calculator_Screen := calculator-screen {
                 width: parent.width;
                 height: parent.height;
-                visible: false;
+                visible: true;
                 filamento <=> filamento;
                 material <=> material;
                 tempo <=> tempo;
@@ -124,6 +134,12 @@ export component AppWindow inherits Window {
                 modelo <=> modelo;
                 observacao <=> observacao;
                 status <=> status;
+                temp_nome_client <=> temp_nome_client;
+
+                temp_entrega <=> temp_entrega;
+                
+                temp_endereco <=> temp_endereco;
+                temp_observacao <=>temp_observacao;
                 registrar_cliente => {
                     root.registrar_cliente();
                 }
@@ -147,6 +163,12 @@ export component AppWindow inherits Window {
                     filamento = 0;
                     material = 0;
                 }
+                editar_cliente => {
+                    root.editar_cliente();
+                }
+                excluir_cliente => {
+                    root.excluir_cliente();
+                }
             }
 
             Estoque_Screen := estoque-screen {
@@ -159,7 +181,7 @@ export component AppWindow inherits Window {
             }
 
             Printer_Screen := printer-screen {
-                visible: true;
+                visible: false;
                 width: parent.width;
                 height: parent.height;
                 input_modelo <=> input_modelo;

@@ -6,7 +6,7 @@ use std::error::Error;
 
 mod utils;
 
-use utils::database_handle::load_clients;
+use utils::database_handle::{atualizar_client, excluir_client, load_clients};
 use utils::estoque_handle::load_estoque;
 use utils::impressora_handle::{load_impressoras, total_filamento};
 use utils::sell_calculator::{atualizar_filamento, total_vendas};
@@ -49,6 +49,23 @@ fn callback() -> Result<(), Box<dyn Error>> {
  
         }
 
+    });
+
+    ui.on_editar_cliente({
+        let ui_handle = ui.as_weak();
+        move || {
+            let ui = ui_handle.unwrap();
+            atualizar_client(&ui);
+ 
+        }
+    });
+    ui.on_excluir_cliente({
+        let ui_handle = ui.as_weak();
+        move || {
+            let ui = ui_handle.unwrap();
+            excluir_client(&ui);
+ 
+        }
     });
 
     ui.on_atualizar_filamento({

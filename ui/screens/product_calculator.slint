@@ -29,6 +29,17 @@ export component calculator_screen {
     callback registrar_cliente();
     callback resetar_inputs();
     callback atualizar_filamento();
+    callback editar_cliente();
+    callback excluir_cliente();
+
+
+    // Variaveis de Edit
+    in-out property <string> temp_nome_client;
+    in-out property <string> temp_entrega;
+    in-out property <string> temp_endereco;
+    in-out property <string> temp_observacao;
+
+
     width: 500px;
     height: 500px;
     Container {
@@ -36,9 +47,55 @@ export component calculator_screen {
         height: parent.height;
         cor: white;
         visible: true;
+
+        
+
+        
         Pedidos := VerticalBox {
             HorizontalBox {
+                
                 GridBox {
+                    Edit_Screen := PopupWindow{
+                        width: parent.width;
+                        height: parent.height;
+                        close-policy: close-on-click-outside;
+                        x: parent.width / 200;
+                        y: parent.height *3;
+                        VerticalLayout {
+                            width: 500px;
+                            height: 500px;
+                             
+                            Container {
+                                width: 100%;
+                                height: 100%;
+                                shadow_blur: 10px;
+                                border_width: 1px;
+                                border_radius: 10px;
+                                
+                                VerticalBox {
+                                    HorizontalBox {
+                                        Text {
+                                            vertical-alignment: center;
+                                            text: "Editar Pedido";
+                                            color: black;
+                                            font-weight: 800;
+                                            font-size: 20px;
+                                        }
+                                        BaloButton { width:80px; height: 40px;texto: "Confirmar"; clicked => {editar_cliente(); Edit_Screen.close();}}
+                                    }
+                                  
+                                    InputField {text: "Cliente: "; input<=> temp_nome_client; place_holder: selected_client.nome;}
+                                    InputField {text: "Entrega: "; input<=> temp_entrega ;place_holder: selected_client.entrega;}
+                                    
+                                    InputField {text: "Observações: "; input<=> temp_observacao;place_holder: selected_client.observacao;}
+                                    InputField {text: "Endereço: "; input<=> temp_endereco;place_holder: selected_client.endereco;}
+                                    InputField {visible:false;text: "Modelo: "; }
+                                }
+                                cor: white;
+                            }
+                        }
+                        
+                    }
                     VerticalBox {
                         Text {
                             text: "Pedidos";
@@ -56,7 +113,7 @@ export component calculator_screen {
                         }
                     }
 
-                    BaloButton { }
+                    BaloButton {clicked => {}}
 
                     BaloButton { }
                 }
@@ -172,12 +229,25 @@ export component calculator_screen {
                         cor: white;
                         VerticalBox {
                             VerticalBox {
-                                Text {
-                                    text: "Detalhes de Pedido";
-                                    color: black;
-                                    font-size: Theme.fontSizeTitle;
-                                    font-weight: 700;
+                                HorizontalLayout {
+                                    Text {
+                                        vertical-alignment: center;
+                                        text: "Detalhes de Pedido";
+                                        color: black;
+                                        font-size: Theme.fontSizeTitle;
+                                        font-weight: 700;
+                                    }
+
+                                    HorizontalLayout {
+                                        spacing: 10px;
+                                        alignment: center;
+                                        width: 3%;
+                                        BaloButton {height: 30px; width: 50px; texto: "Editar"; clicked => {Edit_Screen.show();}}
+                                        BaloButton {background:#f01414;height: 30px; width: 50px; texto: "🗑️"; clicked => {excluir_cliente(); Detalhes_Pedido.visible=false}}
+                                    }
+                                    
                                 }
+                                
                             }
 
                             HorizontalBox {
@@ -257,7 +327,7 @@ export component calculator_screen {
 
                                     Container {
                                         cor: white;
-                                        VerticalBox {
+                                        VerticalLayout {
                                             alignment: center;
                                             Text {
                                                 horizontal-alignment: center;
@@ -267,13 +337,19 @@ export component calculator_screen {
                                                 font-weight: 700;
                                             }
 
-                                            Text {
-                                                horizontal-alignment: center;
-                                                text: "\{root.selected_client.status}";
-                                                color: black;
-                                                font-size: Theme.fontSizeBody;
-                                                font-weight: 500;
+                                            CustomComboBox {
+                                                width: 10%;
+                                                model: ["Pendente","Trabalhando","Concluido","Entregue"];
+                                                current-value: root.selected_client.status;
+                                                
                                             }
+                                            // Text {
+                                            //     horizontal-alignment: center;
+                                            //     text: "\{root.selected_client.status}";
+                                            //     color: black;
+                                            //     font-size: Theme.fontSizeBody;
+                                            //     font-weight: 500;
+                                            // }
                                         }
                                     }
 
@@ -347,6 +423,7 @@ export component calculator_screen {
                             }
                         }
                     }
+                     
                 }
             }
         }
@@ -613,4 +690,10 @@ export component calculator_screen {
             }
         }
     }
+
+
+   
+
+
+   
 }

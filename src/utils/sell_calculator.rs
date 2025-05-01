@@ -65,7 +65,7 @@ pub fn calcular_venda(ui: &AppWindow) {
 
 pub fn get_combobox(ui: &AppWindow) -> Option<String> {
     let selected_box = ui.get_combobox_selected();
-    let mut impressoras = ui.get_impressoras();
+    let  impressoras = ui.get_impressoras();
 
     // Adicione debug para verificar os valores
     println!("Selected: {:?}", selected_box);
@@ -77,7 +77,7 @@ pub fn get_combobox(ui: &AppWindow) -> Option<String> {
             println!("Comparando: {} == {}", i.modelo, selected_box);
             i.modelo == selected_box
         })
-        .map(|mut impressora| {
+        .map(|  impressora| {
             println!("Impressora encontrada: {:?}", impressora);
             impressora.watts.to_string()
         });

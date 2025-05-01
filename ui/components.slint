@@ -144,15 +144,18 @@ export component CustomComboBox {
 export component Container {
     in property <length> borda;
     in property <color> cor;
+    in property <length> shadow_blur;
+    in property <length> border_width;
+    in property <length> border_radius;
     Rectangle {
         // clip: true;
         background: cor;
-        border-radius: Theme.borderRadius;
+        border-radius: (border_radius)+ Theme.borderRadius;
         padding: Theme.spacing;
         drop-shadow-color: rgba(0,0,0,0.5);
         drop-shadow-offset-y: 2px;
-        drop-shadow-blur: 5px;
-        border-width: 0.4px;
+        drop-shadow-blur: (shadow_blur)+ 5px;
+        border-width: (border_width)+0.4px;
         
         border-color: Theme.primary;
         @children
@@ -162,6 +165,7 @@ export component Container {
 export component InputField {
     in property <string> text;
     in-out property <string> input;
+    in property <string> place_holder;
     VerticalBox {
         spacing: Theme.spacing;
 
@@ -179,6 +183,16 @@ export component InputField {
             min-height: Theme.inputHeight + 10px;
             /* Input de texto de baixo nível */
             TextInput {
+                HorizontalLayout {
+
+                    Text {
+                        visible: input == "";
+                        vertical-alignment: center;
+                        text: place_holder;
+                        color: black;
+                    }
+                }
+                
                 vertical-alignment: center;
                 width: parent.width - 15px;
                 min-height: Theme.inputHeight;
@@ -220,22 +234,25 @@ export component SideButton {
 
 export component BaloButton {
     in property <string> texto;
-   
+    in property <brush> background: Theme.primary;
     callback clicked;
     Rectangle {
+        
         clip: true;
-        background: Theme.primary;
+        background: root.background;
         border-radius: Theme.borderRadius;
         drop-shadow-offset-y: 2px;
         drop-shadow-color: rgba(0,0,0,0.2);
         drop-shadow-blur: 8px;
-        HorizontalBox {
+        HorizontalLayout {
             alignment: center;
-            VerticalBox {
+            VerticalLayout {
                 alignment: center;
                 spacing: Theme.spacing;
                 min-height: Theme.buttonHeight;
                 Text {
+                    vertical-alignment: center;
+                    horizontal-alignment: center;
                     text: root.texto;
                     font-size: Theme.fontSizeBody;
                     color: Theme.onPrimary;
