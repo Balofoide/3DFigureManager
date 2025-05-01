@@ -4,8 +4,8 @@ import { ListView, ScrollView, VerticalBox } from "std-widgets.slint";
 import {Theme} from "styling.slint";
 
 
-
-
+ 
+ 
 
 
 export component CustomComboBox {
@@ -27,17 +27,14 @@ export component CustomComboBox {
     // Tamanho do componente
     width: 350px;
     height: 30px;
-
     Rectangle {
-            
         height: parent.height;
         width: parent.width;
          
         // border-color: root.border-color;
         // border-width: 1px;
-        border-radius:10px;
+        border-radius: 10px;
         background: root.background-color;
-
         VerticalLayout {
             alignment: center;
             HorizontalBox {
@@ -47,7 +44,6 @@ export component CustomComboBox {
                     text: root.current-value;
                     color: root.text-color;
                     font-size: Theme.fontSizeSmall;
-                   
                 }
         
                 // Seta de dropdown
@@ -57,11 +53,7 @@ export component CustomComboBox {
                     text: "▼";
                     color: root.text-color;
                     width: 16px;
-                     
-                     
                 }
-                
-                
             }
         }
        
@@ -69,8 +61,9 @@ export component CustomComboBox {
       
         // Abre o popup ao clicar
         TouchArea {
-            
-            clicked => {popup.show();}
+            clicked => {
+                popup.show();
+            }
         }
     }
 
@@ -78,68 +71,56 @@ export component CustomComboBox {
     popup := PopupWindow {
         // x: -10px;
         y: root.height * 0.84;
-        width: root.width ;
+        width: root.width;
         height: root.height * 2.5;
-
         VerticalLayout {
             width: 100%;
             height: 100%;
-             
             Rectangle {
-                
                 background: rgba(0,0,0,0.3);
               
                 // border-top-left-radius: 5px;
                 // border-top-right-radius: 5px;
                 border-bottom-left-radius: 10px;
                 border-bottom-right-radius: 10px;
-
                 ScrollView {
-                
                     width: parent.width;
-                height: parent.height;
-                   
+                    height: parent.height;
                     VerticalBox {
                         alignment: center;
                         width: 100%;
                     // Declaramos `index` para poder usá-lo
                     for item[index] in root.model: Rectangle {
-                        width: 100%;
-                        border-radius: 10px;
-                        height: root.option-height;
-                        background: root.popup-background;
+                            width: 100%;
+                            border-radius: 10px;
+                            height: root.option-height;
+                            background: root.popup-background;
         
                         // Cada opção
                         Text {
-                            text: item;
-                            color: root.text-color;
-                            x: (parent.width) / 40;
-                            y: parent.height / 6;
-                        }
+                                text: item;
+                                color: root.text-color;
+                                x: (parent.width) / 40;
+                                y: parent.height / 6;
+                            }
         
                         // Seleção da opção
                         TouchArea {
-                            callback selected_temp(string);
-                            clicked => {
-                                root.current-index = index;
-                                root.current-value = item;
-                                root.selected(item);
-                                 
-                                popup.close();
+                                callback selected_temp(string);
+                                clicked => {
+                                    root.current-index = index;
+                                    root.current-value = item;
+                                    root.selected(item);
+                                    popup.close();
+                                }
                             }
                         }
                     }
                 }
-                }
-                }
-            
+            }
         }
-      
     }
 }
-
-
-
 
 export component Container {
     in property <length> borda;
@@ -150,28 +131,29 @@ export component Container {
     Rectangle {
         // clip: true;
         background: cor;
-        border-radius: (border_radius)+ Theme.borderRadius;
+        border-radius: (border_radius) + Theme.borderRadius;
         padding: Theme.spacing;
         drop-shadow-color: rgba(0,0,0,0.5);
         drop-shadow-offset-y: 2px;
-        drop-shadow-blur: (shadow_blur)+ 5px;
-        border-width: (border_width)+0.4px;
-        
+        drop-shadow-blur: (shadow_blur) + 5px;
+        border-width: (border_width) + 0.4px;
         border-color: Theme.primary;
         @children
     }
 }
 
 export component InputField {
-    in property <string> text;
+    in property <string> texto;
     in-out property <string> input;
     in property <string> place_holder;
+    in property <InputType> type: text;
+    in property <int> max_lenght: 10;
     VerticalBox {
         spacing: Theme.spacing;
 
         /* Rótulo */
         Text {
-            text: root.text;
+            text: root.texto;
             font-size: Theme.fontSizeBody;
             color: Theme.onBackground;
         }
@@ -184,7 +166,6 @@ export component InputField {
             /* Input de texto de baixo nível */
             TextInput {
                 HorizontalLayout {
-
                     Text {
                         visible: input == "";
                         vertical-alignment: center;
@@ -192,14 +173,33 @@ export component InputField {
                         color: black;
                     }
                 }
-                
+
+                input-type: type;
                 vertical-alignment: center;
                 width: parent.width - 15px;
                 min-height: Theme.inputHeight;
                 text <=> root.input;
                 font-size: Theme.fontSizeBody;
                 color: Theme.onBackground;
+                key-pressed(event)  => {
+                    if(self.text.character-count < max_lenght) {  return reject;}           
+                    
+                    if event.text.character-count == 0 {
+                        return reject;
+                    }
+                    if event.text == Key.Backspace || event.text == Key.Delete || event.text == Key.Tab {
+                        return reject;
+                    }
+                    if event.modifiers.control || event.modifiers.meta {
+                        return reject;
+                    }
+                    
+                    return accept;   
+                }
+                
+               
             }
+           
         }
     }
 }
@@ -237,7 +237,6 @@ export component BaloButton {
     in property <brush> background: Theme.primary;
     callback clicked;
     Rectangle {
-        
         clip: true;
         background: root.background;
         border-radius: Theme.borderRadius;
@@ -259,7 +258,6 @@ export component BaloButton {
                 }
             }
         }
-        
 
         TouchArea {
             clicked => {
@@ -268,9 +266,7 @@ export component BaloButton {
         }
     }
 }
- 
-// components.slint
- 
+
 export component OverviewCard {
     in property <string> title;
     in property <string> value;
@@ -308,6 +304,62 @@ export component OverviewCard {
             }
         }
     }
-} 
+}
 
- 
+export component DataInput {
+    in property <string> texto;
+    in-out property <string> input;
+    in property <string> place_holder: "dd/mm/yyyy";
+    in property <InputType> type: text;
+    VerticalBox {
+        spacing: Theme.spacing;
+
+        /* Rótulo */
+        Text {
+            text: root.texto;
+            font-size: Theme.fontSizeBody;
+            color: Theme.onBackground;
+        }
+
+        /* Caixa de fundo personalizada */
+        Rectangle {
+            border-radius: 10px;
+            background: rgba(0,0,0,0.1);
+            min-height: Theme.inputHeight + 10px;
+            /* Input de texto de baixo nível */
+            TextInput {
+                HorizontalLayout {
+                    Text {
+                        visible: input == "";
+                        vertical-alignment: center;
+                        text: place_holder;
+                        color: black;
+                    }
+                }
+
+                input-type: type;
+                vertical-alignment: center;
+                width: parent.width - 15px;
+                min-height: Theme.inputHeight;
+                text <=> root.input;
+                font-size: Theme.fontSizeBody;
+                color: Theme.onBackground;
+                
+                key-pressed(event)  => {
+                    if( ((event.text >= "0" && event.text <= "9" && self.text.character-count < 10) || event.text == "" || event.text == "/" || event.text == Key.Backspace || event.text == Key.Delete     )) {  return reject;}           
+                    
+                    if event.text.character-count == 0 {
+                        return reject;
+                    }
+                    if event.modifiers.control || event.modifiers.meta {
+                        return reject;
+                    }
+                    
+                    return accept;   
+                }
+                
+            }
+           
+        }
+    }
+}

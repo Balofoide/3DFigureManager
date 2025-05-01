@@ -208,7 +208,7 @@ pub fn excluir_client(ui: &AppWindow) {
     let target_id = selected.id.clone();
 
     // 1. Obter lista atual do UI, filtrando fora o cliente
-    let mut clientes = ui
+    let clientes = ui
         .get_clients_database()
         .iter()
         .enumerate()
@@ -248,3 +248,6 @@ fn excluir_client_json(id: &str) -> std::io::Result<()> {
     }
     Ok(())
 }
+
+
+ 

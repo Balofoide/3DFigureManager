@@ -108,6 +108,7 @@ export component printer_screen {
                                             // spacing: Theme.spacing;
                                             Text {
                                                 text: "Modelo";
+                                                
                                                 color: black;
                                                 font-weight: 700;
                                                 horizontal-alignment: center;
@@ -201,17 +202,20 @@ export component printer_screen {
 
                                         VerticalBox {
                                             InputField {
-                                                text: "Modelo de Impressora";
+                                                max_lenght: 47;
+                                                texto: "Modelo de Impressora";
                                                 input <=> root.input_modelo;
                                             }
     
                                             InputField {
-                                                text: "Watts [W]";
+                                                max_lenght: 5;
+                                                texto: "Watts [W]";
                                                 input <=> root.input_watts;
-                                            }
+                                         }
     
                                             InputField {
-                                                text: "Filamento [g]";
+                                                max_lenght: 5;
+                                                texto: "Filamento [g]";
                                                 input <=> root.input_filamento;
                                             }
     

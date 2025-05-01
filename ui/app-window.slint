@@ -41,10 +41,8 @@ export component AppWindow inherits Window {
     in-out property <Database> selected_client;
     in-out property <int> filamento_total;
     in-out property <string> filamento_printer;
-
     in-out property <string> temp_nome_client;
     in-out property <string> temp_entrega;
-     
     in-out property <string> temp_endereco;
     in-out property <string> temp_observacao;
     callback calcular_preco();
@@ -54,6 +52,7 @@ export component AppWindow inherits Window {
     callback atualizar_filamento();
     callback editar_cliente();
     callback excluir_cliente();
+    callback formater_date();
     no-frame: false;
     width: 1280px;
     combobox-selected: "Teste";
@@ -112,8 +111,6 @@ export component AppWindow inherits Window {
             padding: Theme.spacing;
             clip: true;
             visible: true;
-
-
             Calculator_Screen := calculator-screen {
                 width: parent.width;
                 height: parent.height;
@@ -135,11 +132,9 @@ export component AppWindow inherits Window {
                 observacao <=> observacao;
                 status <=> status;
                 temp_nome_client <=> temp_nome_client;
-
                 temp_entrega <=> temp_entrega;
-                
                 temp_endereco <=> temp_endereco;
-                temp_observacao <=>temp_observacao;
+                temp_observacao <=> temp_observacao;
                 registrar_cliente => {
                     root.registrar_cliente();
                 }

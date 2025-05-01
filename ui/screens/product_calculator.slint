@@ -1,6 +1,6 @@
 import { Theme } from "../styling.slint";
-import { Container, SideButton, InputField, OverviewCard, BaloButton, CustomComboBox} from "../components.slint";
-import {Button, ComboBox, LineEdit,VerticalBox, HorizontalBox, GridBox, ListView, ScrollView} from "std-widgets.slint";
+import { Container, SideButton, InputField, OverviewCard, BaloButton, CustomComboBox, DataInput} from "../components.slint";
+import {Button, ComboBox, LineEdit,VerticalBox, HorizontalBox, GridBox, ListView, ScrollView,DatePickerPopup} from "std-widgets.slint";
 
 import { Database, Impressoras, Estoque-Database } from "../shared.slint";
 
@@ -25,13 +25,14 @@ export component calculator_screen {
     in-out property <string> modelo;
     in-out property <string> status;
     in-out property <Database> selected_client;
+ 
     callback calcular_preco();
     callback registrar_cliente();
     callback resetar_inputs();
     callback atualizar_filamento();
     callback editar_cliente();
     callback excluir_cliente();
-
+   
 
     // Variaveis de Edit
     in-out property <string> temp_nome_client;
@@ -83,13 +84,13 @@ export component calculator_screen {
                                         }
                                         BaloButton { width:80px; height: 40px;texto: "Confirmar"; clicked => {editar_cliente(); Edit_Screen.close();}}
                                     }
-                                  
-                                    InputField {text: "Cliente: "; input<=> temp_nome_client; place_holder: selected_client.nome;}
-                                    InputField {text: "Entrega: "; input<=> temp_entrega ;place_holder: selected_client.entrega;}
                                     
-                                    InputField {text: "Observações: "; input<=> temp_observacao;place_holder: selected_client.observacao;}
-                                    InputField {text: "Endereço: "; input<=> temp_endereco;place_holder: selected_client.endereco;}
-                                    InputField {visible:false;text: "Modelo: "; }
+                                    InputField {texto: "Cliente: "; input<=> temp_nome_client; place_holder: selected_client.nome;}
+                                    DataInput {texto: "Entrega: "; input<=> temp_entrega ;place_holder: selected_client.entrega;}
+                                    
+                                    InputField {texto: "Observações: "; input<=> temp_observacao;place_holder: selected_client.observacao;}
+                                    InputField {texto: "Endereço: "; input<=> temp_endereco;place_holder: selected_client.endereco;}
+                                    InputField {visible:false;texto: "Modelo: "; }
                                 }
                                 cor: white;
                             }
@@ -467,12 +468,14 @@ export component calculator_screen {
                                         alignment: start;
                                         padding: Theme.spacing;
                                         InputField {
-                                            text: "Nome Cliente";
+                                            texto: "Nome Cliente";
+                                            max_lenght: 30;
                                             input <=> root.nome_cliente;
                                         }
 
                                         InputField {
-                                            text: "Endereço";
+                                            texto: "Endereço";
+                                            max_lenght: 47;
                                             input <=> root.endereco;
                                         }
                                     }
@@ -490,18 +493,32 @@ export component calculator_screen {
                                         font-weight: 800;
                                         font-size: 20px;
                                     }
-
-                                    VerticalBox {
+                                    
+                                    VerticalLayout {
                                         padding: Theme.spacing;
-                                        InputField {
-                                            text: "Data Entrega";
-                                            input <=> root.entrega;
-                                        }
+                                                 DataInput {
+                                                    texto: "Data";
+                                                    input <=> entrega;
+                                                 }
+                                        
+                                        
+  
 
                                         InputField {
-                                            text: "Observação";
+                                            max_lenght: 47;
+                                            texto: "Observação";
                                             input <=> root.observacao;
                                         }
+
+
+
+
+
+
+
+
+
+
                                     }
                                 }
                             }
@@ -523,16 +540,19 @@ export component calculator_screen {
                                         padding: Theme.spacing;
                                         alignment: start;
                                         InputField {
-                                            text: "Modelo 3D";
+                                            max_lenght: 47;
+                                            texto: "Modelo 3D";
                                             input <=> root.modelo;
                                         }
 
                                         InputField {
-                                            text: "Tempo Estimado [H]";
+                                            max_lenght: 4;
+                                            texto: "Tempo Estimado [H]";
                                             input <=> root.tempo;
                                             changed input => {
                                                 root.calcular_preco();
                                             }
+                                            type: number;
                                         }
 
                                         VerticalBox {
@@ -571,11 +591,13 @@ export component calculator_screen {
                                         }
                                         
                                         InputField {
-                                            text: "Gasto de Material [g]";
+                                            texto: "Gasto de Material [g]";
+                                            max_lenght: 5;
                                             input <=> root.material;
                                             changed input => {
                                                 root.calcular_preco();
                                             }
+                                            type: number;
                                         }
 
                                         VerticalLayout {
@@ -585,11 +607,15 @@ export component calculator_screen {
                                             VerticalBox {        
                                                 width: 50%;                                               
                                                 // height: 30px;
-                                                HorizontalBox {
+                                                HorizontalLayout {
+                                                    spacing: Theme.spacing;
                                                     Rectangle { 
+                                                        
                                                         background: black;
                                                             // width: 100px;
-                                                            SideButton {
+                                                            BaloButton {
+                                                                width: 100%;
+                                                            
                                                                 texto: "Voltar";
                                                                 
                                                                 clicked => {
@@ -627,27 +653,30 @@ export component calculator_screen {
                                     VerticalBox {
                                         padding: Theme.spacing;
                                         InputField {
-                                            text: "Preço do filamento [R$]";
+                                            texto: "Preço do filamento [R$]";
                                             input <=> root.filamento;
                                             changed input => {
                                                 root.calcular_preco();
                                             }
+                                            type:decimal;
                                         }
 
                                         InputField {
-                                            text: "Taxa de Energia [R$]";
+                                            texto: "Taxa de Energia [R$]";
                                             input <=> root.energia;
                                             changed input => {
                                                 root.calcular_preco();
                                             }
+                                            type:decimal;
                                         }
 
                                         InputField {
-                                            text: "Lucro [%]";
+                                            texto: "Lucro [%]";
                                             input <=> root.lucro;
                                             changed input => {
                                                 root.calcular_preco();
                                             }
+                                            type:number;
                                         }
 
                                         Text {
