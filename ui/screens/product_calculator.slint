@@ -32,6 +32,11 @@ export component calculator_screen {
     callback atualizar_filamento();
     callback editar_cliente();
     callback excluir_cliente();
+
+    callback estoque();
+    callback impressoras();
+    callback dashboard();
+    callback configuracoes();
    
 
     // Variaveis de Edit
@@ -56,6 +61,51 @@ export component calculator_screen {
             HorizontalBox {
                 
                 GridBox {
+                    HorizontalBox {
+                        // max-height: 50px;
+                        Text {
+                                text: "Pedidos";
+                                color: black;
+                                font-weight: 800;
+                                font-size: 40px;
+                            }
+        
+                            BaloButton {
+                                texto: "Adicionar Pedido";
+                                 clicked => {Novo_Pedido.visible = true; Pedidos.visible=false;}
+                            }
+        
+                            BaloButton {
+                                texto: "Dashboard";
+                                clicked => {dashboard() }
+                            }
+                            BaloButton {
+                                texto: "Clientes";
+                                clicked => { }
+                            }
+        
+                            BaloButton {
+                                texto: "Estoque";
+                                clicked => {estoque() }
+                            }
+                            
+                            BaloButton {
+                                texto: "Modelos";
+                                clicked => { }
+                            }
+        
+                            BaloButton {
+                                texto: "Impressoras";
+                                clicked => {impressoras() }
+                            }
+        
+                          
+        
+                            BaloButton {
+                                texto: "Configurações";
+                                clicked => { configuracoes()}
+                            }
+                        } 
                     Edit_Screen := PopupWindow{
                         width: parent.width;
                         height: parent.height;
@@ -97,26 +147,7 @@ export component calculator_screen {
                         }
                         
                     }
-                    VerticalBox {
-                        Text {
-                            text: "Pedidos";
-                            color: black;
-                            font-weight: 800;
-                            font-size: 40px;
-                        }
-                    }
-
-                    BaloButton {
-                        texto: "Novo Pedido";
-                        clicked => {
-                            Pedidos.visible = false;
-                            Novo_Pedido.visible = true;
-                        }
-                    }
-
-                    BaloButton {clicked => {}}
-
-                    BaloButton { }
+                     
                 }
             }
 
@@ -653,7 +684,7 @@ export component calculator_screen {
                                     VerticalBox {
                                         padding: Theme.spacing;
                                         InputField {
-                                            texto: "Preço do filamento [R$]";
+                                            texto: "Preço do filamento/Kg [R$]";
                                             input <=> root.filamento;
                                             changed input => {
                                                 root.calcular_preco();

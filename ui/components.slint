@@ -125,8 +125,8 @@ export component CustomComboBox {
 export component Container {
     in property <length> borda;
     in property <color> cor;
-    in property <length> shadow_blur;
-    in property <length> border_width;
+    in property <length> shadow_blur: 5px;
+    in property <length> border_width: 0.4px;
     in property <length> border_radius;
     Rectangle {
         // clip: true;
@@ -135,8 +135,8 @@ export component Container {
         padding: Theme.spacing;
         drop-shadow-color: rgba(0,0,0,0.5);
         drop-shadow-offset-y: 2px;
-        drop-shadow-blur: (shadow_blur) + 5px;
-        border-width: (border_width) + 0.4px;
+        drop-shadow-blur: shadow_blur ;
+        border-width: border_width;
         border-color: Theme.primary;
         @children
     }

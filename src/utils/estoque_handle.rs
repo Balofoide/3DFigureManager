@@ -18,6 +18,7 @@ struct JsonEstoque {
    quantidade:String,
    quantidade_total:i32,
    medida: String,
+   preco: String,
 }
 
 
@@ -36,7 +37,7 @@ pub fn add_estoque(ui: &AppWindow, novo_cliente: Estoque_Database){
     ui.set_estoque_database(ModelRc::new(vec_model));
 }
 
-pub fn save_estoque(material: String, quantidade:String, quantidade_total:i32, medida: String) -> std::io::Result<()> {
+pub fn save_estoque(material: String, quantidade:String, quantidade_total:i32, medida: String, preco:String) -> std::io::Result<()> {
   
 
     let client_data = JsonEstoque {
@@ -44,6 +45,7 @@ pub fn save_estoque(material: String, quantidade:String, quantidade_total:i32, m
         quantidade,
         quantidade_total,
         medida,
+        preco
     };
 
     let mut file = OpenOptions::new()
@@ -62,8 +64,9 @@ pub fn register_estoque(ui: &AppWindow) {
     let quantidade: String = ui.get_estoque_quantidade().to_string();
     let quantidade_total: i32 = ui.get_estoque_quantidade_total().parse().unwrap_or(0);
     let medida: String = ui.get_estoque_medida().to_string();
+    let preco: String = ui.get_estoque_preco_input().to_string();
 
-    save_estoque(material.clone(),quantidade.clone(),quantidade_total.clone(),medida.clone())
+    save_estoque(material.clone(),quantidade.clone(),quantidade_total.clone(),medida.clone(),preco.clone())
         .expect("Erro ao salvar os dados do cliente");
 
     let estoque = Estoque_Database {
@@ -71,6 +74,7 @@ pub fn register_estoque(ui: &AppWindow) {
         quantidade: quantidade.into(),
         quantidade_total: quantidade_total.into(),
         medida:medida.into(),
+        preco:preco.into(),
     };
 
     add_estoque(&ui, estoque);
@@ -94,6 +98,7 @@ pub fn load_estoque(ui: &AppWindow) -> std::io::Result<()> {
             quantidade: json_client.quantidade.into(),
             quantidade_total: json_client.quantidade_total.into(),
             medida:json_client.medida.into(),
+            preco:json_client.preco.into(),
  
         };
 

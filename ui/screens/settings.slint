@@ -1,0 +1,94 @@
+import { Theme } from "../styling.slint";
+import { Container, SideButton, InputField, OverviewCard, BaloButton } from "../components.slint";
+import {
+    Button, ComboBox, LineEdit,
+    VerticalBox, HorizontalBox, GridBox, ListView, TabWidget
+} from "std-widgets.slint";
+
+import { Database, Impressoras, Estoque-Database } from "../shared.slint";
+
+
+
+export component settings_screen {
+
+    in-out property <string> settings_energia;
+    in-out property <string> settings_lucro;
+
+
+    callback registrar_settings();
+    callback dashboard();
+
+    settings_screen := VerticalBox {
+        
+        // alignment: center;
+        HorizontalBox {
+ 
+                
+                
+                 
+                VerticalLayout {
+                    spacing: Theme.spacing;
+                    padding: Theme.spacing;
+                    
+                    HorizontalLayout {
+
+                        height: 5%;
+                        // width: 5%;
+                        spacing: Theme.spacing;
+                        padding: Theme.spacing;
+                        Text {
+                            height: 10%;
+                            text: "Configurações";
+                            color: black;
+                            font-size: 40px;
+                            font-weight: 800;
+                        }
+                        BaloButton {texto: "Voltar";clicked => {dashboard();}}
+                        BaloButton {texto: "Confirmar";clicked => {registrar_settings();}}
+                         
+ 
+                    }
+                    Container {
+                        padding: Theme.spacing;
+                        
+                        cor: white;
+                         VerticalBox {
+                            GridBox {
+                            
+                                spacing: Theme.spacing;
+                                padding: Theme.spacing;
+                                height: 20%;
+                                Row {
+                                    InputField {
+                                        input <=> settings_energia;
+                                        texto: "Taxa de Energia";
+                                    }
+            
+                                    InputField {
+                                        texto: "Lucro padrão:";
+                                        input <=> settings_lucro;
+                                    }
+                                }
+                                Row {
+                                    InputField {
+                                        texto: "WIP";
+                                        
+                                    }
+                                    InputField {
+                                        texto: "WIP";
+                                         
+                                    }
+                                     
+                                }
+                               
+                            }
+                         }
+                     
+
+                    }
+                    
+                }
+            }
+        }
+    }
+

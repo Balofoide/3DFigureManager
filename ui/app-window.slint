@@ -6,12 +6,14 @@ import { calculator_screen } from "screens/product_calculator.slint";
 import { estoque_screen} from "screens/estoque.slint";
 import { Database, Impressoras, Estoque-Database } from "shared.slint";
 import { printer-screen } from "screens/printer.slint";
+import {settings_screen} from "screens/settings.slint";
 
 export component AppWindow inherits Window {
     function activate(i: int) {
         Calculator_Screen.visible = (i == 1);
         Estoque_Screen.visible = (i == 2);
         Printer_Screen.visible = (i == 3);
+        Settings_Screen.visible = (i ==4);
         Dashboard_Screen.visible = (i == 5);
     }
     in-out property <string> filamento;
@@ -45,6 +47,10 @@ export component AppWindow inherits Window {
     in-out property <string> temp_entrega;
     in-out property <string> temp_endereco;
     in-out property <string> temp_observacao;
+    in-out property <string> estoque_preco_input;
+    in-out property <string>settings_lucro;
+    in-out property <string> settings_energia;
+
     callback calcular_preco();
     callback registrar_cliente();
     callback registrar_impressora();
@@ -53,6 +59,8 @@ export component AppWindow inherits Window {
     callback editar_cliente();
     callback excluir_cliente();
     callback formater_date();
+    callback registrar_settings();
+
     no-frame: false;
     width: 1280px;
     combobox-selected: "Teste";
@@ -65,45 +73,45 @@ export component AppWindow inherits Window {
         height: parent.height;
 
         /* --- SIDEBAR --- */
-        VerticalBox {
-            width: 15%;
-            spacing: Theme.spacing;
-            padding: Theme.spacing;
-            SideButton {
-                texto: "Tela 1";
-                clicked => {
-                    activate(1)
-                }
-            }
+        // VerticalBox {
+        //     width: 15%;
+        //     spacing: Theme.spacing;
+        //     padding: Theme.spacing;
+        //     SideButton {
+        //         texto: "Tela 1";
+        //         clicked => {
+        //             activate(1)
+        //         }
+        //     }
 
-            SideButton {
-                texto: "Tela 2";
-                clicked => {
-                    activate(2)
-                }
-            }
+        //     SideButton {
+        //         texto: "Tela 2";
+        //         clicked => {
+        //             activate(2)
+        //         }
+        //     }
 
-            SideButton {
-                texto: "Tela 3";
-                clicked => {
-                    activate(3)
-                }
-            }
+        //     SideButton {
+        //         texto: "Tela 3";
+        //         clicked => {
+        //             activate(3)
+        //         }
+        //     }
 
-            SideButton {
-                texto: "Tela 4";
-                clicked => {
-                    activate(4)
-                }
-            }
+        //     SideButton {
+        //         texto: "Tela 4";
+        //         clicked => {
+        //             activate(4)
+        //         }
+        //     }
 
-            SideButton {
-                texto: "Tela 5";
-                clicked => {
-                    activate(5)
-                }
-            }
-        }
+        //     SideButton {
+        //         texto: "Tela 5";
+        //         clicked => {
+        //             activate(5)
+        //         }
+        //     }
+        // }
 
         /* --- CONTEÚDO PRINCIPAL --- */
         Rectangle {
@@ -111,10 +119,13 @@ export component AppWindow inherits Window {
             padding: Theme.spacing;
             clip: true;
             visible: true;
+
+
+
             Calculator_Screen := calculator-screen {
                 width: parent.width;
                 height: parent.height;
-                visible: true;
+                visible: false;
                 filamento <=> filamento;
                 material <=> material;
                 tempo <=> tempo;
@@ -135,6 +146,7 @@ export component AppWindow inherits Window {
                 temp_entrega <=> temp_entrega;
                 temp_endereco <=> temp_endereco;
                 temp_observacao <=> temp_observacao;
+
                 registrar_cliente => {
                     root.registrar_cliente();
                 }
@@ -149,8 +161,8 @@ export component AppWindow inherits Window {
                     modelo = "";
                     nome_cliente = "";
                     tempo = "";
-                    energia = "";
-                    lucro = "";
+                    energia = settings_energia;
+                    lucro = settings_lucro;
                     total = 0;
                     endereco = "";
                     entrega = "";
@@ -164,15 +176,50 @@ export component AppWindow inherits Window {
                 excluir_cliente => {
                     root.excluir_cliente();
                 }
+
+
+                dashboard => {
+                    activate(5);
+                }
+                impressoras => {
+                    activate(3);
+                }
+                estoque => {
+                    activate(2);
+                }
+                configuracoes => {
+                    activate(4);
+                }
+
+
             }
 
             Estoque_Screen := estoque-screen {
-                visible: false;
+                width: parent.width;
+                height: parent.height;
+                visible: true;
                 estoque_database <=> estoque_database;
                 estoque_material <=> estoque_material;
                 estoque_quantidade <=> estoque_quantidade;
                 estoque_quantidade_total <=> estoque_quantidade_total;
                 estoque_medida <=> estoque_medida;
+                estoque_preco_input <=> estoque_preco_input;
+
+                registrar_estoque => {
+                    registrar_estoque();
+                }
+                dashboard => {
+                    activate(5);
+                }
+                impressoras => {
+                    activate(3);
+                }
+                estoque => {
+                    activate(2);
+                }
+                configuracoes => {
+                    activate(4);
+                }
             }
 
             Printer_Screen := printer-screen {
@@ -187,6 +234,16 @@ export component AppWindow inherits Window {
                 registrar_impressora => {
                     root.registrar_impressora();
                 }
+                dashboard => {
+                    activate(5);
+                }
+              
+                estoque => {
+                    activate(2);
+                }
+                configuracoes => {
+                    activate(4);
+                }
             }
 
             Dashboard_Screen := dashboard-screen {
@@ -198,6 +255,30 @@ export component AppWindow inherits Window {
                 selected_client <=> selected_client;
                 pedidos => {
                     activate(1);
+                }
+                estoque => {
+                    activate(2);
+                }
+                impressoras => {
+                    activate(3);
+                }
+                configuracoes => {
+                    activate(4);
+                }
+
+            }
+
+            Settings-Screen := settings-screen {
+                width: parent.width;
+                height: parent.height;
+                visible: false;
+                settings_lucro <=> settings_lucro;
+                settings_energia <=> settings_energia;         
+                registrar_settings => {
+                    registrar_settings();
+                }
+                dashboard => {
+                    activate(5);
                 }
             }
         }

@@ -1,5 +1,5 @@
 import { Theme } from "../styling.slint";
-import { Container, SideButton, InputField, OverviewCard} from "../components.slint";
+import { Container, SideButton, InputField, OverviewCard, BaloButton} from "../components.slint";
 import {
     Button, ComboBox, LineEdit,
     VerticalBox, HorizontalBox, GridBox, ListView
@@ -18,9 +18,13 @@ export component dashboard_screen {
     callback registrar_cliente();
     callback registrar_impressora();
     callback registrar_estoque();
+    
 
     
     callback pedidos();
+    callback impressoras();
+    callback configuracoes();
+    callback estoque();
     VerticalBox {
     //  height: 700px;
     //  width: 900px;
@@ -42,29 +46,32 @@ export component dashboard_screen {
                         font-size: 40px;
                     }
 
-                    SideButton {
+                    BaloButton {
                         texto: "Pedidos";
-                         
+                         clicked => {pedidos()}
                     }
 
-                    SideButton {
+                    BaloButton {
                         texto: "Clientes";
                     }
 
-                    SideButton {
+                    BaloButton {
                         texto: "Estoque";
+                        clicked => {estoque()}
                     }
 
-                    SideButton {
+                    BaloButton {
                         texto: "Impressoras";
+                        clicked => {impressoras()}
                     }
 
-                    SideButton {
+                    BaloButton {
                         texto: "Modelos";
                     }
 
-                    SideButton {
-                        texto: "Financeiro";
+                    BaloButton {
+                        texto: "Configurações";
+                        clicked => {configuracoes()}
                     }
                 }
 

@@ -14,10 +14,10 @@ use crate::utils::database_handle::register_client;
 use crate::utils::estoque_handle::register_estoque;
 use crate::utils::impressora_handle::register_impressora;
 use crate::utils::sell_calculator::calcular_venda;
- 
+use crate::utils::settings_handle::{load_settings,registrar_settings};
 slint::include_modules!();
 
-// pub use crate::slint_generatedAppWindow::{AppWindow, Database};
+ 
 
 fn main() {
     callback().expect("Failed to execute callback");
@@ -33,6 +33,7 @@ fn callback() -> Result<(), Box<dyn Error>> {
         load_clients(&ui).expect("Erro ao carregar clients");
         load_impressoras(&ui).expect("Erro ao caregar impressoras");
         load_estoque(&ui).expect("Erro ao carregar o estoque");
+        load_settings(&ui).expect("Erro ao carregar Settings");
         ui.set_vendas_total(total_vendas(&ui));
         ui.set_filamento_total(total_filamento(&ui));
     }
@@ -101,7 +102,15 @@ fn callback() -> Result<(), Box<dyn Error>> {
         }
     });
 
- 
+    ui.on_registrar_settings({
+        let ui_handle = ui.as_weak();
+
+        move || {
+            let ui = ui_handle.unwrap();
+            registrar_settings(&ui);
+        }
+
+    });
 
  
 
