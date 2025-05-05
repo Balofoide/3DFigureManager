@@ -18,6 +18,7 @@ export component printer_screen {
     callback dashboard();
     callback estoque();
     callback configuracoes();
+    callback pedidos();
     Impressoras_Tela := VerticalBox {
         //  height: 700px;
         //  width: 900px;
@@ -58,7 +59,8 @@ export component printer_screen {
                     
 
                         BaloButton {
-                            texto: "Modelos";
+                            texto: "Pedidos";
+                            clicked => {pedidos()}
                         }
 
                         BaloButton {

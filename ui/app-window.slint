@@ -13,7 +13,7 @@ export component AppWindow inherits Window {
         Calculator_Screen.visible = (i == 1);
         Estoque_Screen.visible = (i == 2);
         Printer_Screen.visible = (i == 3);
-        Settings_Screen.visible = (i ==4);
+        Settings_Screen.visible = (i == 4);
         Dashboard_Screen.visible = (i == 5);
     }
     in-out property <string> filamento;
@@ -48,9 +48,8 @@ export component AppWindow inherits Window {
     in-out property <string> temp_endereco;
     in-out property <string> temp_observacao;
     in-out property <string> estoque_preco_input;
-    in-out property <string>settings_lucro;
+    in-out property <string> settings_lucro;
     in-out property <string> settings_energia;
-
     callback calcular_preco();
     callback registrar_cliente();
     callback registrar_impressora();
@@ -60,7 +59,6 @@ export component AppWindow inherits Window {
     callback excluir_cliente();
     callback formater_date();
     callback registrar_settings();
-
     no-frame: false;
     width: 1280px;
     combobox-selected: "Teste";
@@ -119,9 +117,6 @@ export component AppWindow inherits Window {
             padding: Theme.spacing;
             clip: true;
             visible: true;
-
-
-
             Calculator_Screen := calculator-screen {
                 width: parent.width;
                 height: parent.height;
@@ -146,7 +141,6 @@ export component AppWindow inherits Window {
                 temp_entrega <=> temp_entrega;
                 temp_endereco <=> temp_endereco;
                 temp_observacao <=> temp_observacao;
-
                 registrar_cliente => {
                     root.registrar_cliente();
                 }
@@ -176,8 +170,6 @@ export component AppWindow inherits Window {
                 excluir_cliente => {
                     root.excluir_cliente();
                 }
-
-
                 dashboard => {
                     activate(5);
                 }
@@ -190,8 +182,6 @@ export component AppWindow inherits Window {
                 configuracoes => {
                     activate(4);
                 }
-
-
             }
 
             Estoque_Screen := estoque-screen {
@@ -204,7 +194,6 @@ export component AppWindow inherits Window {
                 estoque_quantidade_total <=> estoque_quantidade_total;
                 estoque_medida <=> estoque_medida;
                 estoque_preco_input <=> estoque_preco_input;
-
                 registrar_estoque => {
                     registrar_estoque();
                 }
@@ -219,6 +208,9 @@ export component AppWindow inherits Window {
                 }
                 configuracoes => {
                     activate(4);
+                }
+                pedidos => {
+                    activate(1);
                 }
             }
 
@@ -237,12 +229,14 @@ export component AppWindow inherits Window {
                 dashboard => {
                     activate(5);
                 }
-              
                 estoque => {
                     activate(2);
                 }
                 configuracoes => {
                     activate(4);
+                }
+                pedidos => {
+                    activate(1);
                 }
             }
 
@@ -265,7 +259,6 @@ export component AppWindow inherits Window {
                 configuracoes => {
                     activate(4);
                 }
-
             }
 
             Settings-Screen := settings-screen {
@@ -273,7 +266,7 @@ export component AppWindow inherits Window {
                 height: parent.height;
                 visible: false;
                 settings_lucro <=> settings_lucro;
-                settings_energia <=> settings_energia;         
+                settings_energia <=> settings_energia;
                 registrar_settings => {
                     registrar_settings();
                 }

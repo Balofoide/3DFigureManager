@@ -23,6 +23,7 @@ export component estoque_screen {
     callback estoque();
     callback impressoras();
     callback configuracoes();
+    callback pedidos();
 
     Container {
         width: parent.width;
@@ -51,8 +52,8 @@ export component estoque_screen {
                                 clicked => {dashboard() }
                             }
                             BaloButton {
-                                texto: "Clientes";
-                                clicked => { }
+                                texto: "Pedidos";
+                                clicked => {pedidos() }
                             }
            
                             BaloButton { 
