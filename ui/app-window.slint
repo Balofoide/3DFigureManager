@@ -50,6 +50,17 @@ export component AppWindow inherits Window {
     in-out property <string> estoque_preco_input;
     in-out property <string> settings_lucro;
     in-out property <string> settings_energia;
+    in-out property <Estoque-Database> selectec_estoque;
+    in-out property <int> preco_total_estoque;
+
+    in-out property <string> temp_estoque_material;
+    in-out property <string> temp_estoque_quantidade;
+    in-out property <string> temp_estoque_quantidade_total;
+    in-out property <string> temp_estoque_preco;
+    in-out property <string> temp_estoque_medida;
+    in-out property <string> temp_status;
+
+
     callback calcular_preco();
     callback registrar_cliente();
     callback registrar_impressora();
@@ -59,6 +70,10 @@ export component AppWindow inherits Window {
     callback excluir_cliente();
     callback formater_date();
     callback registrar_settings();
+    callback atualizar_estoque();
+    callback estoque_total_preco();
+    callback excluir_estoque();
+
     no-frame: false;
     width: 1280px;
     combobox-selected: "Teste";
@@ -68,8 +83,10 @@ export component AppWindow inherits Window {
         spacing: Theme.spacing;
         padding: Theme.spacing;
         width: parent.width;
+        x: 4px;
+        y: 5px;
         height: parent.height;
-
+      
         /* --- SIDEBAR --- */
         // VerticalBox {
         //     width: 15%;
@@ -115,6 +132,7 @@ export component AppWindow inherits Window {
         Rectangle {
             background: Theme.background;
             padding: Theme.spacing;
+            border-radius: 20px;
             clip: true;
             visible: true;
             Calculator_Screen := calculator-screen {
@@ -141,6 +159,7 @@ export component AppWindow inherits Window {
                 temp_entrega <=> temp_entrega;
                 temp_endereco <=> temp_endereco;
                 temp_observacao <=> temp_observacao;
+                temp_status <=> temp_status;
                 registrar_cliente => {
                     root.registrar_cliente();
                 }
@@ -194,6 +213,15 @@ export component AppWindow inherits Window {
                 estoque_quantidade_total <=> estoque_quantidade_total;
                 estoque_medida <=> estoque_medida;
                 estoque_preco_input <=> estoque_preco_input;
+                selectec_estoque <=> selectec_estoque;
+                preco_total_estoque <=>preco_total_estoque ;
+
+
+                temp_estoque_material <=> temp_estoque_material;
+                temp_estoque_quantidade <=> temp_estoque_quantidade;
+                temp_estoque_quantidade_total <=> temp_estoque_quantidade_total;
+                temp_estoque_preco <=>temp_estoque_preco;
+                temp_estoque_medida <=> temp_estoque_medida;
                 registrar_estoque => {
                     registrar_estoque();
                 }
@@ -211,6 +239,15 @@ export component AppWindow inherits Window {
                 }
                 pedidos => {
                     activate(1);
+                }
+                atualizar_estoque => {
+                    atualizar_estoque();
+                }
+                estoque_total_preco => {
+                    estoque_total_preco();
+                }
+                excluir_estoque => {
+                    excluir_estoque();
                 }
             }
 

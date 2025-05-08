@@ -6,7 +6,7 @@ use std::error::Error;
 mod utils;
 
 use utils::database_handle::{atualizar_client, excluir_client, load_clients};
-use utils::estoque_handle::load_estoque;
+use utils::estoque_handle::{atualizar_estoque, load_estoque, total_estoque};
 use utils::impressora_handle::{load_impressoras, total_filamento};
 use utils::sell_calculator::{atualizar_filamento, total_vendas};
 
@@ -15,6 +15,8 @@ use crate::utils::estoque_handle::register_estoque;
 use crate::utils::impressora_handle::register_impressora;
 use crate::utils::sell_calculator::calcular_venda;
 use crate::utils::settings_handle::{load_settings,registrar_settings};
+use crate::utils::estoque_handle::excluir_estoque;
+
 slint::include_modules!();
 
  
@@ -36,6 +38,7 @@ fn callback() -> Result<(), Box<dyn Error>> {
         load_settings(&ui).expect("Erro ao carregar Settings");
         ui.set_vendas_total(total_vendas(&ui));
         ui.set_filamento_total(total_filamento(&ui));
+        ui.set_preco_total_estoque(total_estoque(&ui) );
     }
 
     ui.on_calcular_preco({
@@ -52,6 +55,7 @@ fn callback() -> Result<(), Box<dyn Error>> {
         move || {
             let ui = ui_handle.unwrap();
             atualizar_client(&ui);
+            ui.set_status("".into());
         }
     });
     ui.on_excluir_cliente({
@@ -99,6 +103,7 @@ fn callback() -> Result<(), Box<dyn Error>> {
             let ui = ui_handle.unwrap();
             register_estoque(&ui);
             ui.set_vendas_total(total_vendas(&ui));
+            ui.set_preco_total_estoque(total_estoque(&ui));
         }
     });
 
@@ -112,7 +117,22 @@ fn callback() -> Result<(), Box<dyn Error>> {
 
     });
 
- 
+    ui.on_atualizar_estoque({
+        let ui_handle = ui.as_weak();
+
+        move || {
+            let ui = ui_handle.unwrap();
+             atualizar_estoque(&ui);
+        }
+    });
+    ui.on_excluir_estoque({
+        let ui_handle = ui.as_weak();
+
+        move || {
+            let ui = ui_handle.unwrap();
+             excluir_estoque(&ui);
+        }
+    });
 
     ui.run()?;
 

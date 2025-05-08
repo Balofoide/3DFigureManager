@@ -1,6 +1,6 @@
 import { Theme } from "../styling.slint";
 import { Container, SideButton, InputField, OverviewCard, BaloButton, CustomComboBox, DataInput} from "../components.slint";
-import {Button, ComboBox, LineEdit,VerticalBox, HorizontalBox, GridBox, ListView, ScrollView,DatePickerPopup} from "std-widgets.slint";
+import {Button, ComboBox, LineEdit,VerticalBox, HorizontalBox, GridBox, ListView, ScrollView,DatePickerPopup, AboutSlint} from "std-widgets.slint";
 
 import { Database, Impressoras, Estoque-Database } from "../shared.slint";
 
@@ -17,104 +17,171 @@ export component estoque_screen {
     in-out property <string> estoque_material_input;
     in-out property <string> estoque_quantidade_input;
     in-out property <string> estoque_preco_input;
-    callback registrar_estoque();
+    in-out property <Estoque-Database> selectec_estoque;
+    in-out property <int> preco_total_estoque;
 
+
+
+    in-out property <string> temp_estoque_material;
+    in-out property <string> temp_estoque_quantidade;
+    in-out property <string> temp_estoque_quantidade_total;
+    in-out property <string> temp_estoque_preco;
+    in-out property <string>  temp_estoque_medida;
+
+    callback registrar_estoque();
     callback dashboard();
     callback estoque();
     callback impressoras();
     callback configuracoes();
     callback pedidos();
-
+    callback atualizar_estoque();
+    callback estoque_total_preco();
+    callback excluir_estoque();
     Container {
         width: parent.width;
         height: parent.height;
         cor: white;
         visible: true;
         Estoques := VerticalBox {
+            visible: true;
             HorizontalBox {
                 GridBox {
                     HorizontalBox {
                         // max-height: 50px;
                         Text {
-                                text: "Estoque";
-                                color: black;
-                                font-weight: 800;
-                                font-size: 40px;
+                            text: "Estoque";
+                            color: black;
+                            font-weight: 800;
+                            font-size: 40px;
+                        }
+
+                        BaloButton {
+                            texto: "Adicionar Material";
+                            clicked => {
+                                novo_material.visible = true;
+                                Estoques.visible = false;
                             }
-        
-                            BaloButton {
-                                texto: "Adicionar Material";
-                                 clicked => {novo_material.visible = true; Estoques.visible=false;}
+                        }
+
+                        BaloButton {
+                            texto: "Dashboard";
+                            clicked => {
+                                dashboard()
                             }
-        
-                            BaloButton {
-                                texto: "Dashboard";
-                                clicked => {dashboard() }
+                        }
+
+                        BaloButton {
+                            texto: "Pedidos";
+                            clicked => {
+                                pedidos()
                             }
-                            BaloButton {
-                                texto: "Pedidos";
-                                clicked => {pedidos() }
+                        }
+
+                        BaloButton {
+                            texto: "Impressoras";
+                            clicked => {
+                                impressoras()
                             }
-           
-                            BaloButton { 
-                                texto: "Modelos";
-                                clicked => { }
+                        }
+
+                        BaloButton {
+                            texto: "Configurações";
+                            clicked => {
+                                configuracoes()
                             }
-        
-                            BaloButton {
-                                texto: "Impressoras";
-                                clicked => {impressoras() }
+                        }
+                    }
+
+                    Edit_Estoque_Screen := PopupWindow {
+                        width: parent.width;
+                        height: parent.height;
+                        close-policy: close-on-click-outside;
+                        x: parent.width / 2;
+                        y: parent.height * 2.5;
+                        VerticalLayout {
+                            // width: 500px;
+                            // height: 500px;
+                            Container {
+                                width: 100%;
+                                height: 100%;
+                                shadow_blur: 10px;
+                                border_width: 1px;
+                                border_radius: 10px;
+                                VerticalBox {
+                                    HorizontalBox {
+                                        Text {
+                                            vertical-alignment: center;
+                                            text: "Editar Pedido";
+                                            color: black;
+                                            font-weight: 800;
+                                            font-size: 20px;
+                                        }
+
+                                        BaloButton {
+                                            width: 80px;
+                                            height: 40px;
+                                            texto: "Confirmar";
+                                            clicked => {
+                                                
+                                                atualizar_estoque();
+                                                Edit_Estoque_Screen.close();
+                                                temp_estoque_material = "";
+                                                temp_estoque_quantidade = "";
+                                                temp_estoque_quantidade_total = "";
+                                                temp_estoque_preco = "";
+                                                temp_estoque_medida = "";
+ 
+                                            }
+                                        }
+                                    }
+
+                                    InputField {
+                                        texto: "Material: ";
+                                        max_lenght: 40;
+                                        input <=> temp_estoque_material;
+                                    }
+
+                                    InputField {
+                                        texto: "Quantidade: ";
+                                        max_lenght: 20;
+                                        input <=> temp_estoque_quantidade;
+                                    }
+                                    InputField {
+                                        max_lenght: 20;
+                                        texto: "Quantidade Total: ";
+                                        input <=> temp_estoque_quantidade_total;
+                                    }
+
+
+                                    VerticalBox {
+                                        Text {
+                                            text: "Medida";
+                                            color: black;
+                                        }
+                        
+                                        CustomComboBox {
+                                            model: ["g", "mm", "un", "ml"];
+                                            text-color: black;
+                                            selected(current-value) => {
+                                                temp_estoque_medida = current-value;
+                                                debug(temp_estoque_medida)
+                                            }
+                                        }
+                                    }
+
+                                    InputField {
+                                        max_lenght: 4;
+                                        texto: "Preco: ";
+                                        input <=> temp_estoque_preco;
+                                    }
+
+                                     
+                                }
+
+                                cor: white;
                             }
-        
-                          
-        
-                            BaloButton {
-                                texto: "Configurações";
-                                clicked => { configuracoes()}
-                            }
-                        } 
-                // Edit_Screen := PopupWindow{
-                //     width: parent.width;
-                //     height: parent.height;
-                //     close-policy: close-on-click-outside;
-                //     x: parent.width / 200;
-                //     y: parent.height *3;
-                //     VerticalLayout {
-                //         width: 500px;
-                //         height: 500px;
-                         
-                //         Container {
-                //             width: 100%;
-                //             height: 100%;
-                //             shadow_blur: 10px;
-                //             border_width: 1px;
-                //             border_radius: 10px;
-                            
-                //             VerticalBox {
-                //                 HorizontalBox {
-                //                     Text {
-                //                         vertical-alignment: center;
-                //                         text: "Editar Pedido";
-                //                         color: black;
-                //                         font-weight: 800;
-                //                         font-size: 20px;
-                //                     }
-                //                     BaloButton { width:80px; height: 40px;texto: "Confirmar"; clicked => {editar_cliente(); Edit_Screen.close();}}
-                //                 }
-                                
-                //                 InputField {texto: "Cliente: "; input<=> temp_nome_client; place_holder: selected_client.nome;}
-                //                 DataInput {texto: "Entrega: "; input<=> temp_entrega ;place_holder: selected_client.entrega;}
-                                
-                //                 InputField {texto: "Observações: "; input<=> temp_observacao;place_holder: selected_client.observacao;}
-                //                 InputField {texto: "Endereço: "; input<=> temp_endereco;place_holder: selected_client.endereco;}
-                //                 InputField {visible:false;texto: "Modelo: "; }
-                //             }
-                //             cor: white;
-                //         }
-                //     }
-                    
-                // }
-            
+                        }
+                    }
                 }
             }
 
@@ -122,7 +189,7 @@ export component estoque_screen {
                 height: 90%;
                 Row {
                     Container {
-                    height: 50%;
+                        height: 50%;
                         cor: white;
                         VerticalBox {
                     // spacing: Theme.spacing;
@@ -156,6 +223,10 @@ export component estoque_screen {
                             height: 80%;
                             ListView {
                                 for estoque[index] in estoque_database: TouchArea {
+                                    clicked => {
+                                        root.selectec_estoque = root.estoque_database[index];
+                                        Detalhes_Material.visible = true;
+                                    }
                                     Rectangle {
                                         height: 90%;
                                         padding: 8px;
@@ -187,9 +258,33 @@ export component estoque_screen {
                                             Rectangle {
                                                 width: 25%;
                                                 Text {
-                                                    text: "x" + estoque.quantidade;
+                                                    text: estoque.quantidade + "/" + estoque.quantidade-total + estoque.medida;
                                                     color: black;
                                                     horizontal-alignment: center;
+                                                }
+                                            }
+
+                                            HorizontalBox {
+                                                BaloButton {
+                                                    width: 30px;
+                                                    height: 20px;
+                                                    texto: "+";
+                                                    clicked => {
+                                                        selectec_estoque = estoque;
+                                                        estoque_quantidade = estoque.quantidade.to-float() + 1;
+                                                        atualizar_estoque()
+                                                    }
+                                                }
+
+                                                BaloButton {
+                                                    width: 30px;
+                                                    height: 20px;
+                                                    texto: "-";
+                                                    clicked => {
+                                                        selectec_estoque = estoque;
+                                                        estoque_quantidade = estoque.quantidade.to-float() - 1;
+                                                        atualizar_estoque()
+                                                    }
                                                 }
                                             }
                                         }
@@ -200,31 +295,117 @@ export component estoque_screen {
                     }
 
                     VerticalBox {
-                         
                         Container {
                             height: 600px;
                             width: 30%;
                             cor: white;
-                        
-                        VerticalBox {
-                            HorizontalLayout {
-                                Text {
-                                    vertical-alignment: center;
-                                    text: "Detalhes de Material";
-                                    color: black;
-                                    font-size: Theme.fontSizeTitle;
-                                    font-weight: 700;
-                                }
-
+                            Detalhes_Material :=  VerticalBox {
+                                visible: !selectec_estoque.id.is-empty;
                                 HorizontalLayout {
-                                    spacing: 10px;
-                                    alignment: center;
-                                    width: 3%;
-                                    // BaloButton {background:#f01414;height: 30px; width: 50px; texto: "🗑️"; clicked => {excluir_cliente(); Detalhes_Pedido.visible=false}}
-                                    // BaloButton {height: 30px; width: 50px; texto: "Editar"; clicked => {Edit_Screen.show();}}
+                                    Text {
+                                        vertical-alignment: center;
+                                        text: "Detalhes de Material";
+                                        color: black;
+                                        font-size: Theme.fontSizeTitle;
+                                        font-weight: 700;
+                                    }
+
+                                    HorizontalLayout {
+                                        // visible: !selectec_estoque.id.is-empty;
+                                        spacing: 10px;
+                                        alignment: center;
+                                        width: 3%;
+                                        BaloButton {height: 30px; width: 50px; texto: "Editar"; clicked => {Edit_Estoque_Screen.show();}}
+                                        BaloButton {background:#f01414;height: 30px; width: 50px; texto: "🗑️"; clicked => {excluir_estoque(); Detalhes_Material.visible=false}}
+                                }
+                                }
+                                VerticalBox {
+                                    
+                                    Container {cor:white;
+                                        height: 10%;
+                                         VerticalLayout {
+                                            Text {
+                                               vertical-alignment: center;
+                                                text: "Material:"; color: black;
+                                                font-size: 20px;
+                                                font-weight: 700;
+                                            }
+                                            Text {
+                                                vertical-alignment: center;
+                                                text: selectec_estoque.material; color: black;
+                                                font-size: 20px;
+                                                font-weight: 500;
+                                            }
+                                         }
+                                         
+                                    
+                                    }
+
+                                    Container {cor:white;
+                                        height: 10%;
+                                        VerticalLayout {
+                                           Text {
+                                            vertical-alignment: center;
+                                               text: "Preço:"; color: black;
+                                               font-size: 20px;
+                                               font-weight: 700;
+                                           }
+                                           Text {
+                                            vertical-alignment: center;
+                                               text: "R$"+selectec_estoque.preco; color: black;
+                                               font-size: 20px;
+                                               font-weight: 500;
+                                           }
+                                        }
+                                        
+                                   
+                                   }
+                                   Container {cor:white;
+                                    height: 10%;
+                                    VerticalLayout {
+                                       Text {
+                                            vertical-alignment: center;
+                                           text: "Quantidade:"; color: black;
+                                           font-size: 20px;
+                                           font-weight: 700;
+                                       }
+                                       Text {
+                                        vertical-alignment: center;
+                                           text: selectec_estoque.quantidade+"/"+selectec_estoque.quantidade-total+selectec_estoque.medida; color: black;
+                                           font-size: 20px;
+                                           font-weight: 500;
+                                       }
+                                    }
+                                    
+                               
+                               }
+
+
+                                    VerticalBox {
+                                        alignment: end;
+                                        Container {
+                                            cor: white;
+                                            HorizontalBox {
+                                                Text { color: black; text: "Custo Total:"; font-size: 20px; font-weight: 700;}
+                                                Text {
+                                                    color: black; 
+                                                    text:preco_total_estoque+"R$";
+                                                    font-size: 20px;
+                                                    font-weight: 700;
+                                                
+                                                }
+                                                
+                                            }
+                                        }
+                                        
+
+                                    }
+                                    
+                                    
+                                    
                                 }
                             }
-                        }}
+                        }
 
                         HorizontalBox {
                             spacing: Theme.spacing;
@@ -233,134 +414,106 @@ export component estoque_screen {
                 }
             }
         }
-
-
-    // HorizontalLayout {
-    //     VerticalBox {
-    //         visible: true;
-    //         spacing: Theme.spacing;
-
-    //         InputField { texto: "Material"; input <=> root.estoque_material; }
-    //         InputField { texto: "Quantidade"; input <=> root.estoque_quantidade; }
-    //         ComboBox { model: ["g", "kg", "ml", "un"]; current-value: "-Medida-"; selected(current-value) => { estoque_medida = current-value } }
-
-    //         Button { text: "Adicionar"; clicked => { estoque_quantidade_total = estoque_quantidade; registrar_estoque() } }
-    //     }
-
-    //     VerticalBox {
-    //         visible: true;
-
-    //         HorizontalBox {
-    //             Text { text: "Material"; }
-    //             Text { text: "Quantidade"; }
-    //         }
-
-    //         for product in estoque_database: HorizontalBox {
-    //             spacing: Theme.spacing;
-    //             Text { text: product.material; }
-    //             Text { text: product.quantidade + "/" + product.quantidade-total + product.medida; }
-    //         }
-    //     }
-    // }
 }
 
-    novo_material := Rectangle {
-        width: 100%;
-        height: 100%;
-        background: white;
+    novo_material := VerticalBox {
         visible: false;
+      
         HorizontalBox {
-        // spacing: Theme.spacing;
-
-        VerticalBox {
-            
-            // spacing: Theme.spacing;
             alignment: center;
-            HorizontalBox {
-                
-                    max-height: 50px;
-                    Text {
-                        text: "Adicionar Material";
-                        color: black;
-                        font-weight: 800;
-                        font-size: 40px;
-                    }
-                }
+            GridBox {
+                width: 100%;
+               
+               
 
-                GridBox {
-                // spacing: Theme.spacing;
- 
-
-                Row {
+                Row { 
+                    HorizontalBox {
+                    alignment: center;
+                    VerticalLayout {
+                        alignment: center;
                         HorizontalBox {
-                        // spacing: Theme.spacing;
-
-                        VerticalBox {
                             alignment: center;
-                             
-                                Container {
-                                    cor: white;
-                                
-                          
-                            // spacing: Theme.spacing;
- 
+                            Text {
+                                text: "Novo Material";
+                                color: black;
+                                font-weight: 800;
+                                font-size: 40px;
+                            }
+                        }
+                        
+                        Container {
+                       
+                            cor: white;
+                            VerticalBox {
+                                InputField {
+                                    max_lenght: 47;
+                                    texto: "Nome do Material";
+                                    input <=> root.estoque_material;
+                                }
+                    
+                                InputField {
+                                    max_lenght: 5;
+                                    texto: "Quantidade";
+                                    input <=> root.estoque_quantidade;
+                                }
+                    
+                                VerticalBox {
+                                    Text {
+                                        text: "Medida";
+                                        color: black;
+                                    }
+                    
+                                    CustomComboBox {
+                                        model: ["g", "mm", "un", "ml"];
+                                        text-color: black;
+                                        selected(current-value) => {
+                                            estoque_medida = current-value;
+                                            debug(estoque_medida)
+                                        }
+                                    }
+                                }
+                    
+                                InputField {
+                                    max_lenght: 5;
+                                    texto: "Preço";
+                                    input <=> root.estoque_preco_input;
+                                }
+                    
                                 HorizontalBox {
-                                // spacing: Theme.spacing;
-                                
-                            alignment: center;
-                                        Container {
-                                            width: 50%;
-                                            height: 50%;
-                                            cor: white;
-                                            VerticalBox {
-                                                InputField {
-                                                    max_lenght: 47;
-                                                    texto: "Nome do Material";
-                                                    input <=> root.estoque_material;
-                                                }
-
-                                                InputField {
-                                                    max_lenght: 5;
-                                                    texto: "Quantidade";
-                                                    input <=> root.estoque_quantidade;
-                                                }
-
-                                                InputField {
-                                                    max_lenght: 5;
-                                                    texto: "Preço";
-                                                    input <=> root.estoque_preco_input;
-                                                }
-
-                                                HorizontalBox {
-                                                    width: 50%;
-                                                    BaloButton {
-                                                        height: 5%;
-                                                        texto: "Voltar";
-                                                        clicked => {
-                                                            novo_material.visible = false;
-                                                            Estoques.visible = true;
-                                                        }
-                                                    }
-
-                                                    BaloButton {
-                                                        height: 5%;
-                                                        texto: "Adicionar Impressora";
-                                                        clicked => {
-                                                            root.registrar_estoque();
-                                                            novo_material.visible = false;
-                                                            Estoques.visible = true;
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                    width: 50%;
+                                    BaloButton {
+                                        height: 5%;
+                                        texto: "Voltar";
+                                        clicked => {
+                                            novo_material.visible = false;
+                                            Estoques.visible = true;
+                                        }
+                                    }
+                    
+                                    BaloButton {
+                                        height: 5%;
+                                        texto: "Adicionar Material";
+                                        clicked => {
+                                            root.estoque_quantidade_total = estoque_quantidade;
+                                            root.registrar_estoque();
+                                            novo_material.visible = false;
+                                            Estoques.visible = true;
                                         }
                                     }
                                 }
                             }
                         }
                     }
+                   
+                }
                 }
             }
         }
     }
 }
+ 
+
+
+    
+   
+

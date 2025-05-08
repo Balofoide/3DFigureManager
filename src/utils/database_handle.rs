@@ -133,6 +133,7 @@ pub fn atualizar_client(ui: &AppWindow) {
     let temp_observacao = ui.get_temp_observacao();
     let temp_endereco = ui.get_temp_endereco();
     let selected = ui.get_selected_client();
+    let temp_status = ui.get_temp_status();
 
     // 1. Obter a lista atual de clientes do UI
     let mut clientes = ui
@@ -157,6 +158,9 @@ pub fn atualizar_client(ui: &AppWindow) {
         }
         if !temp_endereco.is_empty() {
             updated.endereco = temp_endereco.clone();
+        }
+        if !temp_status.is_empty(){
+            updated.status = temp_status.clone();
         }
 
         // 3. Atualizar o JSON no disco
@@ -185,7 +189,7 @@ fn atualizar_client_json(updated: &Database) -> std::io::Result<()> {
             rec.nome = updated.nome.to_string().clone();
             rec.endereco = updated.endereco.to_string().clone();
             rec.entrega = updated.entrega.to_string().clone();
-            
+            rec.status = updated.status.to_string().clone();
             rec.observacao = updated.observacao.to_string().clone();
             // mantém preco e status originais
         }

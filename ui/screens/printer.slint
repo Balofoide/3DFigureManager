@@ -52,20 +52,16 @@ export component printer_screen {
                         }
 
                         BaloButton {
-                            texto: "Estoque";
-                            clicked => {estoque()}
-                        }
-
-                    
-
-                        BaloButton {
                             texto: "Pedidos";
                             clicked => {pedidos()}
                         }
-
                         BaloButton {
-                            texto: "Financeiro";
+                            texto: "Estoque";
+                            clicked => {estoque()}
                         }
+                        
+
+ 
                         BaloButton {
                             texto: "Configurações";
                             clicked => {configuracoes();}
@@ -193,15 +189,7 @@ export component printer_screen {
             VerticalBox {
                 // spacing: Theme.spacing;
     
-                HorizontalBox {
-                    max-height: 50px;
-                    Text {
-                        text: "Adicionar Impressora";
-                        color: black;
-                        font-weight: 800;
-                        font-size: 40px;
-                    }
-                }
+                 
 
                 GridBox {
                     // spacing: Theme.spacing;
@@ -209,9 +197,22 @@ export component printer_screen {
     
                     Row {
                         HorizontalBox {
+                            
                             // spacing: Theme.spacing;
     
                             VerticalBox {
+                                HorizontalBox {
+                                    alignment: center;
+                                    Text {
+                                        vertical-alignment: center;
+                                        text: "Adicionar Impressora";
+                                        color: black;
+                                        font-weight: 800;
+                                        font-size: 40px;
+                                    }
+
+                                }
+                                
                                 // spacing: Theme.spacing;
                                 alignment: center;
                                 HorizontalBox {

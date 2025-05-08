@@ -5,9 +5,7 @@ import {Button, ComboBox, LineEdit,VerticalBox, HorizontalBox, GridBox, ListView
 import { Database, Impressoras, Estoque-Database } from "../shared.slint";
 
 export component calculator_screen {
-
     
-
     in-out property <string> filamento;
     in-out property <string> material;
     in-out property <string> tempo;
@@ -44,6 +42,7 @@ export component calculator_screen {
     in-out property <string> temp_entrega;
     in-out property <string> temp_endereco;
     in-out property <string> temp_observacao;
+    in-out property <string> temp_status;
 
 
     width: 500px;
@@ -79,28 +78,17 @@ export component calculator_screen {
                                 texto: "Dashboard";
                                 clicked => {dashboard() }
                             }
-                            BaloButton {
-                                texto: "Clientes";
-                                clicked => { }
-                            }
         
                             BaloButton {
                                 texto: "Estoque";
                                 clicked => {estoque() }
-                            }
-                            
-                            BaloButton {
-                                texto: "Modelos";
-                                clicked => { }
                             }
         
                             BaloButton {
                                 texto: "Impressoras";
                                 clicked => {impressoras() }
                             }
-        
-                          
-        
+                           
                             BaloButton {
                                 texto: "Configurações";
                                 clicked => { configuracoes()}
@@ -271,6 +259,7 @@ export component calculator_screen {
                                     }
 
                                     HorizontalLayout {
+                                        visible: !selected_client.id.is-empty;
                                         spacing: 10px;
                                         alignment: center;
                                         width: 3%;
@@ -373,6 +362,12 @@ export component calculator_screen {
                                                 width: 10%;
                                                 model: ["Pendente","Trabalhando","Concluido","Entregue"];
                                                 current-value: root.selected_client.status;
+                                                
+                                                selected(current-value) => {
+                                                    temp_status = current-value;
+                                                    editar_cliente();
+                                                     
+                                                }
                                                 
                                             }
                                             // Text {
@@ -595,20 +590,7 @@ export component calculator_screen {
 
                                             Rectangle {
                                                 border-radius: 10px;
-                                                    // background: rgba(0,0,0,0.1);
-                                                // drop-shadow-color: rgba(0,0,0,0.1);
-                                                // drop-shadow-blur: 2px;
-                                                // drop-shadow-offset-y: 1px;
-                                                // ComboBox {
-                                                //     enabled: false;
-                                                    
-                                                //     width: 100%;
-                                                //     model: impressoras_string;
-                                                //     current-value: "";
-                                                //     selected(current-value) => {
-                                                //         combobox_selected = current-value;
-                                                //     }
-                                                // }
+                                           
                                                 CustomComboBox {
                                                     model: impressoras_string;
                                                     current-value: "";
