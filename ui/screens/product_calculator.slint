@@ -1,11 +1,10 @@
 import { Theme } from "../styling.slint";
-import { Container, SideButton, InputField, OverviewCard, BaloButton, CustomComboBox, DataInput} from "../components.slint";
-import {Button, ComboBox, LineEdit,VerticalBox, HorizontalBox, GridBox, ListView, ScrollView,DatePickerPopup} from "std-widgets.slint";
+import { Container, SideButton, InputField, OverviewCard, BaloButton, CustomComboBox, DataInput } from "../components.slint";
+import { Button, ComboBox, LineEdit, VerticalBox, HorizontalBox, GridBox, ListView, ScrollView, DatePickerPopup } from "std-widgets.slint";
 
 import { Database, Impressoras, Estoque-Database } from "../shared.slint";
 
 export component calculator_screen {
-    
     in-out property <string> filamento;
     in-out property <string> material;
     in-out property <string> tempo;
@@ -23,705 +22,205 @@ export component calculator_screen {
     in-out property <string> modelo;
     in-out property <string> status;
     in-out property <Database> selected_client;
- 
+
     callback calcular_preco();
     callback registrar_cliente();
     callback resetar_inputs();
     callback atualizar_filamento();
     callback editar_cliente();
     callback excluir_cliente();
+    callback atualizar_f_preco();
 
     callback estoque();
     callback impressoras();
     callback dashboard();
     callback configuracoes();
-   
 
-    // Variaveis de Edit
+    // Temporary Variables for Editing
     in-out property <string> temp_nome_client;
     in-out property <string> temp_entrega;
     in-out property <string> temp_endereco;
     in-out property <string> temp_observacao;
     in-out property <string> temp_status;
 
-
-    width: 500px;
-    height: 500px;
+    width: 600px;
+    height: 600px;
     Container {
         width: parent.width;
         height: parent.height;
-        cor: white;
+        cor: #f9f9f9; // Light background for better contrast
         visible: true;
 
-        
-
-        
         Pedidos := VerticalBox {
+            spacing: 16px;
+            padding: 16px;
+
             HorizontalBox {
-                
-                GridBox {
-                    HorizontalBox {
-                        // max-height: 50px;
-                        Text {
-                                text: "Pedidos";
-                                color: black;
-                                font-weight: 800;
-                                font-size: 40px;
-                            }
-        
-                            BaloButton {
-                                texto: "Adicionar Pedido";
-                                 clicked => {Novo_Pedido.visible = true; Pedidos.visible=false;}
-                            }
-        
-                            BaloButton {
-                                texto: "Dashboard";
-                                clicked => {dashboard() }
-                            }
-        
-                            BaloButton {
-                                texto: "Estoque";
-                                clicked => {estoque() }
-                            }
-        
-                            BaloButton {
-                                texto: "Impressoras";
-                                clicked => {impressoras() }
-                            }
-                           
-                            BaloButton {
-                                texto: "Configurações";
-                                clicked => { configuracoes()}
-                            }
-                        } 
-                    Edit_Screen := PopupWindow{
-                        width: parent.width;
-                        height: parent.height;
-                        close-policy: close-on-click-outside;
-                        x: parent.width / 200;
-                        y: parent.height *3;
-                        VerticalLayout {
-                            width: 500px;
-                            height: 500px;
-                             
-                            Container {
-                                width: 100%;
-                                height: 100%;
-                                shadow_blur: 10px;
-                                border_width: 1px;
-                                border_radius: 10px;
-                                
-                                VerticalBox {
-                                    HorizontalBox {
-                                        Text {
-                                            vertical-alignment: center;
-                                            text: "Editar Pedido";
-                                            color: black;
-                                            font-weight: 800;
-                                            font-size: 20px;
-                                        }
-                                        BaloButton { width:80px; height: 40px;texto: "Confirmar"; clicked => {editar_cliente(); Edit_Screen.close();}}
-                                    }
-                                    
-                                    InputField {texto: "Cliente: "; input<=> temp_nome_client; place_holder: selected_client.nome;}
-                                    DataInput {texto: "Entrega: "; input<=> temp_entrega ;place_holder: selected_client.entrega;}
-                                    
-                                    InputField {texto: "Observações: "; input<=> temp_observacao;place_holder: selected_client.observacao;}
-                                    InputField {texto: "Endereço: "; input<=> temp_endereco;place_holder: selected_client.endereco;}
-                                    InputField {visible:false;texto: "Modelo: "; }
-                                }
-                                cor: white;
-                            }
-                        }
-                        
-                    }
+                spacing: 16px;
+                alignment: center;
+
+                Text {
+                    text: "Pedidos";
+                    color: #333333;
+                    font-weight: 800;
+                    font-size: 36px;
+                }
+
+                BaloButton {
+                    width: 150px;
+                    height: 50px;
+                    texto: "Adicionar Pedido";
+                    background: #4CAF50; // Green button
+                    
+                    // clicked => { Novo_Pedido.visible = true; Pedidos.visible = false; }
+                }
+
+                BaloButton {
+                    width: 150px;
+                    height: 50px;
+                    texto: "Dashboard";
+                    background: #2196F3; // Blue button
                      
+                    clicked => { dashboard(); }
+                }
+
+                BaloButton {
+                    width: 150px;
+                    height: 50px;
+                    texto: "Estoque";
+                    background: #FF9800; // Orange button
+                    
+                    clicked => { estoque(); }
+                }
+
+                BaloButton {
+                    width: 150px;
+                    height: 50px;
+                    texto: "Impressoras";
+                    background: #9C27B0; // Purple button
+                     
+                    clicked => { impressoras(); }
+                }
+
+                BaloButton {
+                    width: 150px;
+                    height: 50px;
+                    texto: "Configurações";
+                    background: #607D8B; // Gray button
+                    
+                    clicked => { configuracoes(); }
                 }
             }
 
             GridBox {
-                Container {
-                    width: 60%;
-                    height: 10%;
-                    cor: white;
-                    
-                }
+                spacing: 16px;
+                padding: 16px;
 
                 Row {
                     Container {
                         cor: white;
+                        border-radius: 8px;
+                        shadow_blur: 4px;
+                        padding: 16px;
+
                         VerticalBox {
-                        // spacing: Theme.spacing;
-                        HorizontalBox {
-                            // spacing: Theme.spacing;
-                            Text {
+                            spacing: 8px;
+
+                            InputField {
+                                texto: "Pesquisar";
+                                place_holder: "Digite o nome do cliente...";
+                                 
+                            }
+
+                            HorizontalBox {
+                                spacing: 16px;
+
+                                Text {
                                     text: "Nome";
-                                    color: black;
+                                    color: #333333;
                                     font-weight: 700;
                                     horizontal-alignment: center;
                                 }
 
                                 Text {
                                     text: "Data de Entrega";
-                                    color: black;
+                                    color: #333333;
                                     font-weight: 700;
                                     horizontal-alignment: center;
                                 }
 
                                 Text {
                                     text: "Status";
-                                    color: black;
+                                    color: #333333;
                                     font-weight: 700;
                                     horizontal-alignment: center;
                                 }
 
                                 Text {
                                     text: "Preço";
-                                    color: black;
+                                    color: #333333;
                                     font-weight: 700;
                                     horizontal-alignment: center;
                                 }
                             }
                         }
-
-                        Rectangle {
-                            ListView {
-                                height: 85%;
-                                for client[index] in clients_database: TouchArea {
-                                    clicked => {
-                                        root.selected_client = root.clients_database[index];
-                                        Detalhes_Pedido.visible = true;
-                                    }
-                                    // spacing: Theme.spacing;
-                                    // padding: Theme.spacing;
-                                    Rectangle {
-                                        height: 90%;
-                                        padding: 8px;
-                                        // border-radius: 5px;
-                                        // drop-shadow-offset-y: 1px;  
-                                        background: rgba(0.5,0,1,0.3);
-                                        HorizontalBox {
-                                            alignment: center;
-                                            Rectangle {
-                                                width: 25%;
-                                                Text {
-                                                    text: client.nome;
-                                                    color: black;
-                                                    horizontal-alignment: center;
-                                                    overflow: elide;
-                                                }
-                                            }
-
-                                            Rectangle {
-                                                width: 25%;
-                                                Text {
-                                                    text: client.entrega;
-                                                    color: black;
-                                                    horizontal-alignment: center;
-                                                }
-                                            }
-
-                                            Rectangle {
-                                                width: 25%;
-                                                Text {
-                                                    text: client.status;
-                                                    color: black;
-                                                    horizontal-alignment: center;
-                                                }
-                                            }
-
-                                            Rectangle {
-                                                width: 25%;
-                                                Text {
-                                                    text: "R$" + client.preco.to-fixed(2);
-                                                    color: black;
-                                                    horizontal-alignment: center;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    Container {
-                        cor: white;
-                        VerticalBox {
-                            VerticalBox {
-                                HorizontalLayout {
-                                    Text {
-                                        vertical-alignment: center;
-                                        text: "Detalhes de Pedido";
-                                        color: black;
-                                        font-size: Theme.fontSizeTitle;
-                                        font-weight: 700;
-                                    }
-
-                                    HorizontalLayout {
-                                        visible: !selected_client.id.is-empty;
-                                        spacing: 10px;
-                                        alignment: center;
-                                        width: 3%;
-                                        BaloButton {height: 30px; width: 50px; texto: "Editar"; clicked => {Edit_Screen.show();}}
-                                        BaloButton {background:#f01414;height: 30px; width: 50px; texto: "🗑️"; clicked => {excluir_cliente(); Detalhes_Pedido.visible=false}}
-                                    }
-                                    
-                                }
-                                
-                            }
-
-                            HorizontalBox {
-                                spacing: Theme.spacing;
-                                Detalhes_Pedido := VerticalBox {
-                                    visible: selected_client.preco != 0;
-                                    spacing: Theme.spacing;
-                                    Container {
-                                        cor: white;
- 
-                                        
-                                        GridBox {
-                                            
-                                            Row {
-                                                VerticalBox {
-                                                    alignment: center;
-                                                    Text {
-                                                        horizontal-alignment: center;
-                                                        text: "Cliente";
-                                                        color: black;
-                                                        font-size: Theme.fontSizeBody;
-                                                        font-weight: 700;
-                                                    }
-
-                                                    Text {
-                                                        horizontal-alignment: center;
-                                                        text: "\{root.selected_client.nome}";
-                                                        color: black;
-                                                        font-size: Theme.fontSizeBody;
-                                                        font-weight: 500;
-                                                    }
-                                                }
-
-                                                VerticalBox {
-                                                    alignment: center;
-                                                    Text {
-                                                        horizontal-alignment: center;
-                                                        text: "Entrega";
-                                                        color: black;
-                                                        font-size: Theme.fontSizeBody;
-                                                        font-weight: 700;
-                                                    }
-
-                                                    Text {
-                                                        horizontal-alignment: center;
-                                                        text: "\{root.selected_client.entrega}";
-                                                        color: black;
-                                                        font-size: Theme.fontSizeBody;
-                                                        font-weight: 500;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    Container {
-                                        cor: white;
-                                        VerticalBox {
-                                            alignment: center;
-                                            Text {
-                                                horizontal-alignment: center;
-                                                text: "Modelo";
-                                                color: black;
-                                                font-size: Theme.fontSizeBody;
-                                                font-weight: 700;
-                                            }
-
-                                            Text {
-                                                horizontal-alignment: center;
-                                                text: "\{root.selected_client.modelo}";
-                                                color: black;
-                                                font-size: Theme.fontSizeBody;
-                                                font-weight: 500;
-                                            }
-                                        }
-                                    }
-
-                                    Container {
-                                        cor: white;
-                                        VerticalLayout {
-                                            alignment: center;
-                                            Text {
-                                                horizontal-alignment: center;
-                                                text: "Status";
-                                                color: black;
-                                                font-size: Theme.fontSizeBody;
-                                                font-weight: 700;
-                                            }
-
-                                            CustomComboBox {
-                                                width: 10%;
-                                                model: ["Pendente","Trabalhando","Concluido","Entregue"];
-                                                current-value: root.selected_client.status;
-                                                
-                                                selected(current-value) => {
-                                                    temp_status = current-value;
-                                                    editar_cliente();
-                                                     
-                                                }
-                                                
-                                            }
-                                            // Text {
-                                            //     horizontal-alignment: center;
-                                            //     text: "\{root.selected_client.status}";
-                                            //     color: black;
-                                            //     font-size: Theme.fontSizeBody;
-                                            //     font-weight: 500;
-                                            // }
-                                        }
-                                    }
-
-                                    Container {
-                                        cor: white;
-                                        VerticalBox {
-                                            alignment: center;
-                                            Text {
-                                                horizontal-alignment: center;
-                                                text: "Total";
-                                                color: black;
-                                                font-size: Theme.fontSizeBody;
-                                                font-weight: 700;
-                                            }
-
-                                            Text {
-                                                horizontal-alignment: center;
-                                                text: "R$\{root.selected_client.preco}";
-                                                color: black;
-                                                font-size: Theme.fontSizeBody;
-                                                font-weight: 500;
-                                            }
-                                        }
-                                    }
-
-                                    Container {
-                                        cor: white;
-                                        VerticalBox {
-                                            Text {
-                                                text: "Observações:";
-                                                color: black;
-                                                font-size: Theme.fontSizeBody;
-                                                font-weight: 700;
-                                            }
-
-                                            Text {
-                                                text: "\{root.selected_client.observacao}";
-                                                color: black;
-                                                font-size: Theme.fontSizeBody;
-                                                font-weight: 500;
-                                            }
-                                        }
-                                    }
-
-                                    Container {
-                                        cor: white;
-                                        VerticalBox {
-                                            Text {
-                                                text: "Envio";
-                                                color: black;
-                                                font-size: Theme.fontSizeBody;
-                                                font-weight: 800;
-                                            }
-
-                                            Text {
-                                                text: "Endereço";
-                                                color: black;
-                                                font-size: Theme.fontSizeBody;
-                                                font-weight: 700;
-                                            }
-
-                                            Text {
-                                                text: "\{root.selected_client.endereco}";
-                                                color: black;
-                                                font-size: Theme.fontSizeBody;
-                                                font-weight: 500;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                     
-                }
-            }
-        }
-    }
-
-    Novo_Pedido := VerticalBox {
-        visible: false;
-        alignment: center;
-        HorizontalBox {
-            alignment: center;
-            GridBox {
-                width: 90%;
-                VerticalLayout {
-                    Text {
-                        text: "Novo Pedido";
-                        color: black;
-                        font-weight: 800;
-                        font-size: 40px;
                     }
                 }
 
                 Row {
-                    GridBox {
-                        width: 90%;
-                        spacing: Theme.spacing;
-                        padding: Theme.spacing;
-                        Row {
-                            Container {
-                                width: 50%;
-                                cor: white;
-                                VerticalBox {
-                                    padding: Theme.spacing;
-                                    Text {
-                                        text: "Dados do Cliente";
-                                        color: black;
-                                        font-weight: 800;
-                                        font-size: 20px;
-                                    }
-
-                                    VerticalBox {
-                                        alignment: start;
-                                        padding: Theme.spacing;
-                                        InputField {
-                                            texto: "Nome Cliente";
-                                            max_lenght: 30;
-                                            input <=> root.nome_cliente;
-                                        }
-
-                                        InputField {
-                                            texto: "Endereço";
-                                            max_lenght: 47;
-                                            input <=> root.endereco;
-                                        }
-                                    }
-                                }
+                    ListView {
+                        height: 85%;
+                    
+                        for client[index] in clients_database: TouchArea {
+                            clicked => {
+                                root.selected_client = root.clients_database[index];
+                                // Detalhes_Pedido.visible = true;
                             }
 
-                            Container {
-                                width: 50%;
-                                cor: white;
-                                VerticalBox {
-                                    padding: Theme.spacing;
-                                    Text {
-                                        text: "Detalhes de Entrega";
-                                        color: black;
-                                        font-weight: 800;
-                                        font-size: 20px;
-                                    }
-                                    
-                                    VerticalLayout {
-                                        padding: Theme.spacing;
-                                                 DataInput {
-                                                    texto: "Data";
-                                                    input <=> entrega;
-                                                 }
-                                        
-                                        
-  
+                            Rectangle {
+                                height: 90%;
+                                padding: 8px;
+                                border-radius: 8px;
+                                background: rgba(0.5, 0, 1, 0.1);
+                                 
 
-                                        InputField {
-                                            max_lenght: 47;
-                                            texto: "Observação";
-                                            input <=> root.observacao;
-                                        }
+                                HorizontalBox {
+                                    alignment: center;
 
-
-
-
-
-
-
-
-
-
-                                    }
-                                }
-                            }
-                        }
-
-                        Row {
-                            Container {
-                                cor: white;
-                                VerticalBox {
-                                    padding: Theme.spacing;
-                                    Text {
-                                        text: "Detalhes de Impressão"; 
-                                        color: black;
-                                        font-weight: 800;
-                                        font-size: 20px;
-                                    }
-
-                                    VerticalBox {
-                                        padding: Theme.spacing;
-                                        alignment: start;
-                                        InputField {
-                                            max_lenght: 47;
-                                            texto: "Modelo 3D";
-                                            input <=> root.modelo;
-                                        }
-
-                                        InputField {
-                                            max_lenght: 4;
-                                            texto: "Tempo Estimado [H]";
-                                            input <=> root.tempo;
-                                            changed input => {
-                                                root.calcular_preco();
-                                            }
-                                            type: number;
-                                        }
-
-                                        VerticalBox {
-                                            Text {
-                                                text: "Impressora:";
-                                                color: black;
-                                                font-size: Theme.fontSizeBody;
-                                            }
-
-                                            Rectangle {
-                                                border-radius: 10px;
-                                           
-                                                CustomComboBox {
-                                                    model: impressoras_string;
-                                                    current-value: "";
-                                                    text-color: black;
-                                                    selected(current-value) => {
-                                                        combobox_selected = current-value;
-                                                        root.calcular_preco();
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        
-                                        InputField {
-                                            texto: "Gasto de Material [g]";
-                                            max_lenght: 5;
-                                            input <=> root.material;
-                                            changed input => {
-                                                root.calcular_preco();
-                                            }
-                                            type: number;
-                                        }
-
-                                        VerticalLayout {
-                                            // width: 50%;
-                                            height: 5%;
-                                            // Rectangle{height: 90%;width: 100px;}
-                                            VerticalBox {        
-                                                width: 50%;                                               
-                                                // height: 30px;
-                                                HorizontalLayout {
-                                                    spacing: Theme.spacing;
-                                                    Rectangle { 
-                                                        
-                                                        background: black;
-                                                            // width: 100px;
-                                                            BaloButton {
-                                                                width: 100%;
-                                                            
-                                                                texto: "Voltar";
-                                                                
-                                                                clicked => {
-                                                                    Pedidos.visible = true;
-                                                                    Novo_Pedido.visible = false;
-                                                                    resetar_inputs();
-                                                                }
-                                                            }
-                                                        }
-
-                                                }
-                                                
-                                               
-                                                
-                                            }
-                                        }
-
-                                    }
-                                    
-                                }
-                                
-                            }
-
-                            Container {
-                                cor: white;
-                                VerticalBox {
-                                    padding: Theme.spacing;
-                                    Text {
-                                        text: "Calculo de Custos";
-                                        color: black;
-                                        font-weight: 800;
-                                        font-size: 20px;
-                                    }
-
-                                    VerticalBox {
-                                        padding: Theme.spacing;
-                                        InputField {
-                                            texto: "Preço do filamento/Kg [R$]";
-                                            input <=> root.filamento;
-                                            changed input => {
-                                                root.calcular_preco();
-                                            }
-                                            type:decimal;
-                                        }
-
-                                        InputField {
-                                            texto: "Taxa de Energia [R$]";
-                                            input <=> root.energia;
-                                            changed input => {
-                                                root.calcular_preco();
-                                            }
-                                            type:decimal;
-                                        }
-
-                                        InputField {
-                                            texto: "Lucro [%]";
-                                            input <=> root.lucro;
-                                            changed input => {
-                                                root.calcular_preco();
-                                            }
-                                            type:number;
-                                        }
-
+                                    Rectangle {
+                                        width: 25%;
                                         Text {
-                                            vertical-alignment: bottom;
-                                            text: "Total: R$ \{root.total.to-fixed(2)}";
-                                            font-weight: 700;
+                                            text: client.nome;
+                                            color: #333333;
                                             horizontal-alignment: center;
-                                            font-size: 20px;
-                                            color: Theme.primary;
+                                            overflow: elide;
                                         }
-
-                                       
                                     }
-                                    VerticalLayout {
-                                        width: 10%;
-                                        height: 10%;
-                                        // Rectangle{height: 90%;width: 100px;}
-                                        VerticalBox {
-                                            // width: 50%;
-                                            height: 20px;
-                                            SideButton {
-                                                texto: "Concluir";
-                                                clicked => {
-                                                    status = "Pendente";
-                                                    atualizar_filamento();
-                                                    registrar_cliente();
-                                                    resetar_inputs();
-                                                    Novo_Pedido.visible = false;
-                                                    Pedidos.visible = true;
-                                                }
-                                            }
-                                            
+
+                                    Rectangle {
+                                        width: 25%;
+                                        Text {
+                                            text: client.entrega;
+                                            color: #333333;
+                                            horizontal-alignment: center;
+                                        }
+                                    }
+
+                                    Rectangle {
+                                        width: 25%;
+                                        Text {
+                                            text: client.status;
+                                            color: #333333;
+                                            horizontal-alignment: center;
+                                        }
+                                    }
+
+                                    Rectangle {
+                                        width: 25%;
+                                        Text {
+                                            text: "R$" + client.preco.to-fixed(2);
+                                            color: #333333;
+                                            horizontal-alignment: center;
                                         }
                                     }
                                 }
@@ -732,10 +231,4 @@ export component calculator_screen {
             }
         }
     }
-
-
-   
-
-
-   
 }

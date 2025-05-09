@@ -14,16 +14,31 @@ export component printer_screen {
     in-out property <string> input_watts;
     in-out property <string> input_filamento;
     in-out property <int> filamento_total;
+    in-out property <string> input_filamento_preco;
+
+    in-out property <string> temp_modelo;
+    in-out property <string> temp_watts;
+    in-out property <string> temp_filamento;
+    in-out property <string> temp_filamento_total;
+    in-out property <string> temp_filamento_preco;
+
+    in-out property <Impressoras> selected_impressora;
     callback registrar_impressora();
     callback dashboard();
     callback estoque();
     callback configuracoes();
     callback pedidos();
+    callback excluir_impressora();
+    callback editar_impressora();
+
     Impressoras_Tela := VerticalBox {
         //  height: 700px;
         //  width: 900px;
         visible: true;
-        // spacing: Theme.spacing;
+        // spacing: Theme.spacing; 
+
+    
+
     
      HorizontalBox {
             // spacing: Theme.spacing;
@@ -43,7 +58,7 @@ export component printer_screen {
 
                         BaloButton {
                             texto: "Adicionar Impressora";
-                            clicked => {nova_impressora.visible=true;}
+                            clicked => {Impressoras_Tela.visible=false; nova_impressora.visible=true;}
                         }
 
                         BaloButton {
@@ -66,6 +81,10 @@ export component printer_screen {
                             texto: "Configurações";
                             clicked => {configuracoes();}
                         }
+
+                     
+
+
                 }
 
                 GridBox {
@@ -73,15 +92,103 @@ export component printer_screen {
      
     
                     Row {
+
+
                         HorizontalBox {
                             // spacing: Theme.spacing;
     
                             VerticalBox {
+                                Edit_Impressora_Screen := PopupWindow {
+                                    width: parent.width;
+                                    height: parent.height;
+                                    close-policy: close-on-click-outside;
+                                    x: parent.width / 2;
+                                    y: parent.height / 50;
+                                    VerticalLayout {
+                                        // width: 500px;
+                                        // height: 500px;
+                                        Container {
+                                            height: 50%;
+                                            cor: white;
+                                            width: 100%;
+                                            // height: 100%;
+                                            shadow_blur: 10px;
+                                            border_width: 1px;
+                                            border_radius: 10px;
+                                            VerticalBox {
+                                               
+                                              
+                                                HorizontalBox {
+                                                    Text {
+                                                        vertical-alignment: center;
+                                                        text: "Editar Impressora";
+                                                        color: black;
+                                                        font-weight: 800;
+                                                        font-size: 20px;
+                                                    }
+                        
+                                                    BaloButton {
+                                                        width: 80px;
+                                                        height: 40px;
+                                                        texto: "Confirmar";
+                                                        clicked => {
+                                                            
+                                                            editar_impressora();
+                                                            Edit_Impressora_Screen.close();
+                                                            temp_filamento ="";
+                                                            temp_watts = "";
+                                                            temp_modelo = "";
+                                                            temp_filamento_total = "";
+                                                            temp_filamento_preco = "";
+                                                        }
+                                                    }
+                                                }
+                        
+                                                InputField {
+                                                    texto: "Modelo: ";
+                                                    max_lenght: 40;
+                                                    input <=> temp_modelo;
+                                                    
+                                                }
+                        
+                                                InputField {
+                                                    texto: "Watts: ";
+                                                    max_lenght: 20;
+                                                    input <=> temp_watts;
+                                                    
+                                                }
+                                                InputField {
+                                                    max_lenght: 20;
+                                                    texto: "Filamento: ";
+                                                    input <=> temp_filamento;
+                                                    
+                                                }
+                                                InputField {
+                                                    max_lenght: 20;
+                                                    texto: "Filamento Total: ";
+                                                    input <=> temp_filamento_total;
+                                                    
+                                                }
+                                                InputField {
+                                                    max_lenght: 20;
+                                                    texto: "Preço do Filamento : ";
+                                                    input <=> temp_filamento_preco;
+                                                    
+                                                }
+                        
+                        
+                                                
+                        
+                         
+                                        }
+                                    }
+                                }
+                            }
                                 // spacing: Theme.spacing;
     
                                 HorizontalBox {
                                     // spacing: Theme.spacing;
-    
+
                                     Container {
                                         cor: white;
                                         width: 20%;
@@ -107,11 +214,113 @@ export component printer_screen {
                                 }
 
                                 Container {
+
+
+                                   
+                                
                                     cor: white;
                                     GridBox {
-                                        Row { }
+                                       
+                                        Row { 
 
-                                        Row { }
+                                            VerticalLayout {
+                                                HorizontalBox {
+                                                    Text {
+                                                        vertical-alignment: center;
+                                                        horizontal-alignment: center;
+                                                        color:black;
+                                                        text: selected_impressora.modelo;
+                                                        font-size: 20px;
+                                                        font-weight: 600;
+                                                    }
+                                                    BaloButton { width: 10%; texto: "Editar"; clicked => {Edit_Impressora_Screen.show();}}
+                                                    BaloButton {width: 10%; texto: "Excluir"; clicked => {excluir_impressora()}}
+
+                                                }
+                                               
+                                            }
+
+
+                                        }
+
+                                        Row {
+                                            
+                                            GridBox {
+                                                Row{
+                                                    Container {cor:white;
+                                                     
+                                                        width: 30%;
+                                                        height: 30%;
+                                                    VerticalBox {
+                                                      
+                                                        Text {
+                                                            horizontal-alignment: center;
+                                                            color: black;
+                                                            text: "Filamento";
+                                                            font-size: 15px;
+                                                            font-weight: 600;
+                                                        }
+                                                        Text {
+                                                            horizontal-alignment: center;
+                                                            color:black;
+                                                            text:selected_impressora.filamento+"/"+selected_impressora.filamento-total+"g";
+                                                            font-size: 15px;
+                                                            font-weight: 600;
+
+                                                        }
+                                                        Text {
+                                                            horizontal-alignment: center;
+                                                            color: black;
+                                                            text: "Preço";
+                                                            font-size: 15px;
+                                                            font-weight: 600;
+                                                        }
+                                                        Text {
+                                                            horizontal-alignment: center;
+                                                            color:black;
+                                                            text:selected_impressora.filamento-preco+ "R$";
+                                                            font-size: 15px;
+                                                            font-weight: 600;
+
+                                                        }
+
+                                                    }
+                                                    
+                                                    
+                                                    }
+                                                    Container {cor:white;
+                                                    
+                                                        VerticalBox {
+                                                      
+                                                            Text {
+                                                                horizontal-alignment: center;
+                                                                color: black;
+                                                                text: "Watts";
+                                                                font-size: 15px;
+                                                                font-weight: 600;
+                                                            }
+                                                            Text {
+                                                                horizontal-alignment: center;
+                                                                color:black;
+                                                                text: selected_impressora.watts;
+                                                                font-size: 15px;
+                                                                font-weight: 600;
+    
+                                                            }
+    
+                                                        }
+                                                    
+                                                    }
+                                                }
+                                                Row{
+                                                    Container {cor:white;}
+                                                    Container {cor:white;}
+                                                }
+                                            }
+
+
+
+                                        }
                                     }
                                 }
                             }
@@ -145,7 +354,13 @@ export component printer_screen {
                                             }
                                         }
 
-                                        for printer in impressoras_database: HorizontalBox {
+                                        for printer[index] in impressoras_database: TouchArea {
+
+                                            clicked => {
+
+                                                selected_impressora = impressoras_database[index];
+
+                                            }
                                             // spacing: Theme.spacing;
                                             // padding: Theme.spacing;
                                             Rectangle {
@@ -240,6 +455,11 @@ export component printer_screen {
                                                 max_lenght: 5;
                                                 texto: "Filamento [g]";
                                                 input <=> root.input_filamento;
+                                            }
+                                            InputField {
+                                                max_lenght: 5;
+                                                texto: "Preço do Filamento [R$]";
+                                                input <=> root.input_filamento_preco;
                                             }
 
                                             

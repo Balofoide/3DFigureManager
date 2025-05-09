@@ -8,15 +8,20 @@ use slint::VecModel;
 use std::fs::OpenOptions;
 use std::io::BufRead;
 use std::io::BufReader;
+use uuid::Uuid;
+
  
 use slint::SharedString;
 use crate::{AppWindow,Impressoras};
 
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct JsonImpressora {
+    pub id: String,
     pub modelo: String,
-   pub watts: String,
-   pub filamento:i32,
+    pub watts: String,
+    pub filamento:i32,
+    pub filamento_total:i32,
+    pub filamento_preco:i32,
 }
 
 
@@ -56,27 +61,35 @@ pub fn register_impressora(ui: &AppWindow) {
     let modelo_txt = ui.get_input_modelo().to_string();
     let watts_txt  = ui.get_input_watts().to_string();
     let filamento_txt: i32 = ui.get_filamento_printer().parse().unwrap_or(0);
-
+    let id:String = Uuid::new_v4().to_string();
+    let filamento_total = filamento_txt;
+    let filamento_preco:i32 = ui.get_input_filamento_preco().parse().unwrap_or(0);
     // 2. Cria a struct Impressoras
     let impressora = Impressoras {
+        id :  id.clone().into(),
         modelo: SharedString::from(modelo_txt.clone()),
         watts:  SharedString::from(watts_txt.clone()),
         filamento: filamento_txt.clone(),
+        filamento_total:filamento_total.clone(),
+        filamento_preco:filamento_preco.clone(),
     };
 
     // 3. Adiciona ao modelo e converte para strings
     add_impressora(ui, impressora);
     convert_impressora(ui);
-    save_impressora(modelo_txt.clone(), watts_txt.clone(),filamento_txt.clone()).expect("erro ao salvar impressoras");
+    save_impressora(modelo_txt.clone(), watts_txt.clone(),filamento_txt.clone(),id.clone(),filamento_total.clone(),filamento_preco.clone()).expect("erro ao salvar impressoras");
 }
 
-pub fn save_impressora(modelo: String, watts: String,filamento:i32) -> std::io::Result<()> {
+pub fn save_impressora(modelo: String, watts: String,filamento:i32,id:String,filamento_total:i32,filamento_preco:i32) -> std::io::Result<()> {
   
 
     let impressora_data = JsonImpressora {
+        id,
         modelo,
         watts,
         filamento,
+        filamento_total,
+        filamento_preco,
     };
 
     let mut file = OpenOptions::new()
@@ -104,9 +117,12 @@ pub fn load_impressoras(ui: &AppWindow) -> std::io::Result<()> {
         let json_impressora: JsonImpressora = serde_json::from_str(&line)?;
 
         let impressora = Impressoras {
+            id: json_impressora.id.into(),
             modelo: json_impressora.modelo.into(),
             watts: json_impressora.watts.into(),
             filamento:json_impressora.filamento.into(),
+            filamento_total:json_impressora.filamento_total.into(),
+            filamento_preco:json_impressora.filamento_preco.into(),
             
         };
 
@@ -126,3 +142,170 @@ pub fn total_filamento(ui:&AppWindow) -> i32{
  }
 
  
+pub fn excluir_impressora(ui: &AppWindow) {
+    let selected = ui.get_selected_impressora();
+    let target_id = selected.id.clone();
+
+    // 1. Obter lista atual do UI, filtrando fora o cliente
+    let impressoras = ui
+        .get_impressoras()
+        .iter()
+        .enumerate()
+        .map(|(idx, _)| ui.get_impressoras().row_data(idx).unwrap())
+        .filter(|c: &Impressoras| c.id != target_id)
+        .collect::<Vec<Impressoras>>();
+
+    // 2. Atualizar JSON no disco
+    if let Err(e) = excluir_impressora_json(&target_id) {
+        eprintln!("Erro ao excluir do arquivo: {}", e);
+        return;
+    }
+
+    // 3. Atualizar UI
+    ui.set_selected_impressora(Impressoras{id:"".into(),modelo:"".into(),filamento:0.into(),watts:"".into(),filamento_total:0.into(),filamento_preco:0.into()});
+    let new_model = VecModel::from(impressoras);
+    ui.set_impressoras(ModelRc::new(new_model));
+}
+
+fn excluir_impressora_json(id: &str) -> std::io::Result<()> {
+    // Ler e filtrar registros
+    let file = OpenOptions::new().read(true).open("impressoras.jsonl")?;
+    let reader = BufReader::new(file);
+    let mut registros: Vec<JsonImpressora> = Vec::new();
+
+    for line in reader.lines() {
+        let rec: JsonImpressora = serde_json::from_str(&line?)?;
+        if rec.id != id {
+            registros.push(rec);
+        }
+    }
+
+    // Reescrever arquivo sem o registro excluído
+    let mut file = OpenOptions::new().write(true).truncate(true).open("impressoras.jsonl")?;
+    for rec in registros {
+        writeln!(file, "{}", serde_json::to_string(&rec)?)?;
+    }
+    Ok(())
+}
+
+
+
+
+
+pub fn editar_impressora(ui: &AppWindow) {
+  
+    
+    let selected = ui.get_selected_impressora();
+    let temp_modelo = ui.get_temp_modelo();
+
+    let temp_watts = ui.get_temp_watts();
+    let temp_filamento = ui.get_temp_filamento();
+    let temp_filamento_total:i32 = ui.get_temp_filamento_total().parse().unwrap_or(0);
+    let temp_filamento_preco:i32 = ui.get_temp_filamento_preco().parse().unwrap_or(0);
+    // 1. Obter a lista atual de clientes do UI
+    let mut impressoras = ui
+        .get_impressoras()
+        .iter()
+        .enumerate()
+        .map(|(idx, _)| ui.get_impressoras().row_data(idx).unwrap())
+        .collect::<Vec<Impressoras>>();
+
+    // 2. Encontrar e modificar o cliente selecionado
+    if let Some(impressora) = impressoras.iter_mut().find(|c| c.id == selected.id) {
+        let mut updated = impressora.clone();
+
+        if !temp_filamento_preco != 0 {
+            updated.filamento_preco = temp_filamento_preco.clone();
+        }
+
+        if !temp_modelo.is_empty() {
+            updated.modelo = temp_modelo.clone();
+        }
+         
+        if !temp_watts.is_empty() {
+            updated.watts = temp_watts.clone();
+        }
+        if !temp_filamento.is_empty() {
+            updated.filamento = temp_filamento.parse::<i32>().unwrap_or(0).clone();
+        }
+
+        if temp_filamento_total != 0{
+            updated.filamento_total = temp_filamento_total.clone();
+        }
+        
+        
+        // 3. Atualizar o JSON no disco
+        if let Err(e) = atualizar_impressora_json(&updated) {
+            eprintln!("Erro ao atualizar arquivo: {}", e);
+            return;
+        }
+
+        // 4. Atualizar o registro em memória e a UI
+        *impressora = updated.clone();
+        ui.set_selected_impressora(updated);
+        let new_model = VecModel::from(impressoras);
+        ui.set_impressoras(ModelRc::new(new_model));
+    }
+}
+
+pub fn atualizar_impressora_json(updated: &Impressoras) -> std::io::Result<()> {
+
+    
+    // Leitura das linhas existentes
+    let file = OpenOptions::new().read(true).open("impressoras.jsonl")?;
+    let reader = BufReader::new(file);
+    let mut registros = Vec::new();
+
+    for line in reader.lines() {
+        let mut rec: JsonImpressora = serde_json::from_str(&line?)?;
+        if rec.id == updated.id.to_string() {
+           
+            rec.modelo = updated.modelo.to_string().clone();
+            rec.watts = updated.watts.to_string().clone();
+            rec.filamento = updated.filamento.clone();
+            rec.filamento_total = updated.filamento_total.clone();
+            rec.filamento_preco = updated.filamento_preco.clone();
+            
+
+
+        }
+        registros.push(rec);
+    }
+
+    // Reescrita completa do arquivo
+    let mut file = OpenOptions::new()
+        .write(true)
+        .truncate(true)
+        .open("impressoras.jsonl")?;
+    for rec in registros {
+        writeln!(file, "{}", serde_json::to_string(&rec)?)?;
+    }
+    Ok(())
+}
+pub fn load_price(ui: &AppWindow) -> std::io::Result<()> {
+    let file = match OpenOptions::new().read(true).open("impressoras.jsonl") {
+        Ok(file) => file,
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => return Ok(()),
+        Err(e) => return Err(e),
+    };
+    let target = ui.get_combobox_selected();
+
+    let reader = BufReader::new(file);
+
+    for line in reader.lines() {
+
+        
+        let line = line?;
+        let json_client: JsonImpressora = serde_json::from_str(&line)?;
+
+        let preco_json = json_client.filamento_preco.to_string();
+        if json_client.modelo == target.to_string(){
+            ui.set_filamento(preco_json.into());
+        }
+      
+
+ 
+    }
+
+    Ok(())
+}

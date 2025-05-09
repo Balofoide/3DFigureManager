@@ -52,14 +52,21 @@ export component AppWindow inherits Window {
     in-out property <string> settings_energia;
     in-out property <Estoque-Database> selectec_estoque;
     in-out property <int> preco_total_estoque;
-
+    in-out property <string> input_filamento_preco;
     in-out property <string> temp_estoque_material;
     in-out property <string> temp_estoque_quantidade;
     in-out property <string> temp_estoque_quantidade_total;
     in-out property <string> temp_estoque_preco;
     in-out property <string> temp_estoque_medida;
     in-out property <string> temp_status;
+    in-out property <Impressoras> selected_impressora;
 
+
+    in-out property <string> temp_modelo;
+    in-out property <string> temp_watts;
+    in-out property <string> temp_filamento;
+    in-out property <string> temp_filamento_total;
+   in-out property <string> temp_filamento_preco;
 
     callback calcular_preco();
     callback registrar_cliente();
@@ -73,6 +80,9 @@ export component AppWindow inherits Window {
     callback atualizar_estoque();
     callback estoque_total_preco();
     callback excluir_estoque();
+    callback excluir_impressora();
+    callback editar_impressora();
+    callback atualizar_f_preco();
 
     no-frame: false;
     width: 1280px;
@@ -201,12 +211,16 @@ export component AppWindow inherits Window {
                 configuracoes => {
                     activate(4);
                 }
+                atualizar_f_preco =>
+                {
+                    atualizar_f_preco();
+                }
             }
 
             Estoque_Screen := estoque-screen {
                 width: parent.width;
                 height: parent.height;
-                visible: true;
+                visible: false;
                 estoque_database <=> estoque_database;
                 estoque_material <=> estoque_material;
                 estoque_quantidade <=> estoque_quantidade;
@@ -222,6 +236,7 @@ export component AppWindow inherits Window {
                 temp_estoque_quantidade_total <=> temp_estoque_quantidade_total;
                 temp_estoque_preco <=>temp_estoque_preco;
                 temp_estoque_medida <=> temp_estoque_medida;
+
                 registrar_estoque => {
                     registrar_estoque();
                 }
@@ -252,7 +267,7 @@ export component AppWindow inherits Window {
             }
 
             Printer_Screen := printer-screen {
-                visible: false;
+                visible: true;
                 width: parent.width;
                 height: parent.height;
                 input_modelo <=> input_modelo;
@@ -260,6 +275,16 @@ export component AppWindow inherits Window {
                 input_filamento <=> filamento_printer;
                 impressoras_database <=> impressoras;
                 filamento_total <=> filamento_total;
+                selected_impressora <=> selected_impressora;
+
+
+                temp_modelo <=> temp_modelo;
+                temp_watts <=> temp_watts;
+                temp_filamento <=> temp_filamento;
+                temp_filamento_total <=>temp_filamento_total;
+                temp_filamento_preco <=> temp_filamento_preco;
+                input_filamento_preco <=> input_filamento_preco;
+
                 registrar_impressora => {
                     root.registrar_impressora();
                 }
@@ -274,6 +299,12 @@ export component AppWindow inherits Window {
                 }
                 pedidos => {
                     activate(1);
+                }
+                excluir_impressora => {
+                    excluir_impressora();
+                }
+                editar_impressora => {
+                    editar_impressora();
                 }
             }
 
