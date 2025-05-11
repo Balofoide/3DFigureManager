@@ -30,13 +30,40 @@ export component printer_screen {
     callback pedidos();
     callback excluir_impressora();
     callback editar_impressora();
-
+Container {
+    width: parent.width;
+    height: parent.height;
+    cor: white;
     Impressoras_Tela := VerticalBox {
         //  height: 700px;
         //  width: 900px;
         visible: true;
         // spacing: Theme.spacing; 
-
+        HorizontalBox {
+            spacing: Theme.spacing;
+            alignment: start;
+            // max-height: 50px;
+            Text {
+                vertical-alignment: center;
+                width: 81%;
+                text: "Impressoras";
+                color: black;
+                font-weight: 800;
+                font-size: 40px;
+            }
+           
+            BaloButton {
+                
+                width: 150px;
+                height: 50px;
+                texto: "Adicionar Impressora";
+                clicked => {
+                    nova_impressora.visible = true;
+                    Impressoras_Tela.visible = false;
+                }
+                 
+            }
+        }
     
 
     
@@ -44,59 +71,13 @@ export component printer_screen {
             // spacing: Theme.spacing;
     
             VerticalLayout {
-                // spacing: Theme.spacing;
+                spacing: Theme.spacing;
         
-                    HorizontalBox {
-                        height: 10%;
-                         // max-height: 50px;
-                        Text {
-                        text: "Impressoras";
-                        color: black;
-                        font-weight: 800;
-                        font-size: 40px;
-                        }
-
-                        BaloButton {
-                            texto: "Adicionar Impressora";
-                            clicked => {Impressoras_Tela.visible=false; nova_impressora.visible=true;}
-                        }
-
-                        BaloButton {
-                            texto: "Dashboard";
-                            clicked => {dashboard()}
-                        }
-
-                        BaloButton {
-                            texto: "Pedidos";
-                            clicked => {pedidos()}
-                        }
-                        BaloButton {
-                            texto: "Estoque";
-                            clicked => {estoque()}
-                        }
-                        
-
- 
-                        BaloButton {
-                            texto: "Configurações";
-                            clicked => {configuracoes();}
-                        }
-
-                     
-
-
-                }
+               
 
                 GridBox {
-                    // spacing: Theme.spacing;
-     
-    
-                    Row {
-
-
+                    Row {                       
                         HorizontalBox {
-                            // spacing: Theme.spacing;
-    
                             VerticalBox {
                                 Edit_Impressora_Screen := PopupWindow {
                                     width: parent.width;
@@ -355,7 +336,7 @@ export component printer_screen {
                                         }
 
                                         for printer[index] in impressoras_database: TouchArea {
-
+                                             
                                             clicked => {
 
                                                 selected_impressora = impressoras_database[index];
@@ -498,4 +479,6 @@ export component printer_screen {
             }
         }
     }
+}
+    
 }

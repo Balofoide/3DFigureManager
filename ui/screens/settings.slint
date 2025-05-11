@@ -17,78 +17,84 @@ export component settings_screen {
 
     callback registrar_settings();
     callback dashboard();
-
-    settings_screen := VerticalBox {
+    Container {
+        cor:white;
+        width: parent.width;
+        height: parent.height;
+        settings_screen := VerticalBox {
         
-        // alignment: center;
-        HorizontalBox {
- 
-                
-                
-                 
-                VerticalLayout {
-                    spacing: Theme.spacing;
-                    padding: Theme.spacing;
+            // alignment: center;
+            HorizontalBox {
+     
                     
-                    HorizontalLayout {
-
-                        height: 5%;
-                        // width: 5%;
+                    
+                     
+                    VerticalLayout {
                         spacing: Theme.spacing;
                         padding: Theme.spacing;
-                        Text {
-                            height: 10%;
-                            text: "Configurações";
-                            color: black;
-                            font-size: 40px;
-                            font-weight: 800;
-                        }
-                        BaloButton {texto: "Voltar";clicked => {dashboard();}}
-                        BaloButton {texto: "Confirmar";clicked => {registrar_settings();}}
-                         
- 
-                    }
-                    Container {
-                        padding: Theme.spacing;
                         
-                        cor: white;
-                         VerticalBox {
-                            GridBox {
+                        HorizontalLayout {
+    
+                            height: 5%;
+                            // width: 5%;
+                            spacing: Theme.spacing;
+                            padding: Theme.spacing;
+                            Text {
+                                height: 10%;
+                                text: "Configurações";
+                                color: black;
+                                font-size: 40px;
+                                font-weight: 800;
+                            }
+                            BaloButton {texto: "Voltar";clicked => {dashboard();}}
+                            BaloButton {texto: "Confirmar";clicked => {registrar_settings();}}
+                             
+     
+                        }
+                        Container {
+                            padding: Theme.spacing;
                             
-                                spacing: Theme.spacing;
-                                padding: Theme.spacing;
-                                height: 20%;
-                                Row {
-                                    InputField {
-                                        input <=> settings_energia;
-                                        texto: "Taxa de Energia";
+                            cor: white;
+                             VerticalBox {
+                                GridBox {
+                                
+                                    spacing: Theme.spacing;
+                                    padding: Theme.spacing;
+                                    height: 20%;
+                                    Row {
+                                        InputField {
+                                            input <=> settings_energia;
+                                            texto: "Taxa de Energia";
+                                        }
+                
+                                        InputField {
+                                            texto: "Lucro padrão:";
+                                            input <=> settings_lucro;
+                                        }
                                     }
-            
-                                    InputField {
-                                        texto: "Lucro padrão:";
-                                        input <=> settings_lucro;
-                                    }
-                                }
-                                Row {
-                                    InputField {
-                                        texto: "WIP";
-                                        
-                                    }
-                                    InputField {
-                                        texto: "WIP";
+                                    Row {
+                                        InputField {
+                                            texto: "WIP";
+                                            
+                                        }
+                                        InputField {
+                                            texto: "WIP";
+                                             
+                                        }
                                          
                                     }
-                                     
+                                   
                                 }
-                               
-                            }
-                         }
-                     
-
+                             }
+                         
+    
+                        }
+                        
                     }
-                    
                 }
             }
         }
+
     }
+   
 

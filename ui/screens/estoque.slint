@@ -55,15 +55,10 @@ export component estoque_screen {
                             font-size: 40px;
                         }
 
-                        BaloButton {
-                            texto: "Adicionar Material";
-                            clicked => {
-                                novo_material.visible = true;
-                                Estoques.visible = false;
-                            }
-                        }
+                        
 
                         BaloButton {
+                            visible: false;
                             texto: "Dashboard";
                             clicked => {
                                 dashboard()
@@ -71,6 +66,7 @@ export component estoque_screen {
                         }
 
                         BaloButton {
+                            visible: false;
                             texto: "Pedidos";
                             clicked => {
                                 pedidos()
@@ -78,6 +74,7 @@ export component estoque_screen {
                         }
 
                         BaloButton {
+                            visible: false;
                             texto: "Impressoras";
                             clicked => {
                                 impressoras()
@@ -85,9 +82,18 @@ export component estoque_screen {
                         }
 
                         BaloButton {
+                            visible: false;
                             texto: "Configurações";
                             clicked => {
                                 configuracoes()
+                            }
+                        }
+                        BaloButton {
+                            
+                            texto: "Adicionar Material";
+                            clicked => {
+                                novo_material.visible = true;
+                                Estoques.visible = false;
                             }
                         }
                     }

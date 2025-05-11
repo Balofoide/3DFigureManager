@@ -1,4 +1,4 @@
-import { Button, ComboBox, LineEdit, VerticalBox, HorizontalBox,ListView} from "std-widgets.slint";
+import { Button, ComboBox, LineEdit, VerticalBox, HorizontalBox,ListView,ProgressIndicator,} from "std-widgets.slint";
 import { ListView, ScrollView, VerticalBox } from "std-widgets.slint";
  
 import {Theme} from "styling.slint";
@@ -363,3 +363,117 @@ export component DataInput {
         }
     }
 }
+
+
+export component Clock inherits  VerticalLayout {
+    in property <string> time <=> time-label.text;
+    time-label := Text {
+        // FIXME: actual time
+        text: "10:02:45";
+        font-size: Theme.fontSizeTitle;
+        font-weight: 700;
+        color: black;
+    }
+}
+
+
+export component CircularProgress inherits Rectangle {
+    in property <float> progress: 1.0;               // [0.0 – 1.0]
+    in property <color> background-color: #E5E7EB;    // cor do anel de fundo
+    in property <color> progress-color: #6B46C1;      // cor do anel de progresso
+    in property <float> thickness: 8;                 // espessura do anel
+
+    width: 200px; height: 200px;
+    background: transparent;
+
+    // 1) Anel de fundo (círculo completo)
+    Path {
+        width: parent.width; height: parent.height;
+        viewbox-width: 100; viewbox-height: 100;
+        stroke: background-color;
+        stroke-width: 8px;
+        fill: transparent;
+
+        MoveTo { 
+            // ponto inicial no topo: ângulo = -90°
+            x: 50 + (50 - thickness/2) * cos(-90deg);
+            y: 50 + (50 - thickness/2) * sin(-90deg);
+        }
+        ArcTo {
+            radius-x: 50 - thickness/2; radius-y: 50 - thickness/2;
+            large-arc: true; sweep: true;
+            // volta ao ponto inicial
+            x: 50 + (50 - thickness/2) * cos(-90deg);
+            y: 50 + (50 - thickness/2) * sin(-90deg);
+        }
+    }
+
+    // 2) Arco de progresso parcial (apenas 0 < progress < 1)
+    Path {
+        visible: root.progress > 0 && root.progress < 1;
+        width: parent.width; height: parent.height;
+        viewbox-width: 100; viewbox-height: 100;
+        stroke: progress-color;
+        stroke-width: 8px;
+        stroke-line-cap: round;
+        fill: transparent;
+
+        MoveTo { 
+            x: 50 + (50 - thickness/2) * cos(-90deg);
+            y: 50 + (50 - thickness/2) * sin(-90deg);
+        }
+        ArcTo {
+            radius-x: 50 - thickness/2; radius-y: 50 - thickness/2;
+            large-arc: root.progress > 0.5;
+            sweep: true;
+            // vai até ângulo = -90° + 360°*progress
+            x: 50 + (50 - thickness/2) * cos(-90deg + 360deg * root.progress);
+            y: 50 + (50 - thickness/2) * sin(-90deg + 360deg * root.progress);
+        }
+    }
+
+    // 3) Círculo completo de progresso (progress >= 1)
+    Path {
+        visible: root.progress >= 1;
+        width: parent.width; height: parent.height;
+        viewbox-width: 100; viewbox-height: 100;
+        stroke: progress-color;
+        stroke-width: 8px;
+        fill: transparent;
+    
+        // Ponto inicial (–90°)
+        MoveTo {
+            x: 50 + (50 - thickness/2) * cos(-90deg);
+            y: 50 + (50 - thickness/2) * sin(-90deg);
+        }
+    
+        // Primeiro semi-arco (–90° → 90°)
+        ArcTo {
+            radius-x: 50 - thickness/2; radius-y: 50 - thickness/2;
+            large-arc: false;
+            sweep: true;
+            x: 50 + (50 - thickness/2) * cos(90deg);
+            y: 50 + (50 - thickness/2) * sin(90deg);
+        }
+    
+        // Segundo semi-arco (90° → 270°/–90°)
+        ArcTo {
+            radius-x: 50 - thickness/2; radius-y: 50 - thickness/2;
+            large-arc: false;
+            sweep: true;
+            x: 50 + (50 - thickness/2) * cos(-90deg);
+            y: 50 + (50 - thickness/2) * sin(-90deg);
+        }
+    }
+
+    // Texto central opcional
+    Text {
+        text: (root.progress * 100)+ "%";
+        color: black;
+        font-size: 20px;
+        horizontal-alignment: center;
+        vertical-alignment: center;
+        x: parent.width / 2 - self.width / 2;
+        y: parent.height / 2 - self.height / 2;
+    }
+} 

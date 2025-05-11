@@ -17,6 +17,7 @@ use utils::settings_handle::{load_settings, registrar_settings};
 
 slint::include_modules!();
 
+
 fn main() {
     if let Err(e) = run_app() {
         eprintln!("Application error: {}", e);

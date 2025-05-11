@@ -1,8 +1,8 @@
 import { Theme } from "../styling.slint";
-import { Container, SideButton, InputField, OverviewCard, BaloButton} from "../components.slint";
+import { Container, SideButton, InputField, OverviewCard, BaloButton,Clock,CircularProgress} from "../components.slint";
 import {
     Button, ComboBox, LineEdit,
-    VerticalBox, HorizontalBox, GridBox, ListView
+    VerticalBox, HorizontalBox, GridBox, ListView, ProgressIndicator, 
 } from "std-widgets.slint";
 
 import {Database,Impressoras,Estoque-Database} from "../shared.slint";
@@ -14,253 +14,263 @@ export component dashboard_screen {
     in-out property <[Estoque-Database]> estoque_database;
     in-out property <float> vendas_total;
     in-out property <string> temp_data;
-    
+    in-out property <int> filamento-total;
     callback calcular_preco();
     callback registrar_cliente();
     callback registrar_impressora();
     callback registrar_estoque();
-    
-
-    
     callback pedidos();
     callback impressoras();
     callback configuracoes();
     callback estoque();
-    VerticalBox {
-    //  height: 700px;
-    //  width: 900px;
-    visible: true;
-    // spacing: Theme.spacing;
+    VerticalLayout {
+        width: parent.width;
+        height: parent.height;
+        HorizontalLayout {
+            padding: Theme.spacing;
+            spacing: Theme.spacing;
+            Text {
+                text: "Dashboard";
+                color: black;
+                font-weight: 800;
+                font-size: 40px;
+            }
 
-    HorizontalBox {
-        // spacing: Theme.spacing;
+            HorizontalLayout {
+                height: 10px;
+                alignment: end;
+                Clock { }
+            }
+        }
 
-        VerticalBox {
-            // spacing: Theme.spacing;
+        GridBox {
+            Row {
+                Rectangle {
+                    background: white;
+                    GridBox {
+                        spacing: Theme.spacing;
+                        padding: Theme.spacing;
+                        Row {
+                            Container {
+                                cor: white;
+                                VerticalBox {
+                                    Text {
+                                        text: "Pedidos";
+                                        color: black;
+                                        font-weight: 800;
+                                        font-size: 16px;
+                                        horizontal-alignment: center;
+                                    }
 
-            HorizontalBox {
-                // max-height: 50px;
-                Text {
-                        text: "Dashboard";
-                        color: black;
-                        font-weight: 800;
-                        font-size: 40px;
-                    }
+                                    Text {
+                                        text: "\{root.clients_database.length}";
+                                        color: black;
+                                        horizontal-alignment: center;
+                                        font-weight: 700;
+                                        font-size: 16px;
+                                    }
+                                }
+                            }
 
-                    BaloButton {
-                        texto: "Pedidos";
-                         clicked => {pedidos()}
-                    }
-               
-                    BaloButton {
-                        texto: "Estoque";
-                        clicked => {estoque()}
-                    }
+                            Container {
+                                cor: white;
+                                VerticalBox {
+                                    Text {
+                                        horizontal-alignment: center;
+                                        text: "Resumo de Vendas";
+                                        color: black;
+                                        font-weight: 800;
+                                        font-size: 16px;
+                                    }
 
-                    BaloButton {
-                        texto: "Impressoras";
-                        clicked => {impressoras()}
-                    }
+                                    HorizontalBox {
+                                        Text {
+                                            text: "Vendas no mês:";
+                                            color: black;
+                                            font-weight: 500;
+                                            font-size: 13px;
+                                        }
 
-                    BaloButton {
-                        texto: "Configurações";
-                        clicked => {configuracoes()}
-                    }
-                }
-
-                GridBox {
-                // spacing: Theme.spacing;
- 
-
-                Row {
-                        HorizontalBox {
-                        // spacing: Theme.spacing;
-
-                        VerticalBox {
-                            // spacing: Theme.spacing;
-
-                            HorizontalBox {
-                                // spacing: Theme.spacing;
-
-                                Container {
-                                        cor: white;
-                                        VerticalBox {
-                                            Text {
-                                                text: "Pedidos";
-                                                color: black;
-                                                font-weight: 800;
-                                                font-size: 20px;
-                                                horizontal-alignment: center;
-                                            }
-
-                                            Text {
-                                                text: "\{root.clients_database.length}";
-                                                color: black;
-                                                horizontal-alignment: center;
-                                                font-weight: 700;
-                                                font-size: 20px;
-                                            }
+                                        Text {
+                                            horizontal-alignment: right;
+                                            text: "0";
+                                            color: black;
+                                            font-weight: 500;
+                                            font-size: 13px;
                                         }
                                     }
 
-                                    Container {
-                                        cor: white;
-                                        VerticalBox {
-                                            Text {
-                                                horizontal-alignment: center;
-                                                text: "Resumo de Vendas";
-                                                color: black;
-                                                font-weight: 800;
-                                                font-size: 20px;
-                                            }
+                                    HorizontalBox {
+                                        Text {
+                                            text: "Faturamento:";
+                                            color: black;
+                                            font-weight: 500;
+                                            font-size: 13px;
+                                        }
 
-                                            HorizontalBox {
-                                                Text {
-                                                    text: "Vendas no mês:";
-                                                    color: black;
-                                                    font-weight: 500;
-                                                    font-size: 15px;
-                                                }
-
-                                                Text {
-                                                    horizontal-alignment: right;
-                                                    text: "0";
-                                                    color: black;
-                                                    font-weight: 500;
-                                                    font-size: 15px;
-                                                }
-                                            }
-
-                                            HorizontalBox {
-                                                Text {
-                                                    text: "Faturamento:";
-                                                    color: black;
-                                                    font-weight: 500;
-                                                    font-size: 15px;
-                                                }
-
-                                                Text {
-                                                    horizontal-alignment: right;
-                                                    text: "R$" + vendas_total.to-fixed(2);
-                                                    color: black;
-                                                    font-weight: 500;
-                                                    font-size: 15px;
-                                                }
-                                            }
+                                        Text {
+                                            horizontal-alignment: right;
+                                            text: "R$" + vendas_total.to-fixed(2);
+                                            color: black;
+                                            font-weight: 500;
+                                            font-size: 13px;
                                         }
                                     }
                                 }
+                            }
 
-                                Container {
-                                    cor: white;
-                                    GridBox {
-                                        Row {
-                                            Container {
-                                                cor: white;
-                                               
-                                            }
+                            Container {
+                                width: 20%;
+                                cor: white;
+                                VerticalLayout {
+                                    alignment: start;
+                                    spacing: Theme.spacing;
+                                    Text {
+                                        padding: Theme.spacing;
+                                        text: "Filamento";
+                                        color: black;
+                                        font-weight: 800;
+                                        font-size: 16px;
+                                        horizontal-alignment: center;
+                                    }
 
-                                            Container {
-                                                cor: white;
-                                            }
-                                        }
-
-                                        Row {
-                                            Container {
-                                                cor: white;
-                                            }
-
-                                            Container {
-                                                cor: white;
-                                            }
+                                    HorizontalBox {
+                                        alignment: center;
+                                        CircularProgress {
+                                            width: 100px;
+                                            height: 100px;
+                                            padding: Theme.spacing;
+                                            progress: (filamento-total / 10000) * 10;
                                         }
                                     }
                                 }
                             }
                         }
 
-                        VerticalBox {
-                        // spacing: Theme.spacing;
+                        Row { }
+                    }
+                }
+            }
 
-                        HorizontalBox {
-                            // spacing: Theme.spacing;
+            HorizontalLayout {
+                height: 500px;
+                spacing: Theme.spacing;
+                padding: Theme.spacing;
+                Container {
+                    width: 50%;
+                    cor: white;
+                    VerticalBox {
+                        Text {
+                            padding: Theme.spacing;
+                            text: "Estoque";
+                            color: black;
+                            font-weight: 800;
+                            font-size: 16px;
+                        }
 
-                            Container {
-                                    cor: white;
-                                    VerticalBox {
-                                    // spacing: Theme.spacing;
-
-                                    HorizontalBox {
-                                        // spacing: Theme.spacing;
+                        ListView {
+                            for item in estoque_database: Rectangle {
+                                max-height: 30px;
+                                HorizontalBox {
+                                    Rectangle {
+                                        width: 20%;
                                         Text {
-                                                text: "Nome";
-                                                color: black;
-                                                font-weight: 700;
-                                                horizontal-alignment: center;
-                                            }
-
-                                            Text {
-                                                text: "Data";
-                                                color: black;
-                                                font-weight: 700;
-                                                horizontal-alignment: center;
-                                            }
-
-                                            Text {
-                                                text: "Status";
-                                                color: black;
-                                                font-weight: 700;
-                                                horizontal-alignment: center;
-                                            }
+                                            text: item.material + ": ";
+                                            padding: Theme.spacing;
+                                            color: black;
+                                            font-weight: 600;
+                                            font-size: 15px;
                                         }
+                                    }
 
-                                        ListView {
-                                            height: 85%;
-                                            for client[index] in clients_database: TouchArea {
-                                                clicked => {
-                                                    root.selected_client = root.clients_database[index];
-                                                    pedidos();
-                                                }
-                                            // spacing: Theme.spacing;
-                                            // padding: Theme.spacing;
-                                            Rectangle {
-                                                    height: 90%;
-                                                    padding: 8px;
-                                                // border-radius: 5px;
-                                                // drop-shadow-offset-y: 1px;  
-                                                background: rgba(0.5,0,1,0.3);
-                                                    HorizontalBox {
-                                                        alignment: center;
-                                                        Rectangle {
-                                                            width: 25%;
-                                                            Text {
-                                                                text: client.nome;
-                                                                color: black;
-                                                                horizontal-alignment: center;
-                                                                overflow: elide;
-                                                            }
-                                                        }
+                                    ProgressIndicator {
+                                        width: 50%;
+                                        progress: (item.quantidade.to-float() / item.quantidade-total);
+                                    }
 
-                                                        Rectangle {
-                                                            width: 25%;
-                                                            Text {
-                                                                text:  client.entrega;
-                                                                color: black;
-                                                                horizontal-alignment: center;
-                                                            }
-                                                        }
+                                    Rectangle {
+                                        Text {
+                                            width: 20%;
+                                            text: item.quantidade + "/" + item.quantidade-total;
+                                            color: black;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 
-                                                        Rectangle {
-                                                            width: 25%;
-                                                            Text {
-                                                                text: client.status;
-                                                                color: black;
-                                                                horizontal-alignment: center;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
+                Container {
+                    
+                    // height: 560px;
+                      cor: white;
+                    HorizontalBox {
+                          // spacing: Theme.spacing;
+                          Text {
+                            text: "Nome";
+                            color: black;
+                            font-weight: 700;
+                            horizontal-alignment: center;
+                        }
+
+                        Text {
+                            text: "Data";
+                            color: black;
+                            font-weight: 700;
+                            horizontal-alignment: center;
+                        }
+
+                        Text {
+                            text: "Status";
+                            color: black;
+                            font-weight: 700;
+                            horizontal-alignment: center;
+                        }
+                    }
+
+                    ListView {
+                        height: 85%;
+                        for client[index] in clients_database: TouchArea {
+                            clicked => {
+                                root.selected_client = root.clients_database[index];
+                                pedidos();
+                            }
+                          // spacing: Theme.spacing;
+                          // padding: Theme.spacing;
+                          Rectangle {
+                                height: 90%;
+                                padding: 8px;
+                              // border-radius: 5px;
+                              // drop-shadow-offset-y: 1px;  
+                              background: rgba(0.5,0,1,0.3);
+                                HorizontalBox {
+                                    alignment: center;
+                                    Rectangle {
+                                        width: 25%;
+                                        Text {
+                                            text: client.nome;
+                                            color: black;
+                                            horizontal-alignment: center;
+                                            overflow: elide;
+                                        }
+                                    }
+
+                                    Rectangle {
+                                        width: 25%;
+                                        Text {
+                                            text: client.entrega;
+                                            color: black;
+                                            horizontal-alignment: center;
+                                        }
+                                    }
+
+                                    Rectangle {
+                                        width: 25%;
+                                        Text {
+                                            text: client.status;
+                                            color: black;
+                                            horizontal-alignment: center;
                                         }
                                     }
                                 }

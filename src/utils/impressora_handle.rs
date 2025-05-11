@@ -214,7 +214,7 @@ pub fn editar_impressora(ui: &AppWindow) {
     if let Some(impressora) = impressoras.iter_mut().find(|c| c.id == selected.id) {
         let mut updated = impressora.clone();
 
-        if !temp_filamento_preco != 0 {
+        if temp_filamento_preco != 0 {
             updated.filamento_preco = temp_filamento_preco.clone();
         }
 

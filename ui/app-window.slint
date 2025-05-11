@@ -92,256 +92,285 @@ export component AppWindow inherits Window {
     HorizontalBox {
         spacing: Theme.spacing;
         padding: Theme.spacing;
-        width: parent.width;
-        x: 4px;
-        y: 5px;
-        height: parent.height;
+        // width: parent.width;
+        // x: 4px;
+        // y: 5px;
+        // height: parent.height;
       
         /* --- SIDEBAR --- */
-        // VerticalBox {
-        //     width: 15%;
-        //     spacing: Theme.spacing;
-        //     padding: Theme.spacing;
-        //     SideButton {
-        //         texto: "Tela 1";
-        //         clicked => {
-        //             activate(1)
-        //         }
-        //     }
+        Rectangle {
+            background: rgba(50,0,100,1);
 
-        //     SideButton {
-        //         texto: "Tela 2";
-        //         clicked => {
-        //             activate(2)
-        //         }
-        //     }
-
-        //     SideButton {
-        //         texto: "Tela 3";
-        //         clicked => {
-        //             activate(3)
-        //         }
-        //     }
-
-        //     SideButton {
-        //         texto: "Tela 4";
-        //         clicked => {
-        //             activate(4)
-        //         }
-        //     }
-
-        //     SideButton {
-        //         texto: "Tela 5";
-        //         clicked => {
-        //             activate(5)
-        //         }
-        //     }
-        // }
+            HorizontalLayout {
+                Rectangle {
+                    width:10%;
+                    
+                    VerticalBox {
+                        alignment: center;
+                        // width: 15%;
+                        spacing: Theme.spacing;
+                        padding: Theme.spacing;
+                        SideButton {
+                            height: 50px;
+                            texto: "Dashboard";
+                            clicked => {
+                                activate(5)
+                            }
+                        }
+            
+                        SideButton {
+                            height: 50px;
+                            texto: "Pedidos";
+                            clicked => {
+                                activate(1)
+                            }
+                        }
+            
+                        SideButton {
+                            height: 50px;
+                            texto: "Estoque";
+                            clicked => {
+                                activate(2)
+                            }
+                        }
+            
+                        SideButton {
+                            height: 50px;
+                            texto: "Impressoras";
+                            clicked => {
+                                activate(3)
+                            }
+                        }
+            
+                        SideButton {
+                            height: 50px;
+                            texto: "Configurações";
+                            clicked => {
+                                activate(4)
+                            }
+                        }
+        
+        
+        
+                        
+        
+        
+                    }
+                   
+                }
+             
+                Rectangle {
+                    background: Theme.background;
+                    padding: Theme.spacing;
+                    
+                    clip: true;
+                    visible: true;
+                    Calculator_Screen := calculator-screen {
+                        width: parent.width;
+                        height: parent.height;
+                        visible: false;
+                        filamento <=> filamento;
+                        material <=> material;
+                        tempo <=> tempo;
+                        energia <=> energia;
+                        lucro <=> lucro;
+                        total <=> total;
+                        nome_cliente <=> nome_cliente;
+                        endereco <=> endereco;
+                        entrega <=> entrega;
+                        clients_database <=> clients_database;
+                        impressoras_string <=> impressoras_string;
+                        combobox_selected <=> combobox_selected;
+                        selected_client <=> selected_client;
+                        modelo <=> modelo;
+                        observacao <=> observacao;
+                        status <=> status;
+                        temp_nome_client <=> temp_nome_client;
+                        temp_entrega <=> temp_entrega;
+                        temp_endereco <=> temp_endereco;
+                        temp_observacao <=> temp_observacao;
+                        temp_status <=> temp_status;
+                        registrar_cliente => {
+                            root.registrar_cliente();
+                        }
+                        calcular_preco => {
+                            root.calcular_preco();
+                        }
+                        atualizar_filamento => {
+                            root.atualizar_filamento();
+                        }
+                        resetar_inputs => {
+                            observacao = "";
+                            modelo = "";
+                            nome_cliente = "";
+                            tempo = "";
+                            energia = settings_energia;
+                            lucro = settings_lucro;
+                            total = 0;
+                            endereco = "";
+                            entrega = "";
+                            combobox_selected = "";
+                            filamento = 0;
+                            material = 0;
+                        }
+                        editar_cliente => {
+                            root.editar_cliente();
+                        }
+                        excluir_cliente => {
+                            root.excluir_cliente();
+                        }
+                        dashboard => {
+                            activate(5);
+                        }
+                        impressoras => {
+                            activate(3);
+                        }
+                        estoque => {
+                            activate(2);
+                        }
+                        configuracoes => {
+                            activate(4);
+                        }
+                        atualizar_f_preco =>
+                        {
+                            atualizar_f_preco();
+                        }
+                    }
+        
+                    Estoque_Screen := estoque-screen {
+                        width: parent.width;
+                        height: parent.height;
+                        visible: false;
+                        estoque_database <=> estoque_database;
+                        estoque_material <=> estoque_material;
+                        estoque_quantidade <=> estoque_quantidade;
+                        estoque_quantidade_total <=> estoque_quantidade_total;
+                        estoque_medida <=> estoque_medida;
+                        estoque_preco_input <=> estoque_preco_input;
+                        selectec_estoque <=> selectec_estoque;
+                        preco_total_estoque <=>preco_total_estoque ;
+        
+        
+                        temp_estoque_material <=> temp_estoque_material;
+                        temp_estoque_quantidade <=> temp_estoque_quantidade;
+                        temp_estoque_quantidade_total <=> temp_estoque_quantidade_total;
+                        temp_estoque_preco <=>temp_estoque_preco;
+                        temp_estoque_medida <=> temp_estoque_medida;
+        
+                        registrar_estoque => {
+                            registrar_estoque();
+                        }
+                        dashboard => {
+                            activate(5);
+                        }
+                        impressoras => {
+                            activate(3);
+                        }
+                        estoque => {
+                            activate(2);
+                        }
+                        configuracoes => {
+                            activate(4);
+                        }
+                        pedidos => {
+                            activate(1);
+                        }
+                        atualizar_estoque => {
+                            atualizar_estoque();
+                        }
+                        estoque_total_preco => {
+                            estoque_total_preco();
+                        }
+                        excluir_estoque => {
+                            excluir_estoque();
+                        }
+                    }
+        
+                    Printer_Screen := printer-screen {
+                        visible: false;
+                        width: parent.width;
+                        height: parent.height;
+                        input_modelo <=> input_modelo;
+                        input_watts <=> input_watts;
+                        input_filamento <=> filamento_printer;
+                        impressoras_database <=> impressoras;
+                        filamento_total <=> filamento_total;
+                        selected_impressora <=> selected_impressora;
+        
+        
+                        temp_modelo <=> temp_modelo;
+                        temp_watts <=> temp_watts;
+                        temp_filamento <=> temp_filamento;
+                        temp_filamento_total <=>temp_filamento_total;
+                        temp_filamento_preco <=> temp_filamento_preco;
+                        input_filamento_preco <=> input_filamento_preco;
+        
+                        registrar_impressora => {
+                            root.registrar_impressora();
+                        }
+                        dashboard => {
+                            activate(5);
+                        }
+                        estoque => {
+                            activate(2);
+                        }
+                        configuracoes => {
+                            activate(4);
+                        }
+                        pedidos => {
+                            activate(1);
+                        }
+                        excluir_impressora => {
+                            excluir_impressora();
+                        }
+                        editar_impressora => {
+                            editar_impressora();
+                        }
+                    }
+        
+                    Dashboard_Screen := dashboard-screen {
+                        visible: true;
+                        width: parent.width;
+                        height: parent.height;
+                        clients_database <=> clients_database;
+                        vendas_total <=> vendas_total;
+                        selected_client <=> selected_client;
+                        estoque_database <=> estoque_database;
+                        filamento-total <=> filamento_total;
+                        pedidos => {
+                            activate(1);
+                        }
+                        estoque => {
+                            activate(2);
+                        }
+                        impressoras => {
+                            activate(3);
+                        }
+                        configuracoes => {
+                            activate(4);
+                        }
+                    }
+        
+                    Settings-Screen := settings-screen {
+                        width: parent.width;
+                        height: parent.height;
+                        visible: false;
+                        settings_lucro <=> settings_lucro;
+                        settings_energia <=> settings_energia;
+                        registrar_settings => {
+                            registrar_settings();
+                        }
+                        dashboard => {
+                            activate(5);
+                        }
+                    }
+                }
+            }
+          
+        }
+        
 
         /* --- CONTEÚDO PRINCIPAL --- */
-        Rectangle {
-            background: Theme.background;
-            padding: Theme.spacing;
-            border-radius: 20px;
-            clip: true;
-            visible: true;
-            Calculator_Screen := calculator-screen {
-                width: parent.width;
-                height: parent.height;
-                visible: false;
-                filamento <=> filamento;
-                material <=> material;
-                tempo <=> tempo;
-                energia <=> energia;
-                lucro <=> lucro;
-                total <=> total;
-                nome_cliente <=> nome_cliente;
-                endereco <=> endereco;
-                entrega <=> entrega;
-                clients_database <=> clients_database;
-                impressoras_string <=> impressoras_string;
-                combobox_selected <=> combobox_selected;
-                selected_client <=> selected_client;
-                modelo <=> modelo;
-                observacao <=> observacao;
-                status <=> status;
-                temp_nome_client <=> temp_nome_client;
-                temp_entrega <=> temp_entrega;
-                temp_endereco <=> temp_endereco;
-                temp_observacao <=> temp_observacao;
-                temp_status <=> temp_status;
-                registrar_cliente => {
-                    root.registrar_cliente();
-                }
-                calcular_preco => {
-                    root.calcular_preco();
-                }
-                atualizar_filamento => {
-                    root.atualizar_filamento();
-                }
-                resetar_inputs => {
-                    observacao = "";
-                    modelo = "";
-                    nome_cliente = "";
-                    tempo = "";
-                    energia = settings_energia;
-                    lucro = settings_lucro;
-                    total = 0;
-                    endereco = "";
-                    entrega = "";
-                    combobox_selected = "";
-                    filamento = 0;
-                    material = 0;
-                }
-                editar_cliente => {
-                    root.editar_cliente();
-                }
-                excluir_cliente => {
-                    root.excluir_cliente();
-                }
-                dashboard => {
-                    activate(5);
-                }
-                impressoras => {
-                    activate(3);
-                }
-                estoque => {
-                    activate(2);
-                }
-                configuracoes => {
-                    activate(4);
-                }
-                atualizar_f_preco =>
-                {
-                    atualizar_f_preco();
-                }
-            }
-
-            Estoque_Screen := estoque-screen {
-                width: parent.width;
-                height: parent.height;
-                visible: false;
-                estoque_database <=> estoque_database;
-                estoque_material <=> estoque_material;
-                estoque_quantidade <=> estoque_quantidade;
-                estoque_quantidade_total <=> estoque_quantidade_total;
-                estoque_medida <=> estoque_medida;
-                estoque_preco_input <=> estoque_preco_input;
-                selectec_estoque <=> selectec_estoque;
-                preco_total_estoque <=>preco_total_estoque ;
-
-
-                temp_estoque_material <=> temp_estoque_material;
-                temp_estoque_quantidade <=> temp_estoque_quantidade;
-                temp_estoque_quantidade_total <=> temp_estoque_quantidade_total;
-                temp_estoque_preco <=>temp_estoque_preco;
-                temp_estoque_medida <=> temp_estoque_medida;
-
-                registrar_estoque => {
-                    registrar_estoque();
-                }
-                dashboard => {
-                    activate(5);
-                }
-                impressoras => {
-                    activate(3);
-                }
-                estoque => {
-                    activate(2);
-                }
-                configuracoes => {
-                    activate(4);
-                }
-                pedidos => {
-                    activate(1);
-                }
-                atualizar_estoque => {
-                    atualizar_estoque();
-                }
-                estoque_total_preco => {
-                    estoque_total_preco();
-                }
-                excluir_estoque => {
-                    excluir_estoque();
-                }
-            }
-
-            Printer_Screen := printer-screen {
-                visible: true;
-                width: parent.width;
-                height: parent.height;
-                input_modelo <=> input_modelo;
-                input_watts <=> input_watts;
-                input_filamento <=> filamento_printer;
-                impressoras_database <=> impressoras;
-                filamento_total <=> filamento_total;
-                selected_impressora <=> selected_impressora;
-
-
-                temp_modelo <=> temp_modelo;
-                temp_watts <=> temp_watts;
-                temp_filamento <=> temp_filamento;
-                temp_filamento_total <=>temp_filamento_total;
-                temp_filamento_preco <=> temp_filamento_preco;
-                input_filamento_preco <=> input_filamento_preco;
-
-                registrar_impressora => {
-                    root.registrar_impressora();
-                }
-                dashboard => {
-                    activate(5);
-                }
-                estoque => {
-                    activate(2);
-                }
-                configuracoes => {
-                    activate(4);
-                }
-                pedidos => {
-                    activate(1);
-                }
-                excluir_impressora => {
-                    excluir_impressora();
-                }
-                editar_impressora => {
-                    editar_impressora();
-                }
-            }
-
-            Dashboard_Screen := dashboard-screen {
-                visible: false;
-                width: parent.width;
-                height: parent.height;
-                clients_database <=> clients_database;
-                vendas_total <=> vendas_total;
-                selected_client <=> selected_client;
-                pedidos => {
-                    activate(1);
-                }
-                estoque => {
-                    activate(2);
-                }
-                impressoras => {
-                    activate(3);
-                }
-                configuracoes => {
-                    activate(4);
-                }
-            }
-
-            Settings-Screen := settings-screen {
-                width: parent.width;
-                height: parent.height;
-                visible: false;
-                settings_lucro <=> settings_lucro;
-                settings_energia <=> settings_energia;
-                registrar_settings => {
-                    registrar_settings();
-                }
-                dashboard => {
-                    activate(5);
-                }
-            }
-        }
+   
     }
 }
