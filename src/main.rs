@@ -1,10 +1,11 @@
 // Prevent console window in addition to Slint window in Windows release builds when, e.g., starting the app via file manager. Ignored on other platforms.
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-
+ 
 use std::error::Error;
 
 mod utils;
 
+use utils::clock_handle::clock;
 use utils::database_handle::{atualizar_client, excluir_client, load_clients, register_client};
 use utils::estoque_handle::{
     atualizar_estoque, excluir_estoque, load_estoque, register_estoque, total_estoque,
@@ -19,14 +20,18 @@ slint::include_modules!();
 
 
 fn main() {
+
+
     if let Err(e) = run_app() {
         eprintln!("Application error: {}", e);
     }
+
+    
 }
 
 fn run_app() -> Result<(), Box<dyn Error>> {
     let ui = AppWindow::new()?;
-
+    
     initialize_ui(&ui)?;
     register_callbacks(&ui);
 
@@ -41,7 +46,7 @@ fn initialize_ui(ui: &AppWindow) -> Result<(), Box<dyn Error>> {
     load_estoque(ui).expect("Erro ao carregar o estoque");
     load_settings(ui).expect("Erro ao carregar Settings");
     load_price(ui).expect("erro ao carregar preco do filamento");
-
+    clock(ui);
     ui.set_vendas_total(total_vendas(ui));
     ui.set_filamento_total(total_filamento(ui));
     ui.set_preco_total_estoque(total_estoque(ui));
@@ -56,6 +61,7 @@ fn register_callbacks(ui: &AppWindow) {
         move || {
             if let Some(ui) = ui_handle.upgrade() {
                 calcular_venda(&ui);
+                
             }
         }
     });
@@ -66,6 +72,7 @@ fn register_callbacks(ui: &AppWindow) {
             if let Some(ui) = ui_handle.upgrade() {
                 atualizar_client(&ui);
                 ui.set_status("".into());
+                ui.set_vendas_total(total_vendas(&ui));
             }
         }
     });
@@ -75,6 +82,7 @@ fn register_callbacks(ui: &AppWindow) {
         move || {
             if let Some(ui) = ui_handle.upgrade() {
                 excluir_client(&ui);
+                ui.set_vendas_total(total_vendas(&ui));
             }
         }
     });

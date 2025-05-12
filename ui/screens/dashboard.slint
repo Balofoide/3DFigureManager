@@ -15,6 +15,8 @@ export component dashboard_screen {
     in-out property <float> vendas_total;
     in-out property <string> temp_data;
     in-out property <int> filamento-total;
+
+    in-out property <string> time;
     callback calcular_preco();
     callback registrar_cliente();
     callback registrar_impressora();
@@ -39,7 +41,7 @@ export component dashboard_screen {
             HorizontalLayout {
                 height: 10px;
                 alignment: end;
-                Clock { }
+                
             }
         }
 
@@ -161,6 +163,7 @@ export component dashboard_screen {
                     cor: white;
                     VerticalBox {
                         Text {
+                            horizontal-alignment: center;
                             padding: Theme.spacing;
                             text: "Estoque";
                             color: black;
@@ -189,8 +192,9 @@ export component dashboard_screen {
                                     }
 
                                     Rectangle {
+                                        width: 20%;
                                         Text {
-                                            width: 20%;
+                                            
                                             text: item.quantidade + "/" + item.quantidade-total;
                                             color: black;
                                         }
@@ -203,9 +207,24 @@ export component dashboard_screen {
 
                 Container {
                     
+                     cor: white;
+                    VerticalBox {
+                        spacing: Theme.spacing;
+                        padding: Theme.spacing;
+                        Text {
+                            horizontal-alignment: center;
+                             padding: Theme.spacing;
+                            text: "Pedidos";
+                            color: black;
+                            font-weight: 800;
+                            font-size: 16px;
+                        }
+                    
                     // height: 560px;
-                      cor: white;
+                     
                     HorizontalBox {
+                         spacing: Theme.spacing;
+                        padding: Theme.spacing;
                           // spacing: Theme.spacing;
                           Text {
                             text: "Nome";
@@ -215,7 +234,7 @@ export component dashboard_screen {
                         }
 
                         Text {
-                            text: "Data";
+                            text: "Preço";
                             color: black;
                             font-weight: 700;
                             horizontal-alignment: center;
@@ -230,14 +249,16 @@ export component dashboard_screen {
                     }
 
                     ListView {
+                        
+                    padding: Theme.spacing;
                         height: 85%;
                         for client[index] in clients_database: TouchArea {
                             clicked => {
                                 root.selected_client = root.clients_database[index];
                                 pedidos();
                             }
-                          // spacing: Theme.spacing;
-                          // padding: Theme.spacing;
+                         
+                          padding: Theme.spacing;
                           Rectangle {
                                 height: 90%;
                                 padding: 8px;
@@ -247,7 +268,7 @@ export component dashboard_screen {
                                 HorizontalBox {
                                     alignment: center;
                                     Rectangle {
-                                        width: 25%;
+                                        width: 30%;
                                         Text {
                                             text: client.nome;
                                             color: black;
@@ -257,16 +278,16 @@ export component dashboard_screen {
                                     }
 
                                     Rectangle {
-                                        width: 25%;
+                                        width: 30%;
                                         Text {
-                                            text: client.entrega;
+                                            text: client.preco;
                                             color: black;
                                             horizontal-alignment: center;
                                         }
                                     }
 
                                     Rectangle {
-                                        width: 25%;
+                                        width: 30%;
                                         Text {
                                             text: client.status;
                                             color: black;
@@ -277,6 +298,7 @@ export component dashboard_screen {
                             }
                         }
                     }
+                }
                 }
             }
         }

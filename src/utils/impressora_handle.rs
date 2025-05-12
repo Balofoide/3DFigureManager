@@ -22,6 +22,9 @@ pub struct JsonImpressora {
     pub filamento:i32,
     pub filamento_total:i32,
     pub filamento_preco:i32,
+    pub filamento_tipo:String,
+    pub nozzle:String,
+    pub diametro:String,
 }
 
 
@@ -64,6 +67,9 @@ pub fn register_impressora(ui: &AppWindow) {
     let id:String = Uuid::new_v4().to_string();
     let filamento_total = filamento_txt;
     let filamento_preco:i32 = ui.get_input_filamento_preco().parse().unwrap_or(0);
+    let filamento_tipo = ui.get_input_tipo_filamento().to_string();
+    let nozzle = ui.get_input_nozzle().to_string();
+    let diametro = ui.get_input_area_impressao().to_string();
     // 2. Cria a struct Impressoras
     let impressora = Impressoras {
         id :  id.clone().into(),
@@ -72,15 +78,18 @@ pub fn register_impressora(ui: &AppWindow) {
         filamento: filamento_txt.clone(),
         filamento_total:filamento_total.clone(),
         filamento_preco:filamento_preco.clone(),
+        tipo_filamento: SharedString::from(filamento_tipo.clone()),
+        nozzle: SharedString::from(nozzle.clone()),
+        diametro:SharedString::from(diametro.clone()),
     };
 
     // 3. Adiciona ao modelo e converte para strings
     add_impressora(ui, impressora);
     convert_impressora(ui);
-    save_impressora(modelo_txt.clone(), watts_txt.clone(),filamento_txt.clone(),id.clone(),filamento_total.clone(),filamento_preco.clone()).expect("erro ao salvar impressoras");
+    save_impressora(modelo_txt.clone(), watts_txt.clone(),filamento_txt.clone(),id.clone(),filamento_total.clone(),filamento_preco.clone(),filamento_tipo.clone(),nozzle.clone(),diametro.clone()).expect("erro ao salvar impressoras");
 }
 
-pub fn save_impressora(modelo: String, watts: String,filamento:i32,id:String,filamento_total:i32,filamento_preco:i32) -> std::io::Result<()> {
+pub fn save_impressora(modelo: String, watts: String,filamento:i32,id:String,filamento_total:i32,filamento_preco:i32,filamento_tipo:String,nozzle:String,diametro:String) -> std::io::Result<()> {
   
 
     let impressora_data = JsonImpressora {
@@ -90,6 +99,9 @@ pub fn save_impressora(modelo: String, watts: String,filamento:i32,id:String,fil
         filamento,
         filamento_total,
         filamento_preco,
+        filamento_tipo,
+        nozzle,
+        diametro,
     };
 
     let mut file = OpenOptions::new()
@@ -123,6 +135,9 @@ pub fn load_impressoras(ui: &AppWindow) -> std::io::Result<()> {
             filamento:json_impressora.filamento.into(),
             filamento_total:json_impressora.filamento_total.into(),
             filamento_preco:json_impressora.filamento_preco.into(),
+            tipo_filamento:json_impressora.filamento_tipo.into(),
+            nozzle:json_impressora.nozzle.into(),
+            diametro:json_impressora.diametro.into(),
             
         };
 
@@ -162,7 +177,7 @@ pub fn excluir_impressora(ui: &AppWindow) {
     }
 
     // 3. Atualizar UI
-    ui.set_selected_impressora(Impressoras{id:"".into(),modelo:"".into(),filamento:0.into(),watts:"".into(),filamento_total:0.into(),filamento_preco:0.into()});
+    ui.set_selected_impressora(Impressoras{id:"".into(),modelo:"".into(),filamento:0.into(),watts:"".into(),filamento_total:0.into(),filamento_preco:0.into(),tipo_filamento:"".into(),nozzle:"".into(),diametro:"".into()});
     let new_model = VecModel::from(impressoras);
     ui.set_impressoras(ModelRc::new(new_model));
 }
@@ -202,6 +217,9 @@ pub fn editar_impressora(ui: &AppWindow) {
     let temp_filamento = ui.get_temp_filamento();
     let temp_filamento_total:i32 = ui.get_temp_filamento_total().parse().unwrap_or(0);
     let temp_filamento_preco:i32 = ui.get_temp_filamento_preco().parse().unwrap_or(0);
+    let temp_filamento_tipo = ui.get_temp_tipo_filamento();
+    let temp_nozzle = ui.get_temp_nozzle();
+    let temp_diametro = ui.get_temp_diametro();
     // 1. Obter a lista atual de clientes do UI
     let mut impressoras = ui
         .get_impressoras()
@@ -222,6 +240,18 @@ pub fn editar_impressora(ui: &AppWindow) {
             updated.modelo = temp_modelo.clone();
         }
          
+        if !temp_nozzle.is_empty(){
+            updated.nozzle = temp_nozzle.clone();
+        }
+
+        if !temp_filamento_tipo.is_empty(){
+            updated.tipo_filamento = temp_filamento.clone();
+        }
+
+        if !temp_diametro.is_empty(){
+            updated.diametro = temp_diametro.clone();
+        }
+
         if !temp_watts.is_empty() {
             updated.watts = temp_watts.clone();
         }
@@ -265,6 +295,9 @@ pub fn atualizar_impressora_json(updated: &Impressoras) -> std::io::Result<()> {
             rec.filamento = updated.filamento.clone();
             rec.filamento_total = updated.filamento_total.clone();
             rec.filamento_preco = updated.filamento_preco.clone();
+            rec.filamento_tipo = updated.tipo_filamento.to_string().clone();
+            rec.diametro = updated.diametro.to_string().clone();
+            rec.nozzle = updated.nozzle.to_string().clone();
             
 
 

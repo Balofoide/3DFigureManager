@@ -60,13 +60,23 @@ export component AppWindow inherits Window {
     in-out property <string> temp_estoque_medida;
     in-out property <string> temp_status;
     in-out property <Impressoras> selected_impressora;
-
+    in-out property <string> time;
 
     in-out property <string> temp_modelo;
     in-out property <string> temp_watts;
     in-out property <string> temp_filamento;
     in-out property <string> temp_filamento_total;
    in-out property <string> temp_filamento_preco;
+
+
+
+    in-out property <string> input_tipo_filamento;
+    in-out property <string> input_nozzle;
+    in-out property <string> input_area_impressao;
+
+      in-out property <string> temp_nozzle;
+    in-out property <string> temp_tipo_filamento;
+    in-out property <string> temp_diametro;
 
     callback calcular_preco();
     callback registrar_cliente();
@@ -89,6 +99,7 @@ export component AppWindow inherits Window {
     combobox-selected: "Teste";
     full-screen: false;
     height: 820px;
+    
     HorizontalBox {
         spacing: Theme.spacing;
         padding: Theme.spacing;
@@ -96,11 +107,11 @@ export component AppWindow inherits Window {
         // x: 4px;
         // y: 5px;
         // height: parent.height;
-      
+     
         /* --- SIDEBAR --- */
         Rectangle {
             background: rgba(50,0,100,1);
-
+            
             HorizontalLayout {
                 Rectangle {
                     width:10%;
@@ -287,7 +298,7 @@ export component AppWindow inherits Window {
                     }
         
                     Printer_Screen := printer-screen {
-                        visible: false;
+                        visible: true;
                         width: parent.width;
                         height: parent.height;
                         input_modelo <=> input_modelo;
@@ -304,6 +315,14 @@ export component AppWindow inherits Window {
                         temp_filamento_total <=>temp_filamento_total;
                         temp_filamento_preco <=> temp_filamento_preco;
                         input_filamento_preco <=> input_filamento_preco;
+
+                        input_tipo_filamento <=> input_tipo_filamento;
+                        input_nozzle <=> input_nozzle;
+                        input_area_impressao <=> input_area_impressao;
+
+                        temp_nozzle <=> temp_nozzle;
+                        temp_tipo_filamento <=> temp_tipo_filamento;
+                        temp_diametro <=> temp_diametro;
         
                         registrar_impressora => {
                             root.registrar_impressora();
@@ -329,7 +348,7 @@ export component AppWindow inherits Window {
                     }
         
                     Dashboard_Screen := dashboard-screen {
-                        visible: true;
+                        visible: false;
                         width: parent.width;
                         height: parent.height;
                         clients_database <=> clients_database;
@@ -337,6 +356,7 @@ export component AppWindow inherits Window {
                         selected_client <=> selected_client;
                         estoque_database <=> estoque_database;
                         filamento-total <=> filamento_total;
+                        time <=> time;
                         pedidos => {
                             activate(1);
                         }
@@ -366,11 +386,6 @@ export component AppWindow inherits Window {
                     }
                 }
             }
-          
-        }
-        
-
-        /* --- CONTEÚDO PRINCIPAL --- */
-   
+        }   
     }
 }
