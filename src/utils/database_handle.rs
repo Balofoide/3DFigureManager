@@ -23,6 +23,7 @@ struct JsonClient {
     modelo: String,
     observacao: String,
     status: String,
+    filamento_gasto:String,
 }
 
 
@@ -41,7 +42,7 @@ pub fn add_client(ui: &AppWindow, novo_cliente: Database) {
     ui.set_clients_database(ModelRc::new(vec_model));
 }
 
-pub fn save_cliente(id:String,nome: String, endereco: String, entrega: String,preco:f32,modelo:String,observacao:String,status:String) -> std::io::Result<()> {
+pub fn save_cliente(id:String,nome: String, endereco: String, entrega: String,preco:f32,modelo:String,observacao:String,status:String,filamento_gasto:String) -> std::io::Result<()> {
   
     
     let client_data = JsonClient {
@@ -53,6 +54,7 @@ pub fn save_cliente(id:String,nome: String, endereco: String, entrega: String,pr
         modelo,
         observacao,
         status,
+        filamento_gasto,
     };
 
     let mut file = OpenOptions::new()
@@ -75,8 +77,9 @@ pub fn register_client(ui: &AppWindow) {
     let observacao: String = ui.get_observacao().to_string();
     let status:String = ui.get_status().to_string();
     let id:String = Uuid::new_v4().to_string();
+    let filamento = ui.get_material().to_string();
 
-    save_cliente(id.clone(),nome_cliente.clone(), endereco.clone(), entrega.clone(),preco.clone(),modelo.clone(),observacao.clone(),status.clone())
+    save_cliente(id.clone(),nome_cliente.clone(), endereco.clone(), entrega.clone(),preco.clone(),modelo.clone(),observacao.clone(),status.clone(),filamento.clone())
         .expect("Erro ao salvar os dados do cliente");
 
     let client = Database {
@@ -89,6 +92,7 @@ pub fn register_client(ui: &AppWindow) {
         modelo: modelo.into(),
         observacao: observacao.into(),
         status: status.into(),
+        filamento_gasto: filamento.into(),
     };
 
     add_client(&ui, client);
@@ -117,6 +121,7 @@ pub fn load_clients(ui: &AppWindow) -> std::io::Result<()> {
             modelo: json_client.modelo.into(),
             observacao: json_client.observacao.into(),
             status: json_client.status.into(),
+            filamento_gasto:json_client.filamento_gasto.into(),
         };
 
         add_client(ui, client);
@@ -227,7 +232,7 @@ pub fn excluir_client(ui: &AppWindow) {
     }
 
     // 3. Atualizar UI
-    ui.set_selected_client(Database{id:"".into(),endereco:"".into(),entrega:"".into(),modelo:"".into(),nome: "".into(),observacao: "".into(), preco:0.0.into(),status:"".into()});
+    ui.set_selected_client(Database{id:"".into(),endereco:"".into(),entrega:"".into(),modelo:"".into(),nome: "".into(),observacao: "".into(), preco:0.0.into(),status:"".into(),filamento_gasto:"".into()});
     let new_model = VecModel::from(clientes);
     ui.set_clients_database(ModelRc::new(new_model));
 }

@@ -332,6 +332,12 @@ export component printer_screen {
                                                         HorizontalBox {
                                                             BaloButton {
                                                                 texto: "Refill";
+
+                                                                clicked => {
+                                                                    temp_filamento = selected_impressora.filamento-total;
+                                                                     editar_impressora();
+                                                                     temp_filamento = "";
+                                                                }
                                                             }
                                                         }
                                                     }

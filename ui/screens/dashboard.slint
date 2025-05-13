@@ -142,14 +142,14 @@ export component dashboard_screen {
                                             width: 100px;
                                             height: 100px;
                                             padding: Theme.spacing;
-                                            progress: (filamento-total / 10000) * 10;
+                                            progress: ((filamento-total / 10000) * 10).to-fixed(2));
                                         }
                                     }
                                 }
                             }
                         }
 
-                        Row { }
+                      
                     }
                 }
             }

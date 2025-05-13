@@ -352,9 +352,11 @@ export component calculator_screen {
     
                                         Container {
                                             cor: white;
-                                            VerticalBox {
-                                                alignment: center;
-                                                Text {
+                                            HorizontalBox {
+                                                
+                                                VerticalBox {
+                                                    alignment: center;
+                                                    Text {
                                                     horizontal-alignment: center;
                                                     text: "Modelo";
                                                     color: black;
@@ -368,6 +370,26 @@ export component calculator_screen {
                                                     color: black;
                                                     font-size: Theme.fontSizeBody;
                                                     font-weight: 500;
+                                                }
+                                                }
+
+                                                 VerticalBox {
+                                                    alignment: center;
+                                                    Text {
+                                                    horizontal-alignment: center;
+                                                    text: "Filamento Gasto";
+                                                    color: black;
+                                                    font-size: Theme.fontSizeBody;
+                                                    font-weight: 700;
+                                                }
+    
+                                                Text {
+                                                    horizontal-alignment: center;
+                                                    text: "\{root.selected_client.filamento_gasto}g";
+                                                    color: black;
+                                                    font-size: Theme.fontSizeBody;
+                                                    font-weight: 500;
+                                                }
                                                 }
                                             }
                                         }
@@ -483,6 +505,7 @@ export component calculator_screen {
            
         }
     }
+
 
     Novo_Pedido := VerticalBox {
         visible: false;
@@ -761,11 +784,5 @@ export component calculator_screen {
                 }
             }
         }
-    }
-
-
-   
-
-
-   
+    }  
 }

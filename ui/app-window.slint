@@ -98,19 +98,12 @@ export component AppWindow inherits Window {
     width: 1280px;
     combobox-selected: "Teste";
     full-screen: false;
+    background: transparent;
     height: 820px;
-    
-    HorizontalBox {
-        spacing: Theme.spacing;
-        padding: Theme.spacing;
-        // width: parent.width;
-        // x: 4px;
-        // y: 5px;
-        // height: parent.height;
-     
-        /* --- SIDEBAR --- */
-        Rectangle {
-            background: rgba(50,0,100,1);
+    title: "Figure Manager";
+    Rectangle {
+            border-radius: 10px;
+            background: #5c15b8;
             
             HorizontalLayout {
                 Rectangle {
@@ -118,8 +111,8 @@ export component AppWindow inherits Window {
                     
                     VerticalBox {
                         alignment: center;
-                        // width: 15%;
-                        spacing: Theme.spacing;
+                         
+                        spacing: 50px;
                         padding: Theme.spacing;
                         SideButton {
                             height: 50px;
@@ -160,12 +153,7 @@ export component AppWindow inherits Window {
                                 activate(4)
                             }
                         }
-        
-        
-        
-                        
-        
-        
+      
                     }
                    
                 }
@@ -173,9 +161,12 @@ export component AppWindow inherits Window {
                 Rectangle {
                     background: Theme.background;
                     padding: Theme.spacing;
+                    border-top-right-radius: 10px;
+                    border-bottom-right-radius: 10px;
                     
                     clip: true;
                     visible: true;
+                    
                     Calculator_Screen := calculator-screen {
                         width: parent.width;
                         height: parent.height;
@@ -298,7 +289,7 @@ export component AppWindow inherits Window {
                     }
         
                     Printer_Screen := printer-screen {
-                        visible: true;
+                        visible: false;
                         width: parent.width;
                         height: parent.height;
                         input_modelo <=> input_modelo;
@@ -348,7 +339,7 @@ export component AppWindow inherits Window {
                     }
         
                     Dashboard_Screen := dashboard-screen {
-                        visible: false;
+                        visible: true;
                         width: parent.width;
                         height: parent.height;
                         clients_database <=> clients_database;
@@ -387,5 +378,5 @@ export component AppWindow inherits Window {
                 }
             }
         }   
-    }
+      
 }
