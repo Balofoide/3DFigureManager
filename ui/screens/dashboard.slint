@@ -1,5 +1,5 @@
 import { Theme } from "../styling.slint";
-import { Container, SideButton, InputField, OverviewCard, BaloButton,Clock,CircularProgress} from "../components.slint";
+import { Container, SideButton, InputField, OverviewCard, BaloButton,Clock,CircularProgress, RectangularProgress} from "../components.slint";
 import {
     Button, ComboBox, LineEdit,
     VerticalBox, HorizontalBox, GridBox, ListView, ProgressIndicator, 
@@ -28,12 +28,13 @@ export component dashboard_screen {
     VerticalLayout {
         width: parent.width;
         height: parent.height;
+        
         HorizontalLayout {
             padding: Theme.spacing;
             spacing: Theme.spacing;
             Text {
                 text: "Dashboard";
-                color: black;
+                color: Theme.onBackground;
                 font-weight: 800;
                 font-size: 40px;
             }
@@ -48,39 +49,40 @@ export component dashboard_screen {
         GridBox {
             Row {
                 Rectangle {
-                    background: white;
+                    background: Theme.background;
                     GridBox {
                         spacing: Theme.spacing;
                         padding: Theme.spacing;
                         Row {
                             Container {
-                                cor: white;
+                            
                                 VerticalBox {
                                     Text {
                                         text: "Pedidos";
-                                        color: black;
+                                        color: Theme.onSurface;
                                         font-weight: 800;
-                                        font-size: 16px;
+                                        font-size: Theme.fontSizeTitle;
                                         horizontal-alignment: center;
                                     }
 
                                     Text {
                                         text: "\{root.clients_database.length}";
-                                        color: black;
+                                        color:  Theme.onSurface;
                                         horizontal-alignment: center;
                                         font-weight: 700;
-                                        font-size: 16px;
+                                        font-size: Theme.fontSizeTitle;
                                     }
                                 }
                             }
 
                             Container {
-                                cor: white;
+                                
                                 VerticalBox {
                                     Text {
                                         horizontal-alignment: center;
                                         text: "Resumo de Vendas";
-                                        color: black;
+                                        color:   Theme.onSurface;
+                                        
                                         font-weight: 800;
                                         font-size: 16px;
                                     }
@@ -88,7 +90,7 @@ export component dashboard_screen {
                                     HorizontalBox {
                                         Text {
                                             text: "Vendas no mês:";
-                                            color: black;
+                                            color:   Theme.onSurface;
                                             font-weight: 500;
                                             font-size: 13px;
                                         }
@@ -96,7 +98,7 @@ export component dashboard_screen {
                                         Text {
                                             horizontal-alignment: right;
                                             text: "0";
-                                            color: black;
+                                            color:  Theme.onSurface;
                                             font-weight: 500;
                                             font-size: 13px;
                                         }
@@ -105,7 +107,7 @@ export component dashboard_screen {
                                     HorizontalBox {
                                         Text {
                                             text: "Faturamento:";
-                                            color: black;
+                                            color:  Theme.onSurface;
                                             font-weight: 500;
                                             font-size: 13px;
                                         }
@@ -113,7 +115,7 @@ export component dashboard_screen {
                                         Text {
                                             horizontal-alignment: right;
                                             text: "R$" + vendas_total.to-fixed(2);
-                                            color: black;
+                                            color:  Theme.onSurface;
                                             font-weight: 500;
                                             font-size: 13px;
                                         }
@@ -123,16 +125,17 @@ export component dashboard_screen {
 
                             Container {
                                 width: 20%;
-                                cor: white;
-                                VerticalLayout {
+                               
+                                VerticalBox {
                                     alignment: start;
                                     spacing: Theme.spacing;
                                     Text {
                                         padding: Theme.spacing;
                                         text: "Filamento";
-                                        color: black;
+                                        color:   Theme.onSurface;
                                         font-weight: 800;
                                         font-size: 16px;
+                                        vertical-alignment: center;
                                         horizontal-alignment: center;
                                     }
 
@@ -140,9 +143,12 @@ export component dashboard_screen {
                                         alignment: center;
                                         CircularProgress {
                                             width: 100px;
+                                            background-color: Theme.onPrimary;
+                                            progress-color: Theme.secondaryLight;
+                                            text-color:  Theme.onSurface;
                                             height: 100px;
                                             padding: Theme.spacing;
-                                            progress: ((filamento-total / 10000) * 10).to-fixed(2));
+                                            progress: ((filamento-total / 10000) * 10);
                                         }
                                     }
                                 }
@@ -160,43 +166,66 @@ export component dashboard_screen {
                 padding: Theme.spacing;
                 Container {
                     width: 50%;
-                    cor: white;
+                   
                     VerticalBox {
+                         
                         Text {
                             horizontal-alignment: center;
                             padding: Theme.spacing;
                             text: "Estoque";
-                            color: black;
+                            color:  Theme.onSurface;
                             font-weight: 800;
                             font-size: 16px;
                         }
 
+                       
+
                         ListView {
+                            horizontal-scrollbar-policy: as-needed;
                             for item in estoque_database: Rectangle {
                                 max-height: 30px;
+
+                               
+                               
                                 HorizontalBox {
                                     Rectangle {
-                                        width: 20%;
-                                        Text {
+                                        VerticalBox {
+                                            Text {
                                             text: item.material + ": ";
                                             padding: Theme.spacing;
-                                            color: black;
+                                            color: Theme.onSurface;
                                             font-weight: 600;
                                             font-size: 15px;
-                                        }
-                                    }
+                                            }
 
-                                    ProgressIndicator {
-                                        width: 50%;
-                                        progress: (item.quantidade.to-float() / item.quantidade-total);
+                                            
+                                        }
+                                        
+                                        width: 20%;
+                                        
                                     }
+                                
+
+                                    VerticalBox {
+                                        alignment: center;
+                                          RectangularProgress {
+                                        width: 50%;
+                                        progress: (item.quantidade.to-float()/ item.quantidade-total);
+                                        
+                                    
+                                    }
+                                     
+                                    }
+                                   
+
+                                   
 
                                     Rectangle {
                                         width: 20%;
                                         Text {
                                             
-                                            text: item.quantidade + "/" + item.quantidade-total;
-                                            color: black;
+                                            text: item.quantidade + "/" + item.quantidade-total + item.medida;
+                                            color: Theme.onSurface;
                                         }
                                     }
                                 }
@@ -207,42 +236,41 @@ export component dashboard_screen {
 
                 Container {
                     
-                     cor: white;
+                     
                     VerticalBox {
                         spacing: Theme.spacing;
                         padding: Theme.spacing;
                         Text {
                             horizontal-alignment: center;
                              padding: Theme.spacing;
-                            text: "Pedidos";
-                            color: black;
+                            text: "Historico de Pedidos";
+                            color:  Theme.onSurface;
                             font-weight: 800;
                             font-size: 16px;
                         }
-                    
-                    // height: 560px;
+                 
                      
                     HorizontalBox {
                          spacing: Theme.spacing;
                         padding: Theme.spacing;
-                          // spacing: Theme.spacing;
+                     
                           Text {
                             text: "Nome";
-                            color: black;
+                            color:   Theme.onSurface;
                             font-weight: 700;
                             horizontal-alignment: center;
                         }
 
                         Text {
                             text: "Preço";
-                            color: black;
+                            color:   Theme.onSurface;
                             font-weight: 700;
                             horizontal-alignment: center;
                         }
 
                         Text {
                             text: "Status";
-                            color: black;
+                            color:   Theme.onSurface;
                             font-weight: 700;
                             horizontal-alignment: center;
                         }
@@ -251,27 +279,27 @@ export component dashboard_screen {
                     ListView {
                         
                     padding: Theme.spacing;
-                        height: 85%;
+                        height: 99%;
                         for client[index] in clients_database: TouchArea {
                             clicked => {
                                 root.selected_client = root.clients_database[index];
                                 pedidos();
                             }
-                         
+                          property <bool> selected_hover <=> self.has-hover;
                           padding: Theme.spacing;
                           Rectangle {
+                            
                                 height: 90%;
                                 padding: 8px;
-                              // border-radius: 5px;
-                              // drop-shadow-offset-y: 1px;  
-                              background: rgba(0.5,0,1,0.3);
+                      
+                              background: !selected_hover? Theme.background:Theme.secondaryLight;
                                 HorizontalBox {
                                     alignment: center;
                                     Rectangle {
                                         width: 30%;
                                         Text {
                                             text: client.nome;
-                                            color: black;
+                                            color:  Theme.onSurface;
                                             horizontal-alignment: center;
                                             overflow: elide;
                                         }
@@ -280,8 +308,8 @@ export component dashboard_screen {
                                     Rectangle {
                                         width: 30%;
                                         Text {
-                                            text: client.preco;
-                                            color: black;
+                                            text: client.preco + "R$";
+                                            color: Theme.onSurface;
                                             horizontal-alignment: center;
                                         }
                                     }
@@ -290,7 +318,7 @@ export component dashboard_screen {
                                         width: 30%;
                                         Text {
                                             text: client.status;
-                                            color: black;
+                                            color: Theme.onSurface;
                                             horizontal-alignment: center;
                                         }
                                     }

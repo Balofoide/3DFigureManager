@@ -1,5 +1,5 @@
 import { Theme } from "../styling.slint";
-import { Container, SideButton, InputField, OverviewCard, BaloButton } from "../components.slint";
+import { Container, SideButton, InputField, OverviewCard, BaloButton, CustomComboBox } from "../components.slint";
 import {
     Button, ComboBox, LineEdit,
     VerticalBox, HorizontalBox, GridBox, ListView, TabWidget
@@ -17,8 +17,8 @@ export component settings_screen {
 
     callback registrar_settings();
     callback dashboard();
-    Container {
-        cor:white;
+    Rectangle {
+        background:Theme.background;
         width: parent.width;
         height: parent.height;
         settings_screen := VerticalBox {
@@ -42,7 +42,7 @@ export component settings_screen {
                             Text {
                                 height: 10%;
                                 text: "Configurações";
-                                color: black;
+                                color: Theme.onBackground;
                                 font-size: 40px;
                                 font-weight: 800;
                             }
@@ -54,7 +54,7 @@ export component settings_screen {
                         Container {
                             padding: Theme.spacing;
                             
-                            cor: white;
+                            cor: Theme.surface;
                              VerticalBox {
                                 GridBox {
                                 
@@ -71,7 +71,24 @@ export component settings_screen {
                                             texto: "Lucro padrão:";
                                             input <=> settings_lucro;
                                         }
-                                    }                                          
+
+                                        // VerticalLayout {
+                                        //     alignment: center;
+                                        //     spacing: Theme.spacing;
+                                        //     Text {
+                                        //         text: "Theme";
+                                        //     color: Theme.onBackground;
+                                        //     font-size: Theme.fontSizeBody;
+                                        // }
+
+                                        // CustomComboBox {
+                                        //     model: ["Light","Dark"];
+                                        // }
+                                        // }
+                                    }         
+                                    Row {
+                                        
+                                    }                                 
                                 }
                              }
                         }                        

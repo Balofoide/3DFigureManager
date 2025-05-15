@@ -1,19 +1,28 @@
-  
-export global Theme {
-    // Palette colors
-    in property <brush> text-color: #000000;
-    in property <color> background: #ffffff;
-    in property <color> surface: #7c7c7c;
-    in property <color> primary: #6200EE;
-    in property <color> onPrimary: #FFFFFF;
-    in property <color> secondary: #03DAC6;
-    in property <color> onSecondary: #000000;
-    in property <color> error: #B00020;
-    in property <color> onError: #FFFFFF;
-    in property <color> onBackground: #000000;
-    in property <color> onSurface: #000000;
+ 
 
-    // Typography and spacing
+export global Theme {
+    // Cores Principais (baseadas na paleta)
+    in property <color> primary: #401F71;        /* Roxo escuro vibrante */
+    in property <color> primaryLight: #824D74;   /* Roxo médio suavizado */
+    in property <color> primaryDark: #2A1349;     /* Tom mais escuro derivado da primary */
+
+    // Cores de Apoio (tons terciários da paleta)
+    in property <color> secondary: #BE7B72;       /* Salmão rosado */
+    in property <color> secondaryLight: #FDAF7B;  /* Salmão claro energético */
+
+    // Cores de Texto e Superfície
+    in property <color> onPrimary: #FFFFFF;       /* Texto branco puro */
+    in property <color> onSecondary: #2A2A2A;     /* Texto escuro suave */
+    in property <color> background: #FDF5F0;      /* Fundo bege-claro (tom pastel do FDAF7B) */
+    in property <color> surface: #F0E4E1;         /* Superfície rosada neutra */
+    in property <color> onBackground: #401F71;    /* Texto usando a cor primary */
+    in property <color> onSurface: #4A2B5C;       /* Texto roxo-escuro suavizado */
+
+    // Cores de Estado (mantidas para contraste)
+    in property <color> error: #D32F2F;
+    in property <color> onError: #FFFFFF;
+
+    // Tipografia e Espaçamento (mantidos)
     in property <length> fontSizeSmall: 12px;
     in property <length> fontSizeBody: 14px;
     in property <length> fontSizeTitle: 18px;
@@ -22,3 +31,70 @@ export global Theme {
     in property <length> inputHeight: 15px;
     in property <length> spacing: 12px;
 }
+
+
+// export global Theme {
+//     // Cores Principais
+//     in property <color> primary: #282D4F;       /* Azul-arroxeado profundo */
+//     in property <color> primaryLight: #3A406F;  /* Tom claro derivado de primary (+20% luminosidade) */
+//     in property <color> primaryDark: #23103A;   /* Roxo quase preto (tom base da paleta) */
+
+//     // Cores de Apoio
+//     in property <color> secondary: #A0204C;     /* Vinho intenso */
+//     in property <color> secondaryLight: #FF6C00;/* Laranja elétrico (contraste dinâmico) */
+
+//     // Cores de Texto e Superfície
+//     in property <color> onPrimary: #FFFFFF;     /* Branco puro sobre azul-arroxeado */
+//     in property <color> onSecondary: #FFFFFF;    /* Branco sobre vinho/laranja */
+//     in property <color> background: #1A0A2F;     /* Fundo escuro (variante de primaryDark) */
+//     in property <color> surface: rgba(40,45,79,0.1); /* Superfície translúcida baseada em primary */
+//     in property <color> onBackground: #E8E6F2;    /* Cinza-claro perolado */
+//     in property <color> onSurface: #A9A5C9;       /* Texto médio com toque metálico */
+
+//     // Cores de Estado (mantidas para segurança)
+//     in property <color> error: #FF4444;          /* Vermelho atualizado para combinar */
+//     in property <color> onError: #FFFFFF;
+
+//     // Tipografia e Espaçamento (constantes)
+//     in property <length> fontSizeSmall: 12px;
+//     in property <length> fontSizeBody: 14px;
+//     in property <length> fontSizeTitle: 18px;
+//     in property <length> borderRadius: 10px;
+//     in property <length> buttonHeight: 36px;
+//     in property <length> inputHeight: 15px;
+//     in property <length> spacing: 12px;
+// }
+
+
+
+// export global Theme {
+//     // Cores Principais
+//     in property <color> primary: #AB4459;       /* Vinho intenso (tom base) */
+//     in property <color> primaryLight: #F29F58;  /* Laranja dourado (realce vibrante) */
+//     in property <color> primaryDark: #441752;   /* Roxo profundo */
+
+//     // Cores de Apoio
+//     in property <color> secondary: #1B1833;      /* Azul-noite escuro */
+//     in property <color> secondaryLight: #2A274D; /* Azul médio derivado */
+
+//     // Cores de Texto e Superfície
+//     in property <color> onPrimary: #FFF4EB;     /* Branco cremoso */
+//     in property <color> onSecondary: #EAD8C8;   /* Bege claro */
+//     in property <color> background: #120E1A;    /* Fundo azul quase preto */
+//     in property <color> surface: #1F1A2F;       /* Superfície roxa escura */
+//     in property <color> onBackground: #D1C8E1;  /* Lilás claro */
+//     in property <color> onSurface: #B8AECF;     /* Lavanda média */
+
+//     // Cores de Estado
+//     in property <color> error: #C44545;         /* Vermelho terroso */
+//     in property <color> onError: #FFE9E1;       /* Rosa claro suave */
+
+//     // Tipografia e Espaçamento (mantidos)
+//     in property <length> fontSizeSmall: 12px;
+//     in property <length> fontSizeBody: 14px;
+//     in property <length> fontSizeTitle: 18px;
+//     in property <length> borderRadius: 10px;
+//     in property <length> buttonHeight: 36px;
+//     in property <length> inputHeight: 15px;
+//     in property <length> spacing: 12px;
+// }

@@ -37,10 +37,10 @@ export component estoque_screen {
     callback atualizar_estoque();
     callback estoque_total_preco();
     callback excluir_estoque();
-    Container {
+    Rectangle {
         width: parent.width;
         height: parent.height;
-        cor: white;
+        background: Theme.background;
         visible: true;
         Estoques := VerticalBox {
             visible: true;
@@ -50,7 +50,7 @@ export component estoque_screen {
                         // max-height: 50px;
                         Text {
                             text: "Estoque";
-                            color: black;
+                            color: Theme.onBackground;
                             font-weight: 800;
                             font-size: 40px;
                         }
@@ -117,8 +117,8 @@ export component estoque_screen {
                                     HorizontalBox {
                                         Text {
                                             vertical-alignment: center;
-                                            text: "Editar Pedido";
-                                            color: black;
+                                            text: "Editar Material";
+                                            color: Theme.onSurface;
                                             font-weight: 800;
                                             font-size: 20px;
                                         }
@@ -196,7 +196,7 @@ export component estoque_screen {
                 Row {
                     Container {
                         height: 50%;
-                        cor: white;
+                         
                         VerticalBox {
                     // spacing: Theme.spacing;
                     HorizontalBox {
@@ -204,21 +204,21 @@ export component estoque_screen {
                         // spacing: Theme.spacing;
                         Text {
                                     text: "Material";
-                                    color: black;
+                                    color: Theme.onSurface;
                                     font-weight: 700;
                                     horizontal-alignment: center;
                                 }
 
                                 Text {
                                     text: "Preço";
-                                    color: black;
+                                    color: Theme.onSurface;
                                     font-weight: 700;
                                     horizontal-alignment: center;
                                 }
 
                                 Text {
                                     text: "Quantidade";
-                                    color: black;
+                                    color: Theme.onSurface;
                                     font-weight: 700;
                                     horizontal-alignment: center;
                                 }
@@ -233,20 +233,23 @@ export component estoque_screen {
                                         root.selectec_estoque = root.estoque_database[index];
                                         Detalhes_Material.visible = true;
                                     }
+
+                                      property <bool> selected_hover <=> self.has-hover;
+                                    
                                     Rectangle {
                                         height: 90%;
                                         padding: 8px;
-                                         
+                                         background: !selected_hover? Theme.background:Theme.secondaryLight;
                                     // border-radius: 5px;
                                     // drop-shadow-offset-y: 1px;  
-                                    background: rgba(0.5,0,1,0.3);
+                                     
                                         HorizontalBox {
                                             alignment: center;
                                             Rectangle {
                                                 width: 25%;
                                                 Text {
                                                     text: estoque.material;
-                                                    color: black;
+                                                    color: Theme.onSurface;
                                                     horizontal-alignment: center;
                                                     overflow: elide;
                                                 }
@@ -256,7 +259,7 @@ export component estoque_screen {
                                                 width: 25%;
                                                 Text {
                                                     text: "R$" + estoque.preco;
-                                                    color: black;
+                                                    color: Theme.onSurface;
                                                     horizontal-alignment: center;
                                                 }
                                             }
@@ -265,7 +268,7 @@ export component estoque_screen {
                                                 width: 25%;
                                                 Text {
                                                     text: estoque.quantidade + "/" + estoque.quantidade-total + estoque.medida;
-                                                    color: black;
+                                                    color: Theme.onSurface;
                                                     horizontal-alignment: center;
                                                 }
                                             }
@@ -304,7 +307,7 @@ export component estoque_screen {
                         Container {
                             height: 600px;
                             width: 30%;
-                            cor: white;
+                            cor: Theme.surface;
                             Detalhes_Material :=  VerticalBox {
                                 visible: !selectec_estoque.id.is-empty;
                                 HorizontalLayout {
@@ -332,13 +335,13 @@ export component estoque_screen {
                                          VerticalLayout {
                                             Text {
                                                vertical-alignment: center;
-                                                text: "Material:"; color: black;
+                                                text: "Material:"; color: Theme.onSurface;
                                                 font-size: 20px;
                                                 font-weight: 700;
                                             }
                                             Text {
                                                 vertical-alignment: center;
-                                                text: selectec_estoque.material; color: black;
+                                                text: selectec_estoque.material; color: Theme.onSurface;
                                                 font-size: 20px;
                                                 font-weight: 500;
                                             }
@@ -352,13 +355,13 @@ export component estoque_screen {
                                         VerticalLayout {
                                            Text {
                                             vertical-alignment: center;
-                                               text: "Preço:"; color: black;
+                                               text: "Preço:"; color: Theme.onSurface;
                                                font-size: 20px;
                                                font-weight: 700;
                                            }
                                            Text {
                                             vertical-alignment: center;
-                                               text: "R$"+selectec_estoque.preco; color: black;
+                                               text: "R$"+selectec_estoque.preco; color:Theme.onSurface;
                                                font-size: 20px;
                                                font-weight: 500;
                                            }
@@ -371,13 +374,13 @@ export component estoque_screen {
                                     VerticalLayout {
                                        Text {
                                             vertical-alignment: center;
-                                           text: "Quantidade:"; color: black;
+                                           text: "Quantidade:"; color: Theme.onSurface;
                                            font-size: 20px;
                                            font-weight: 700;
                                        }
                                        Text {
                                         vertical-alignment: center;
-                                           text: selectec_estoque.quantidade+"/"+selectec_estoque.quantidade-total+selectec_estoque.medida; color: black;
+                                           text: selectec_estoque.quantidade+"/"+selectec_estoque.quantidade-total+selectec_estoque.medida; color: Theme.onSurface;
                                            font-size: 20px;
                                            font-weight: 500;
                                        }
@@ -390,11 +393,11 @@ export component estoque_screen {
                                     VerticalBox {
                                         alignment: end;
                                         Container {
-                                            cor: white;
+                                            cor: Theme.surface;
                                             HorizontalBox {
-                                                Text { color: black; text: "Custo Total:"; font-size: 20px; font-weight: 700;}
+                                                Text { color: Theme.onSurface; text: "Custo Total:"; font-size: 20px; font-weight: 700;}
                                                 Text {
-                                                    color: black; 
+                                                    color: Theme.onSurface; 
                                                     text:preco_total_estoque+"R$";
                                                     font-size: 20px;
                                                     font-weight: 700;
@@ -441,7 +444,7 @@ export component estoque_screen {
                             alignment: center;
                             Text {
                                 text: "Novo Material";
-                                color: black;
+                                color: Theme.onSurface;
                                 font-weight: 800;
                                 font-size: 40px;
                             }
@@ -449,7 +452,7 @@ export component estoque_screen {
                         
                         Container {
                        
-                            cor: white;
+                           
                             VerticalBox {
                                 InputField {
                                     max_lenght: 47;
@@ -466,12 +469,12 @@ export component estoque_screen {
                                 VerticalBox {
                                     Text {
                                         text: "Medida";
-                                        color: black;
+                                        color: Theme.onSurface;
                                     }
                     
                                     CustomComboBox {
                                         model: ["g", "mm", "un", "ml"];
-                                        text-color: black;
+                                        text-color: Theme.onSurface;
                                         selected(current-value) => {
                                             estoque_medida = current-value;
                                             debug(estoque_medida)

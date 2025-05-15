@@ -4,8 +4,8 @@
 use std::error::Error;
 
 mod utils;
-
-use utils::clock_handle::clock;
+ 
+// use utils::clock_handle::clock;
 use utils::database_handle::{atualizar_client, excluir_client, load_clients, register_client};
 use utils::estoque_handle::{
     atualizar_estoque, excluir_estoque, load_estoque, register_estoque, total_estoque,
@@ -46,7 +46,7 @@ fn initialize_ui(ui: &AppWindow) -> Result<(), Box<dyn Error>> {
     load_estoque(ui).expect("Erro ao carregar o estoque");
     load_settings(ui).expect("Erro ao carregar Settings");
     load_price(ui).expect("erro ao carregar preco do filamento");
-    clock(ui);
+    // clock(ui);
     ui.set_vendas_total(total_vendas(ui));
     ui.set_filamento_total(total_filamento(ui));
     ui.set_preco_total_estoque(total_estoque(ui));
