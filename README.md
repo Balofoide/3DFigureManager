@@ -32,6 +32,7 @@ Um aplicativo desktop multiplataforma (Windows/Linux/macOS) escrito em Rust, com
   <img src="https://raw.githubusercontent.com/Balofoide/3DPrint-Price-Calculator/main/img/Estoque_img.png" alt="Estoque" width="300" />  
   <img src="https://raw.githubusercontent.com/Balofoide/3DPrint-Price-Calculator/main/img/Impressoras_img.png" alt="Impressoras" width="300" />  
   <img src="https://raw.githubusercontent.com/Balofoide/3DPrint-Price-Calculator/main/img/Pedidos_img.png" alt="Pedidos" width="300" />  
+   <img src="https://raw.githubusercontent.com/Balofoide/3DPrint-Price-Calculator/main/img/Configuracoes_img.png" alt="Configurações" width="300" />  
 </div>  
 
  
