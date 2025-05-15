@@ -1,4 +1,4 @@
-# FigureManager
+# 3D FigureManager
 
 Um **Dashboard de gerenciamento de vendas de Figures em 3D** desenvolvida em Rust + Slint, que permite estimar preço do produto, Organizar Estoque e Vendas.
 
