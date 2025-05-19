@@ -301,7 +301,60 @@ export component estoque_screen {
                     }
 
                     VerticalBox {
+                       
                         Container {
+                             Confirm_screen := PopupWindow{
+                                        // width: parent.width;
+                                        // height: parent.height;
+                                        close-policy: close-on-click-outside;
+                                        x: parent.width / 200;
+                                        y: parent.height *-0.1;
+                                        VerticalLayout {
+                                            
+                                            
+                                            Container {
+                                                cor: Theme.background;
+                                                // width: 100%;
+                                                // height: 100%;
+                                                shadow_blur: 10px;
+                                                border_width: 1px;
+                                                border_radius: 10px;
+                                                
+                                                VerticalBox {
+                                                    HorizontalBox {
+                                                        Text {
+                                                        
+                                                            text: "Confirmação";
+                                                            color: Theme.onBackground;
+                                                            font-weight: 800;
+                                                            font-size: 20px;
+                                                        }
+                                                    
+                                                    }
+                                                    HorizontalBox {
+                                                        
+                                                    Text {
+                                                        
+                                                            text: "Deseja excluir "+selectec_estoque.material+" ?";
+                                                            color: Theme.onBackground;
+                                                            font-weight: 800;
+                                                            font-size: Theme.fontSizeBody;
+                                                        }
+                                                    }
+                                                    
+                                                    HorizontalBox {
+                                                        spacing: Theme.spacing;
+                                                        BaloButton { width:80px; height: 40px;texto: "Cancelar"; clicked => {Confirm_screen.close()}}
+                                                        BaloButton { width:80px; height: 40px;texto: "Confirmar"; clicked => {excluir_estoque(); Confirm_screen.close();Detalhes_Material.visible=false}}
+                                                    }
+                                                    
+                
+                                                }
+                                            
+                                            }
+                                        }
+                        
+                        }
                             height: 600px;
                             width: 30%;
                             cor: Theme.surface;
@@ -322,7 +375,7 @@ export component estoque_screen {
                                         alignment: center;
                                         width: 3%;
                                         BaloButton {height: 30px; width: 50px; texto: "Editar"; clicked => {Edit_Estoque_Screen.show();}}
-                                        BaloButton {background:#f01414;height: 30px; width: 50px; texto: "🗑️"; clicked => {excluir_estoque(); Detalhes_Material.visible=false}}
+                                        BaloButton {background:#f01414;height: 30px; width: 50px; texto: "🗑️"; clicked => {Confirm_screen.show()}}
                                 }
                                 }
                                 VerticalBox {
