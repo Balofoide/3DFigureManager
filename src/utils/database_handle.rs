@@ -7,6 +7,8 @@ use slint::ModelRc;
 use slint::VecModel;
 use std::fs::OpenOptions;
 use std::io::BufRead;
+use chrono::Utc;
+use chrono::Datelike;
 use std::io::BufReader;
 use uuid::Uuid;
 
@@ -24,6 +26,7 @@ struct JsonClient {
     observacao: String,
     status: String,
     filamento_gasto:String,
+    data_criacao:String,
 }
 
 
@@ -42,7 +45,7 @@ pub fn add_client(ui: &AppWindow, novo_cliente: Database) {
     ui.set_clients_database(ModelRc::new(vec_model));
 }
 
-pub fn save_cliente(id:String,nome: String, endereco: String, entrega: String,preco:f32,modelo:String,observacao:String,status:String,filamento_gasto:String) -> std::io::Result<()> {
+pub fn save_cliente(id:String,nome: String, endereco: String, entrega: String,preco:f32,modelo:String,observacao:String,status:String,filamento_gasto:String,data_criacao:String) -> std::io::Result<()> {
   
     
     let client_data = JsonClient {
@@ -55,6 +58,7 @@ pub fn save_cliente(id:String,nome: String, endereco: String, entrega: String,pr
         observacao,
         status,
         filamento_gasto,
+        data_criacao
     };
 
     let mut file = OpenOptions::new()
@@ -78,8 +82,9 @@ pub fn register_client(ui: &AppWindow) {
     let status:String = ui.get_status().to_string();
     let id:String = Uuid::new_v4().to_string();
     let filamento = ui.get_material().to_string();
+    let data_criacao = Utc::now().date_naive().format("%d-%m-%Y").to_string();
 
-    save_cliente(id.clone(),nome_cliente.clone(), endereco.clone(), entrega.clone(),preco.clone(),modelo.clone(),observacao.clone(),status.clone(),filamento.clone())
+    save_cliente(id.clone(),nome_cliente.clone(), endereco.clone(), entrega.clone(),preco.clone(),modelo.clone(),observacao.clone(),status.clone(),filamento.clone(),data_criacao.clone())
         .expect("Erro ao salvar os dados do cliente");
 
     let client = Database {
@@ -93,6 +98,7 @@ pub fn register_client(ui: &AppWindow) {
         observacao: observacao.into(),
         status: status.into(),
         filamento_gasto: filamento.into(),
+        data_criacao:data_criacao.into(),
     };
 
     add_client(&ui, client);
@@ -122,6 +128,7 @@ pub fn load_clients(ui: &AppWindow) -> std::io::Result<()> {
             observacao: json_client.observacao.into(),
             status: json_client.status.into(),
             filamento_gasto:json_client.filamento_gasto.into(),
+            data_criacao:json_client.data_criacao.into(),
         };
 
         add_client(ui, client);
@@ -232,7 +239,7 @@ pub fn excluir_client(ui: &AppWindow) {
     }
 
     // 3. Atualizar UI
-    ui.set_selected_client(Database{id:"".into(),endereco:"".into(),entrega:"".into(),modelo:"".into(),nome: "".into(),observacao: "".into(), preco:0.0.into(),status:"".into(),filamento_gasto:"".into()});
+    ui.set_selected_client(Database{id:"".into(),endereco:"".into(),entrega:"".into(),modelo:"".into(),nome: "".into(),observacao: "".into(), preco:0.0.into(),status:"".into(),filamento_gasto:"".into(),data_criacao:"".into()});
     let new_model = VecModel::from(clientes);
     ui.set_clients_database(ModelRc::new(new_model));
 }
@@ -259,4 +266,35 @@ fn excluir_client_json(id: &str) -> std::io::Result<()> {
 }
 
 
+ pub fn vendas_mes(ui: &AppWindow) -> std::io::Result<()> {
+    let mut vendas_do_mes:f32 = 0.0;
+    let file = match OpenOptions::new().read(true).open("clientes.jsonl") {
+        Ok(file) => file,
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => return Ok(()),
+        Err(e) => return Err(e),
+    };
+
+    let reader = BufReader::new(file);
+
+    for line in reader.lines() {
+        let line = line?;
+        let json_client: JsonClient = serde_json::from_str(&line)?;
+
  
+    // Extrai o mês do campo data_criacao (esperado no formato "dd-mm-YYYY")
+        if let Ok(data) = chrono::NaiveDate::parse_from_str(&json_client.data_criacao, "%d-%m-%Y") {
+            let mes_criacao = data.month();
+            let mes_atual = Utc::now().month();
+            if mes_criacao == mes_atual {
+                vendas_do_mes = json_client.preco + vendas_do_mes;
+            }
+        }
+    }
+    
+    if vendas_do_mes > 0.0{
+         ui.set_vendas_mes(vendas_do_mes);
+    }
+   
+
+    Ok(())
+}

@@ -16,6 +16,23 @@ export component AppWindow inherits Window {
         Settings_Screen.visible = (i == 4);
         Dashboard_Screen.visible = (i == 5);
     }
+    
+    in-out property <color> primary <=> Theme.primary;
+    in-out property <color> primaryLight <=> Theme.primaryLight;
+    in-out property <color> primaryDark <=> Theme.primaryDark;
+    in-out property <color> secondary <=> Theme.secondary;
+    in-out property <color> secondaryLight <=> Theme.secondaryLight;
+    in-out property <color> onPrimary <=> Theme.onPrimary;
+    in-out property <color> onSecondary <=> Theme.onSecondary;
+    in-out property <color> t_background <=> Theme.background;
+    in-out property <color> surface <=> Theme.surface;
+    in-out property <color> onBackground <=> Theme.onBackground;
+    in-out property <color> onSurface <=> Theme.onSurface;
+    in-out property <color> onSurfaceInput <=> Theme.onSurfaceInput;
+      
+    in-out property <color> error  <=> Theme.error;
+    in-out property <color> onError  <=> Theme.onError;
+
     in-out property <string> filamento;
     in-out property <string> material;
     in-out property <string> tempo;
@@ -66,7 +83,7 @@ export component AppWindow inherits Window {
     in-out property <string> temp_watts;
     in-out property <string> temp_filamento;
     in-out property <string> temp_filamento_total;
-   in-out property <string> temp_filamento_preco;
+    in-out property <string> temp_filamento_preco;
 
 
 
@@ -74,10 +91,13 @@ export component AppWindow inherits Window {
     in-out property <string> input_nozzle;
     in-out property <string> input_area_impressao;
 
-      in-out property <string> temp_nozzle;
+    in-out property <string> temp_nozzle;
     in-out property <string> temp_tipo_filamento;
     in-out property <string> temp_diametro;
+    in-out property <float> vendas_mes;
 
+    
+    in-out property <string> tema;
     callback calcular_preco();
     callback registrar_cliente();
     callback registrar_impressora();
@@ -93,6 +113,7 @@ export component AppWindow inherits Window {
     callback excluir_impressora();
     callback editar_impressora();
     callback atualizar_f_preco();
+    callback carregar_tema();
 
     no-frame: false;
     width: 1280px;
@@ -101,6 +122,7 @@ export component AppWindow inherits Window {
     background: transparent;
     height: 820px;
     title: "Figure Manager";
+    default-font-family: "Comic Sans MS";
     
    
                 
@@ -441,6 +463,7 @@ export component AppWindow inherits Window {
                             estoque_database <=> estoque_database;
                             filamento-total <=> filamento_total;
                             time <=> time;
+                            vendas_mes <=> vendas_mes;
                             pedidos => {
                                 activate(1);
                             }
@@ -461,11 +484,15 @@ export component AppWindow inherits Window {
                             visible: false;
                             settings_lucro <=> settings_lucro;
                             settings_energia <=> settings_energia;
+                            tema <=> tema;
                             registrar_settings => {
                                 registrar_settings();
                             }
                             dashboard => {
                                 activate(5);
+                            }
+                            carregar_tema => {
+                                carregar_tema();
                             }
                         }
                     }

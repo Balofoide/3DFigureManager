@@ -13,10 +13,11 @@ export component settings_screen {
 
     in-out property <string> settings_energia;
     in-out property <string> settings_lucro;
-
+    in-out property <string> tema : "Light";
 
     callback registrar_settings();
     callback dashboard();
+    callback carregar_tema();
     Rectangle {
         background:Theme.background;
         width: parent.width;
@@ -47,7 +48,7 @@ export component settings_screen {
                                 font-weight: 800;
                             }
                             BaloButton {texto: "Voltar";clicked => {dashboard();}}
-                            BaloButton {texto: "Confirmar";clicked => {registrar_settings();}}
+                            BaloButton {texto: "Confirmar";clicked => {registrar_settings(); dashboard();}}
                              
      
                         }
@@ -80,14 +81,22 @@ export component settings_screen {
                                         //     color: Theme.onBackground;
                                         //     font-size: Theme.fontSizeBody;
                                         // }
-
-                                        // CustomComboBox {
-                                        //     model: ["Light","Dark"];
-                                        // }
+                                          
+                                       
                                         // }
                                     }         
                                     Row {
+                                        CustomComboBox {
+                                            model: ["Light","Dark"];
+                                            texto: "Tema";
+                                            current-value: "Tema";
+                                            selected (current-value) => {
+                                                tema = current-value;
+                                                	carregar_tema();
+                                            }
                                         
+                                        }
+                                           
                                     }                                 
                                 }
                              }

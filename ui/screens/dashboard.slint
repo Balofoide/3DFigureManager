@@ -15,7 +15,7 @@ export component dashboard_screen {
     in-out property <float> vendas_total;
     in-out property <string> temp_data;
     in-out property <int> filamento-total;
-
+    in-out property <float> vendas_mes;
     in-out property <string> time;
     callback calcular_preco();
     callback registrar_cliente();
@@ -97,7 +97,7 @@ export component dashboard_screen {
 
                                         Text {
                                             horizontal-alignment: right;
-                                            text: "0";
+                                            text: "R$" + vendas_mes.to-fixed(2);
                                             color:  Theme.onSurface;
                                             font-weight: 500;
                                             font-size: 13px;
@@ -106,7 +106,7 @@ export component dashboard_screen {
 
                                     HorizontalBox {
                                         Text {
-                                            text: "Faturamento:";
+                                            text: "Faturamento Total:";
                                             color:  Theme.onSurface;
                                             font-weight: 500;
                                             font-size: 13px;

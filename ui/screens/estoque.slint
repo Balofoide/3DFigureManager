@@ -1,5 +1,5 @@
 import { Theme } from "../styling.slint";
-import { Container, SideButton, InputField, OverviewCard, BaloButton, CustomComboBox, DataInput} from "../components.slint";
+import { Container, SideButton, InputField, OverviewCard, BaloButton, CustomComboBox, DataInput, CircularProgress} from "../components.slint";
 import {Button, ComboBox, LineEdit,VerticalBox, HorizontalBox, GridBox, ListView, ScrollView,DatePickerPopup, AboutSlint} from "std-widgets.slint";
 
 import { Database, Impressoras, Estoque-Database } from "../shared.slint";
@@ -99,10 +99,10 @@ export component estoque_screen {
                     }
 
                     Edit_Estoque_Screen := PopupWindow {
-                        width: parent.width;
+                        width: parent.width / 3;
                         height: parent.height;
                         close-policy: close-on-click-outside;
-                        x: parent.width / 2;
+                        x: parent.width / 3.3;
                         y: parent.height * 2.5;
                         VerticalLayout {
                             // width: 500px;
@@ -113,12 +113,13 @@ export component estoque_screen {
                                 shadow_blur: 10px;
                                 border_width: 1px;
                                 border_radius: 10px;
+                                cor: Theme.background;
                                 VerticalBox {
                                     HorizontalBox {
                                         Text {
                                             vertical-alignment: center;
                                             text: "Editar Material";
-                                            color: Theme.onSurface;
+                                            color: Theme.onBackground;
                                             font-weight: 800;
                                             font-size: 20px;
                                         }
@@ -159,21 +160,18 @@ export component estoque_screen {
                                     }
 
 
-                                    VerticalBox {
-                                        Text {
-                                            text: "Medida";
-                                            color: black;
-                                        }
+                                     
                         
                                         CustomComboBox {
+                                            texto: "Medida";
                                             model: ["g", "mm", "un", "ml"];
-                                            text-color: black;
+                                            background-color: Theme.onBackground;
                                             selected(current-value) => {
                                                 temp_estoque_medida = current-value;
                                                 debug(temp_estoque_medida)
                                             }
                                         }
-                                    }
+                                    
 
                                     InputField {
                                         max_lenght: 4;
@@ -183,8 +181,7 @@ export component estoque_screen {
 
                                      
                                 }
-
-                                cor: white;
+ 
                             }
                         }
                     }
@@ -196,7 +193,7 @@ export component estoque_screen {
                 Row {
                     Container {
                         height: 50%;
-                         
+                         cor: Theme.surface;
                         VerticalBox {
                     // spacing: Theme.spacing;
                     HorizontalBox {
@@ -309,12 +306,12 @@ export component estoque_screen {
                             width: 30%;
                             cor: Theme.surface;
                             Detalhes_Material :=  VerticalBox {
-                                visible: !selectec_estoque.id.is-empty;
+                            visible: !selectec_estoque.id.is-empty;
                                 HorizontalLayout {
                                     Text {
                                         vertical-alignment: center;
                                         text: "Detalhes de Material";
-                                        color: black;
+                                        color: Theme.onSurface;
                                         font-size: Theme.fontSizeTitle;
                                         font-weight: 700;
                                     }
@@ -329,68 +326,91 @@ export component estoque_screen {
                                 }
                                 }
                                 VerticalBox {
-                                    
-                                    Container {cor:white;
-                                        height: 10%;
+                                    // alignment: center;
+                                     
+                                        // height: 20%;
                                          VerticalLayout {
-                                            Text {
+                                            alignment: center;
+                                            spacing: Theme.spacing;
+                                            padding: Theme.spacing;
+                                            Container {cor:Theme.background;
+                                            VerticalBox {
+                                                Text {
+                                                    horizontal-alignment: center;
                                                vertical-alignment: center;
-                                                text: "Material:"; color: Theme.onSurface;
+                                                text: "Material"; color: Theme.onBackground;
                                                 font-size: 20px;
                                                 font-weight: 700;
+                                                }
+                                                Text {
+                                                    vertical-alignment: center;
+                                                      horizontal-alignment: center;
+                                                    text: selectec_estoque.material; color: Theme.onBackground;
+                                                    font-size: 20px;
+                                                    font-weight: 500;
+                                                }
+
                                             }
-                                            Text {
-                                                vertical-alignment: center;
-                                                text: selectec_estoque.material; color: Theme.onSurface;
-                                                font-size: 20px;
-                                                font-weight: 500;
+                                        }
+                                        Container {cor:Theme.background;
+                                            VerticalBox {
+                                                Text {
+                                                    vertical-alignment: center;
+                                                    horizontal-alignment: center;
+                                                    text: "Preço"; color: Theme.onBackground;
+                                                    font-size: 20px;
+                                                    font-weight: 700;
+                                                }
+                                                Text {
+                                                    vertical-alignment: center;
+                                                    horizontal-alignment: center;
+                                                    text: "R$"+selectec_estoque.preco; color:Theme.onBackground;
+                                                    font-size: 20px;
+                                                    font-weight: 500;
+                                                }
+
                                             }
+                                        }
+                                        Container {cor:Theme.background;
+                                            VerticalBox {
+                                                padding: Theme.spacing;
+                                                spacing: Theme.spacing;
+                                                alignment: center;
+                                                Text {
+                                                    vertical-alignment: center;
+                                                      horizontal-alignment: center;
+                                                    text: "Quantidade"; color: Theme.onBackground;
+                                                    font-size: 20px;
+                                                    font-weight: 700;
+                                                }
+                                                HorizontalLayout {
+                                                    alignment: center;
+                                                     CircularProgress {
+                                                        progress-color: Theme.secondaryLight;
+                                                        texto: selectec_estoque.quantidade + "/" + selectec_estoque.quantidade-total + "\n" + selectec_estoque.medida;
+                                                        progress: selectec_estoque.quantidade.to-float() / selectec_estoque.quantidade-total;
+                                                }
+                                                }
+                                               
+
+                                            }
+                                        }
+                                              
+                                            
                                          }
                                          
                                     
-                                    }
-
-                                    Container {cor:white;
-                                        height: 10%;
-                                        VerticalLayout {
-                                           Text {
-                                            vertical-alignment: center;
-                                               text: "Preço:"; color: Theme.onSurface;
-                                               font-size: 20px;
-                                               font-weight: 700;
-                                           }
-                                           Text {
-                                            vertical-alignment: center;
-                                               text: "R$"+selectec_estoque.preco; color:Theme.onSurface;
-                                               font-size: 20px;
-                                               font-weight: 500;
-                                           }
-                                        }
-                                        
-                                   
-                                   }
-                                   Container {cor:white;
-                                    height: 10%;
-                                    VerticalLayout {
-                                       Text {
-                                            vertical-alignment: center;
-                                           text: "Quantidade:"; color: Theme.onSurface;
-                                           font-size: 20px;
-                                           font-weight: 700;
-                                       }
-                                       Text {
-                                        vertical-alignment: center;
-                                           text: selectec_estoque.quantidade+"/"+selectec_estoque.quantidade-total+selectec_estoque.medida; color: Theme.onSurface;
-                                           font-size: 20px;
-                                           font-weight: 500;
-                                       }
-                                    }
+                                             
                                     
-                               
-                               }
+                                }
+                                
+                                    
+                            }
+                        }
 
-
-                                    VerticalBox {
+                        HorizontalLayout {
+                            spacing: Theme.spacing;
+                             VerticalBox {
                                         alignment: end;
                                         Container {
                                             cor: Theme.surface;
@@ -408,18 +428,10 @@ export component estoque_screen {
                                         }
                                         
 
-                                    }
-                                    
-                                    
-                                    
                                 }
-                            }
-                        }
-
-                        HorizontalBox {
-                            spacing: Theme.spacing;
                         }
                     }
+                    
                 }
             }
         }
@@ -466,21 +478,18 @@ export component estoque_screen {
                                     input <=> root.estoque_quantidade;
                                 }
                     
-                                VerticalBox {
-                                    Text {
-                                        text: "Medida";
-                                        color: Theme.onSurface;
-                                    }
+                                
                     
                                     CustomComboBox {
+                                        texto: "Medida";
                                         model: ["g", "mm", "un", "ml"];
-                                        text-color: Theme.onSurface;
+                                        current-value: "Medida";
                                         selected(current-value) => {
                                             estoque_medida = current-value;
                                             debug(estoque_medida)
                                         }
                                     }
-                                }
+                                
                     
                                 InputField {
                                     max_lenght: 5;

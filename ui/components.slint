@@ -13,11 +13,11 @@ export component CustomComboBox {
     in property <[string]> model: [];
     in-out property <int> current-index: -1;
     in-out property <string> current-value: "";
-
+    in property <string> texto;
     // Estilos customizáveis
     in property <color> text-color: Theme.onSurface;
     in property <color> border-color: Theme.secondary;
-    in property <color> background-color: Theme.background;
+    in property <color> background-color:  Theme.onSurfaceInput;
     in property <color> popup-background: Theme.secondaryLight;
     in property <length> option-height: 24px;
 
@@ -25,22 +25,28 @@ export component CustomComboBox {
     callback selected(string);
 
     // Tamanho do componente
-    width: 350px;
-    height: 30px;
-    Rectangle {
-        height: parent.height;
-        width: parent.width;
-         
-        // border-color: root.border-color;
-        // border-width: 1px;
-        border-radius: 10px;
-        background: root.background-color;
-        VerticalLayout {
-            alignment: center;
+    // width: 350px;
+    // height: 30px;
+    VerticalBox {
+        // padding: Theme.spacing;
+        // spacing: Theme.spacing;
+        Text {
+           
+           text: root.texto;
+            font-size: Theme.fontSizeBody;
+            color: Theme.onBackground;
+        }
+       
+       area:= Rectangle {
+            
+            border-radius: 10px;
+            background: Theme.onSurfaceInput;
+            min-height: Theme.inputHeight + 10px;
+            min-width: 200px;
             HorizontalBox {
                 Text {
                     // horizontal-alignment: left;
-                     
+                    // vertical-alignment: center;
                     text: root.current-value;
                     color: root.text-color;
                     font-size: Theme.fontSizeSmall;
@@ -48,36 +54,33 @@ export component CustomComboBox {
         
                 // Seta de dropdown
                 Text {
-                    horizontal-alignment: center;
+                    // horizontal-alignment: center;
                     vertical-alignment: center;
                     text: "▼";
                     color: root.text-color;
                     width: 16px;
                 }
             }
+            TouchArea {
+            clicked => {
+                popup.show();
+            }
+        }
         }
        
         // Texto da opção selecionada
       
         // Abre o popup ao clicar
-        TouchArea {
-            clicked => {
-                popup.show();
-            }
-        }
-    }
-
-    // Popup com lista de opções
-    popup := PopupWindow {
-        // x: -10px;
+        popup := PopupWindow {
+        x: 8px;
         y: root.height * 0.84;
-        width: root.width;
-        height: root.height * 2.5;
+        width: area.width;
+        height: root.height * 1.3;
         VerticalLayout {
             width: 100%;
             height: 100%;
             Rectangle {
-                background: Theme.secondaryLight;
+                background: Theme.secondary;
               
                 // border-top-left-radius: 5px;
                 // border-top-right-radius: 5px;
@@ -86,18 +89,21 @@ export component CustomComboBox {
                 ScrollView {
                     width: parent.width;
                     height: parent.height;
-                    VerticalBox {
+                    VerticalLayout {
                         alignment: center;
                         width: 100%;
+                        spacing: 2px;
                     // Declaramos `index` para poder usá-lo
                     for item[index] in root.model: Rectangle {
                             width: 100%;
-                            border-radius: 10px;
+                            // border-radius: 10px;
+                            
                             height: root.option-height;
                             background: root.popup-background;
         
                         // Cada opção
                         Text {
+                            vertical-alignment: center;
                                 text: item;
                                 color: root.text-color;
                                 x: (parent.width) / 40;
@@ -120,6 +126,10 @@ export component CustomComboBox {
             }
         }
     }
+    }
+
+    // Popup com lista de opções
+    
 }
 
 export component Container {
@@ -162,7 +172,7 @@ export component InputField {
         /* Caixa de fundo personalizada */
         Rectangle {
             border-radius: 10px;
-            background: rgba(0,0,0,0.1);
+            background: Theme.onSurfaceInput;
             min-height: Theme.inputHeight + 10px;
             /* Input de texto de baixo nível */
             TextInput {
@@ -337,7 +347,7 @@ export component DataInput {
         /* Caixa de fundo personalizada */
         Rectangle {
             border-radius: 10px;
-            background: rgba(0,0,0,0.1);
+            background: Theme.onSurfaceInput;
             min-height: Theme.inputHeight + 10px;
             /* Input de texto de baixo nível */
             TextInput {
@@ -346,7 +356,7 @@ export component DataInput {
                         visible: input == "";
                         vertical-alignment: center;
                         text: place_holder;
-                        color: Theme.onSurface;
+                        color: Theme.onBackground;
                     }
                 }
 
@@ -370,6 +380,8 @@ export component DataInput {
                     
                     return accept;   
                 }
+
+              
                 
             }
            
@@ -396,7 +408,7 @@ export component CircularProgress inherits Rectangle {
     in property <color> progress-color: #6B46C1;      // cor do anel de progresso
     in property <float> thickness: 8;         
     in property <color> text-color: Theme.onBackground;        // espessura do anel
-
+    in property <string> texto :(root.progress * 100).to-fixed(0)+ "%" ;
     width: 200px; height: 200px;
     background: transparent;
 
@@ -482,7 +494,7 @@ export component CircularProgress inherits Rectangle {
 
     // Texto central opcional
     Text {
-        text: (root.progress * 100).to-fixed(0)+ "%";
+        text: texto;
         color: text-color;
         font-size: 20px;
         horizontal-alignment: center;
@@ -510,7 +522,7 @@ export component RectangularProgress inherits Rectangle {
         x: 0; y: 0;
         width: root.width;
         height: root.height;
-        color: root.track-color;
+        background: root.track-color;
     }
 
     // 2) Fill (barra de progresso)
@@ -519,6 +531,6 @@ export component RectangularProgress inherits Rectangle {
         // largura dinâmica de acordo com o progresso
         width: root.width * root.progress;
         height: root.height;
-        color: root.fill-color;
+        background: root.fill-color;
     }
 }

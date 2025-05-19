@@ -6,7 +6,7 @@ use std::error::Error;
 mod utils;
  
 // use utils::clock_handle::clock;
-use utils::database_handle::{atualizar_client, excluir_client, load_clients, register_client};
+use utils::database_handle::{atualizar_client, excluir_client, load_clients, register_client, vendas_mes};
 use utils::estoque_handle::{
     atualizar_estoque, excluir_estoque, load_estoque, register_estoque, total_estoque,
 };
@@ -14,24 +14,20 @@ use utils::impressora_handle::{
     editar_impressora, excluir_impressora, load_impressoras, load_price, register_impressora, total_filamento
 };
 use utils::sell_calculator::{atualizar_filamento, calcular_venda, total_vendas};
-use utils::settings_handle::{load_settings, registrar_settings};
+use utils::settings_handle::{load_settings, load_tema, registrar_settings};
 
 slint::include_modules!();
 
 
 fn main() {
-
-
     if let Err(e) = run_app() {
         eprintln!("Application error: {}", e);
     }
-
-    
 }
 
 fn run_app() -> Result<(), Box<dyn Error>> {
     let ui = AppWindow::new()?;
-    
+  
     initialize_ui(&ui)?;
     register_callbacks(&ui);
 
@@ -46,10 +42,12 @@ fn initialize_ui(ui: &AppWindow) -> Result<(), Box<dyn Error>> {
     load_estoque(ui).expect("Erro ao carregar o estoque");
     load_settings(ui).expect("Erro ao carregar Settings");
     load_price(ui).expect("erro ao carregar preco do filamento");
+    vendas_mes(ui).expect("erro ao somar vendas do mês");
     // clock(ui);
     ui.set_vendas_total(total_vendas(ui));
     ui.set_filamento_total(total_filamento(ui));
     ui.set_preco_total_estoque(total_estoque(ui));
+    load_tema(ui);
 
     Ok(())
 }
@@ -104,6 +102,7 @@ fn register_callbacks(ui: &AppWindow) {
             if let Some(ui) = ui_handle.upgrade() {
                 register_client(&ui);
                 ui.set_vendas_total(total_vendas(&ui));
+                vendas_mes(&ui).expect("erro ao somar vendas do mês");
             }
         }
     });
@@ -142,6 +141,7 @@ fn register_callbacks(ui: &AppWindow) {
         move || {
             if let Some(ui) = ui_handle.upgrade() {
                 atualizar_estoque(&ui);
+                ui.set_preco_total_estoque(total_estoque(&ui));
             }
         }
     });
@@ -171,6 +171,7 @@ fn register_callbacks(ui: &AppWindow) {
             if let Some(ui) = ui_handle.upgrade() {
                 editar_impressora(&ui);
                 ui.set_filamento_total(total_filamento(&ui));
+                
             }
         }
     });
@@ -181,5 +182,14 @@ fn register_callbacks(ui: &AppWindow) {
                 load_price(&ui).expect("erro ao carregar preco filamento");
             }
         }
-    })
+    });
+
+    ui.on_carregar_tema({
+        let ui_handle = ui.as_weak();
+        move || {
+            if let Some(ui) = ui_handle.upgrade() {
+               load_tema(&ui);
+            }
+        }
+    });
 }

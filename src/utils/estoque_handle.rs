@@ -54,6 +54,8 @@ pub fn atualizar_estoque(ui: &AppWindow) {
          
         if temp_quantidade_total != 0{
             updated.quantidade_total = temp_quantidade_total.clone();
+
+          
         }
         if !temp_preco.is_empty() {
             updated.preco = temp_preco.clone();
@@ -64,6 +66,8 @@ pub fn atualizar_estoque(ui: &AppWindow) {
 
         if !temp_quantidade.is_empty(){
             updated.quantidade = temp_quantidade.clone();
+              
+             
         }
 
         if !quantidade.is_empty(){
@@ -73,6 +77,7 @@ pub fn atualizar_estoque(ui: &AppWindow) {
             }
         }
         
+ 
         
         // 3. Atualizar o JSON no disco
         if let Err(e) = atualizar_estoque_json(&updated) {
@@ -105,6 +110,8 @@ pub fn atualizar_estoque_json(updated: &Estoque_Database) -> std::io::Result<()>
             rec.quantidade_total = updated.quantidade_total.clone();
             rec.medida = updated.medida.to_string().clone();
             rec.quantidade = updated.quantidade.to_string().clone();
+
+            
             
 
 
