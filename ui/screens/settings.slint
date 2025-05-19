@@ -87,9 +87,9 @@ export component settings_screen {
                                     }         
                                     Row {
                                         CustomComboBox {
-                                            model: ["Light","Dark"];
+                                            model: ["Light","Dark","TealSunsetLight","TealSunsetDark","PastelDreamLight","PastelDreamDark"];
                                             texto: "Tema";
-                                            current-value: "Tema";
+                                            current-value: tema;
                                             selected (current-value) => {
                                                 tema = current-value;
                                                 	carregar_tema();
