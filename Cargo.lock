@@ -3646,6 +3646,7 @@ name = "price3d"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "i-slint-backend-winit",
  "serde",
  "serde_json",
  "slint",

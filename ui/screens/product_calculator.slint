@@ -141,10 +141,10 @@ export component calculator_screen {
                                         BaloButton { width:80px; height: 40px;texto: "Confirmar"; clicked => {editar_cliente(); Edit_Screen.close();}}
                                     }
                                     
-                                    InputField {texto: "Cliente: "; input<=> temp_nome_client; place_holder: selected_client.nome;}
-                                    DataInput {texto: "Entrega: "; input<=> temp_entrega ;place_holder: selected_client.entrega;}                                  
-                                    InputField {texto: "Observações: "; input<=> temp_observacao;place_holder: selected_client.observacao;}
-                                    InputField {texto: "Endereço: "; input<=> temp_endereco;place_holder: selected_client.endereco;}
+                                    InputField {texto: "Cliente: ";max_lenght: 20; input<=> temp_nome_client;}
+                                    DataInput {texto: "Entrega: "; input<=> temp_entrega ;}                                  
+                                    InputField {texto: "Observações: "; max_lenght: 50; input<=> temp_observacao;}
+                                    InputField {texto: "Endereço: "; max_lenght: 50; input<=> temp_endereco;}
                                     InputField {visible:false;texto: "Modelo: "; }
                                 }
                               
@@ -351,7 +351,12 @@ export component calculator_screen {
                                             spacing: 10px;
                                             alignment: center;
                                             width: 3%;
-                                            BaloButton {height: 30px; width: 50px; texto: "Editar"; clicked => {Edit_Screen.show();}}
+                                            BaloButton {height: 30px; width: 50px; texto: "Editar"; clicked => {Edit_Screen.show();
+                                                temp_nome_client = selected_client.nome;
+                                                temp_entrega = selected_client.entrega;
+                                                temp_observacao = selected_client.observacao;
+                                                temp_endereco = selected_client.endereco;                                          
+                                            }}
                                             BaloButton {background:#f01414;height: 30px; width: 50px; texto: "🗑️"; clicked => {Confirm_screen.show()}}
                                         }
                                         

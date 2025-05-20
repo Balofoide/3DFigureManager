@@ -98,6 +98,7 @@ export component AppWindow inherits Window {
 
     
     in-out property <string> tema;
+
     callback calcular_preco();
     callback registrar_cliente();
     callback registrar_impressora();
@@ -115,7 +116,7 @@ export component AppWindow inherits Window {
     callback atualizar_f_preco();
     callback carregar_tema();
 
-    no-frame: false;
+    no-frame: true;
     width: 1280px;
     combobox-selected: "Teste";
     full-screen: false;
@@ -125,378 +126,424 @@ export component AppWindow inherits Window {
     default-font-family: "Comic Sans MS";
     
    
-                
+    callback move_window(length,length);
+    callback minimizar();
+    callback fechar();
                  
              Rectangle {
-        
-                border-radius: 10px;
+                
+               
+                border-radius: 20px;
                 background: Theme.primary;
-                
-            
-                HorizontalLayout {
-                    
-                    Rectangle {
-                        width:10%;
-    
-                        VerticalBox {
-                            alignment: center;
-                            
-                            // spacing: 50px;
+                TouchArea {
+                    VerticalLayout {
+                         HorizontalBox { 
+                            spacing: Theme.spacing;
                             padding: Theme.spacing;
-                            SideButton {
-                                
-                                shadow_color: transparent;
-                                backgroud:   !Dashboard_Screen.visible && !self.has-hover  ? Theme.primary : Theme.secondary;
-                                text-color: !Dashboard_Screen.visible && !self.has-hover ?  Theme.onPrimary :  Theme.onSurface;
+                            alignment:start; height: 5%; 
+                             BaloButton {
+                                width: 30px;
+                                height: 30px;
+                                background: Theme.error;
                             
-                                animate text-color{
-                                    iteration-count: 1;
-                                    duration: 250ms;
-                                    easing: ease-in-out;
-                                }
-                                animate backgroud {
-                                    iteration-count: 1;
-                                    duration: 250ms;
-                                    easing: ease-in-out;
-                                    
-                                }
-                                
-                                height: 50px;
-                                texto: "Dashboard";
+                                texto: "-";
+
                                 clicked => {
-                                    
-                                    activate(5);
-                                    
-                                    
-                                    
+                                    minimizar();
                                 }
-                                
+                            
                             }
+                             BaloButton {
+                                width: 30px;
+                                height: 30px;
+                                background: Theme.error;
+                                texto: "X";
+
+                                clicked => {
+                                    fechar();
+                                }
+                            }
+                            }
+                    }
+                   
+                        width: parent.width;
+                        height: parent.height;
+                       HorizontalLayout {
+                         
+                            Rectangle {
+                                width:10%;
+                              
+                                VerticalBox {
+                                    alignment: center;
+                                      
+                                    // spacing: 50px;
+                                    padding: Theme.spacing;
+                                    SideButton {
+                                        
+                                        shadow_color: transparent;
+                                        backgroud:   !Dashboard_Screen.visible && !self.has-hover  ? Theme.primary : Theme.secondary;
+                                        text-color: !Dashboard_Screen.visible && !self.has-hover ?  Theme.onPrimary :  Theme.onSurface;
+                                    
+                                        animate text-color{
+                                            iteration-count: 1;
+                                            duration: 250ms;
+                                            easing: ease-in-out;
+                                        }
+                                        animate backgroud {
+                                            iteration-count: 1;
+                                            duration: 250ms;
+                                            easing: ease-in-out;
+                                            
+                                        }
+                                        
+                                        height: 50px;
+                                        texto: "Dashboard";
+                                        clicked => {
+                                            
+                                            activate(5);
+                                            
+                                            
+                                            
+                                        }
+                                        
+                                    }
+                        
+                                    SideButton {
+                                        shadow_color: transparent;
+                                        backgroud: !Calculator_Screen.visible  && !self.has-hover  ? Theme.primary : Theme.secondary;
+                                        text-color: !Calculator_Screen.visible && !self.has-hover ?  Theme.onPrimary :  Theme.onSurface;
+                                    
+                                        animate text-color{
+                                            iteration-count: 1;
+                                            duration: 250ms;
+                                            easing: ease-in-out;
+                                        }
+                                        animate backgroud {
+                                            iteration-count: 1;
+                                            duration: 250ms;
+                                            easing: ease-in-out;
+                                            
+                                        }
+                                        height: 50px;
+                                        texto: "Pedidos";
+                                        clicked => {
+                                            activate(1)
+                                        }
+                                    }
+                        
+                                    SideButton {
+                                        shadow_color: transparent;
+                                        backgroud: !Estoque_Screen.visible   && !self.has-hover  ? Theme.primary : Theme.secondary;
+                                        text-color: !Estoque_Screen.visible && !self.has-hover ?  Theme.onPrimary :  Theme.onSurface;
+                                    
+                                        animate text-color{
+                                            iteration-count: 1;
+                                            duration: 250ms;
+                                            easing: ease-in-out;
+                                        }
+                                        animate backgroud {
+                                            iteration-count: 1;
+                                            duration: 250ms;
+                                            easing: ease-in-out;
+                                            
+                                        }
+                                        height: 50px;
+                                        texto: "Estoque";
+                                        clicked => {
+                                            activate(2)
+                                        }
+                                    }
+                        
+                                    SideButton {
+                                        shadow_color: transparent;
+                                        text-color: !Printer_Screen.visible && !self.has-hover ?  Theme.onPrimary :  Theme.onSurface;
+                                    
+                                        animate text-color{
+                                            iteration-count: 1;
+                                            duration: 250ms;
+                                            easing: ease-in-out;
+                                        }
+                                        backgroud: !Printer_Screen.visible   && !self.has-hover  ? Theme.primary : Theme.secondary;
+                                        animate backgroud {
+                                            iteration-count: 1;
+                                            duration: 250ms;
+                                            easing: ease-in-out;
+                                            
+                                        }
+                                        height: 50px;
+                                        texto: "Impressoras";
+                                        clicked => {
+                                            activate(3)
+                                        }
+                                    }
+                        
+                                    SideButton {
+                                        text-color: !Settings-Screen.visible && !self.has-hover ?  Theme.onPrimary :  Theme.onSurface;
+                                    
+                                        animate text-color{
+                                            iteration-count: 1;
+                                            duration: 250ms;
+                                            easing: ease-in-out;
+                                        }
+                                        backgroud: !Settings-Screen.visible  && !self.has-hover  ? Theme.primary : Theme.secondary;
+                                        shadow_color: transparent;
+                                        
+                                        animate backgroud {
+                                            iteration-count: 1;
+                                            duration: 250ms;
+                                            easing: ease-in-out;
+                                            
+                                        }
+                                        height: 50px;
+                                        texto: "Configurações";
+                                        clicked => {
+                                            activate(4)
+                                        }
+                                    }
                 
-                            SideButton {
-                                shadow_color: transparent;
-                                backgroud: !Calculator_Screen.visible  && !self.has-hover  ? Theme.primary : Theme.secondary;
-                                text-color: !Calculator_Screen.visible && !self.has-hover ?  Theme.onPrimary :  Theme.onSurface;
+                                }
                             
-                                animate text-color{
-                                    iteration-count: 1;
-                                    duration: 250ms;
-                                    easing: ease-in-out;
-                                }
-                                animate backgroud {
-                                    iteration-count: 1;
-                                    duration: 250ms;
-                                    easing: ease-in-out;
-                                    
-                                }
-                                height: 50px;
-                                texto: "Pedidos";
-                                clicked => {
-                                    activate(1)
-                                }
                             }
-                
-                            SideButton {
-                                shadow_color: transparent;
-                                backgroud: !Estoque_Screen.visible   && !self.has-hover  ? Theme.primary : Theme.secondary;
-                                text-color: !Estoque_Screen.visible && !self.has-hover ?  Theme.onPrimary :  Theme.onSurface;
-                            
-                                animate text-color{
-                                    iteration-count: 1;
-                                    duration: 250ms;
-                                    easing: ease-in-out;
-                                }
-                                animate backgroud {
-                                    iteration-count: 1;
-                                    duration: 250ms;
-                                    easing: ease-in-out;
-                                    
-                                }
-                                height: 50px;
-                                texto: "Estoque";
-                                clicked => {
-                                    activate(2)
-                                }
-                            }
-                
-                            SideButton {
-                                shadow_color: transparent;
-                                text-color: !Printer_Screen.visible && !self.has-hover ?  Theme.onPrimary :  Theme.onSurface;
-                            
-                                animate text-color{
-                                    iteration-count: 1;
-                                    duration: 250ms;
-                                    easing: ease-in-out;
-                                }
-                                backgroud: !Printer_Screen.visible   && !self.has-hover  ? Theme.primary : Theme.secondary;
-                                animate backgroud {
-                                    iteration-count: 1;
-                                    duration: 250ms;
-                                    easing: ease-in-out;
-                                    
-                                }
-                                height: 50px;
-                                texto: "Impressoras";
-                                clicked => {
-                                    activate(3)
-                                }
-                            }
-                
-                            SideButton {
-                                text-color: !Settings-Screen.visible && !self.has-hover ?  Theme.onPrimary :  Theme.onSurface;
-                            
-                                animate text-color{
-                                    iteration-count: 1;
-                                    duration: 250ms;
-                                    easing: ease-in-out;
-                                }
-                                backgroud: !Settings-Screen.visible  && !self.has-hover  ? Theme.primary : Theme.secondary;
-                                shadow_color: transparent;
+                        
+                            Rectangle {
+                                background: Theme.background;
+                                padding: Theme.spacing;
+                                border-top-right-radius: 20px;
+                                border-bottom-right-radius: 20px;
                                 
-                                animate backgroud {
-                                    iteration-count: 1;
-                                    duration: 250ms;
-                                    easing: ease-in-out;
-                                    
+                                clip: true;
+                                visible: true;
+
+
+                                
+                                
+                                Calculator_Screen := calculator-screen {
+                                    width: parent.width;
+                                    height: parent.height;
+                                    visible: false;
+                                    filamento <=> filamento;
+                                    material <=> material;
+                                    tempo <=> tempo;
+                                    energia <=> energia;
+                                    lucro <=> lucro;
+                                    total <=> total;
+                                    nome_cliente <=> nome_cliente;
+                                    endereco <=> endereco;
+                                    entrega <=> entrega;
+                                    clients_database <=> clients_database;
+                                    impressoras_string <=> impressoras_string;
+                                    combobox_selected <=> combobox_selected;
+                                    selected_client <=> selected_client;
+                                    modelo <=> modelo;
+                                    observacao <=> observacao;
+                                    status <=> status;
+                                    temp_nome_client <=> temp_nome_client;
+                                    temp_entrega <=> temp_entrega;
+                                    temp_endereco <=> temp_endereco;
+                                    temp_observacao <=> temp_observacao;
+                                    temp_status <=> temp_status;
+                                    registrar_cliente => {
+                                        root.registrar_cliente();
+                                    }
+                                    calcular_preco => {
+                                        root.calcular_preco();
+                                    }
+                                    atualizar_filamento => {
+                                        root.atualizar_filamento();
+                                    }
+                                    resetar_inputs => {
+                                        observacao = "";
+                                        modelo = "";
+                                        nome_cliente = "";
+                                        tempo = "";
+                                        energia = settings_energia;
+                                        lucro = settings_lucro;
+                                        total = 0;
+                                        endereco = "";
+                                        entrega = "";
+                                        combobox_selected = "";
+                                        filamento = 0;
+                                        material = 0;
+                                    }
+                                    editar_cliente => {
+                                        root.editar_cliente();
+                                    }
+                                    excluir_cliente => {
+                                        root.excluir_cliente();
+                                    }
+                                    dashboard => {
+                                        activate(5);
+                                    }
+                                    impressoras => {
+                                        activate(3);
+                                    }
+                                    estoque => {
+                                        activate(2);
+                                    }
+                                    configuracoes => {
+                                        activate(4);
+                                    }
+                                    atualizar_f_preco =>
+                                    {
+                                        atualizar_f_preco();
+                                    }
                                 }
-                                height: 50px;
-                                texto: "Configurações";
-                                clicked => {
-                                    activate(4)
-                                }
-                            }
-        
-                        }
                     
-                    }
-                
-                    Rectangle {
-                        background: Theme.background;
-                        padding: Theme.spacing;
-                        border-top-right-radius: 10px;
-                        border-bottom-right-radius: 10px;
-                        
-                        clip: true;
-                        visible: true;
+                                Estoque_Screen := estoque-screen {
+                                    width: parent.width;
+                                    height: parent.height;
+                                    visible: false;
+                                    estoque_database <=> estoque_database;
+                                    estoque_material <=> estoque_material;
+                                    estoque_quantidade <=> estoque_quantidade;
+                                    estoque_quantidade_total <=> estoque_quantidade_total;
+                                    estoque_medida <=> estoque_medida;
+                                    estoque_preco_input <=> estoque_preco_input;
+                                    selectec_estoque <=> selectec_estoque;
+                                    preco_total_estoque <=>preco_total_estoque ;
+                    
+                    
+                                    temp_estoque_material <=> temp_estoque_material;
+                                    temp_estoque_quantidade <=> temp_estoque_quantidade;
+                                    temp_estoque_quantidade_total <=> temp_estoque_quantidade_total;
+                                    temp_estoque_preco <=>temp_estoque_preco;
+                                    temp_estoque_medida <=> temp_estoque_medida;
+                    
+                                    registrar_estoque => {
+                                        registrar_estoque();
+                                    }
+                                    dashboard => {
+                                        activate(5);
+                                    }
+                                    impressoras => {
+                                        activate(3);
+                                    }
+                                    estoque => {
+                                        activate(2);
+                                    }
+                                    configuracoes => {
+                                        activate(4);
+                                    }
+                                    pedidos => {
+                                        activate(1);
+                                    }
+                                    atualizar_estoque => {
+                                        atualizar_estoque();
+                                    }
+                                    estoque_total_preco => {
+                                        estoque_total_preco();
+                                    }
+                                    excluir_estoque => {
+                                        excluir_estoque();
+                                    }
+                                }
+                    
+                                Printer_Screen := printer-screen {
+                                    visible: false;
+                                    width: parent.width;
+                                    height: parent.height;
+                                    input_modelo <=> input_modelo;
+                                    input_watts <=> input_watts;
+                                    input_filamento <=> filamento_printer;
+                                    impressoras_database <=> impressoras;
+                                    filamento_total <=> filamento_total;
+                                    selected_impressora <=> selected_impressora;
+                    
+                    
+                                    temp_modelo <=> temp_modelo;
+                                    temp_watts <=> temp_watts;
+                                    temp_filamento <=> temp_filamento;
+                                    temp_filamento_total <=>temp_filamento_total;
+                                    temp_filamento_preco <=> temp_filamento_preco;
+                                    input_filamento_preco <=> input_filamento_preco;
 
+                                    input_tipo_filamento <=> input_tipo_filamento;
+                                    input_nozzle <=> input_nozzle;
+                                    input_area_impressao <=> input_area_impressao;
 
-                        
-                        
-                        Calculator_Screen := calculator-screen {
-                            width: parent.width;
-                            height: parent.height;
-                            visible: false;
-                            filamento <=> filamento;
-                            material <=> material;
-                            tempo <=> tempo;
-                            energia <=> energia;
-                            lucro <=> lucro;
-                            total <=> total;
-                            nome_cliente <=> nome_cliente;
-                            endereco <=> endereco;
-                            entrega <=> entrega;
-                            clients_database <=> clients_database;
-                            impressoras_string <=> impressoras_string;
-                            combobox_selected <=> combobox_selected;
-                            selected_client <=> selected_client;
-                            modelo <=> modelo;
-                            observacao <=> observacao;
-                            status <=> status;
-                            temp_nome_client <=> temp_nome_client;
-                            temp_entrega <=> temp_entrega;
-                            temp_endereco <=> temp_endereco;
-                            temp_observacao <=> temp_observacao;
-                            temp_status <=> temp_status;
-                            registrar_cliente => {
-                                root.registrar_cliente();
-                            }
-                            calcular_preco => {
-                                root.calcular_preco();
-                            }
-                            atualizar_filamento => {
-                                root.atualizar_filamento();
-                            }
-                            resetar_inputs => {
-                                observacao = "";
-                                modelo = "";
-                                nome_cliente = "";
-                                tempo = "";
-                                energia = settings_energia;
-                                lucro = settings_lucro;
-                                total = 0;
-                                endereco = "";
-                                entrega = "";
-                                combobox_selected = "";
-                                filamento = 0;
-                                material = 0;
-                            }
-                            editar_cliente => {
-                                root.editar_cliente();
-                            }
-                            excluir_cliente => {
-                                root.excluir_cliente();
-                            }
-                            dashboard => {
-                                activate(5);
-                            }
-                            impressoras => {
-                                activate(3);
-                            }
-                            estoque => {
-                                activate(2);
-                            }
-                            configuracoes => {
-                                activate(4);
-                            }
-                            atualizar_f_preco =>
-                            {
-                                atualizar_f_preco();
+                                    temp_nozzle <=> temp_nozzle;
+                                    temp_tipo_filamento <=> temp_tipo_filamento;
+                                    temp_diametro <=> temp_diametro;
+                    
+                                    registrar_impressora => {
+                                        root.registrar_impressora();
+                                    }
+                                    dashboard => {
+                                        activate(5);
+                                    }
+                                    estoque => {
+                                        activate(2);
+                                    }
+                                    configuracoes => {
+                                        activate(4);
+                                    }
+                                    pedidos => {
+                                        activate(1);
+                                    }
+                                    excluir_impressora => {
+                                        excluir_impressora();
+                                    }
+                                    editar_impressora => {
+                                        editar_impressora();
+                                    }
+                                }
+                    
+                                Dashboard_Screen := dashboard-screen {
+                                    visible: true;
+                                    width: parent.width;
+                                    height: parent.height;
+                                    clients_database <=> clients_database;
+                                    vendas_total <=> vendas_total;
+                                    selected_client <=> selected_client;
+                                    estoque_database <=> estoque_database;
+                                    filamento-total <=> filamento_total;
+                                    time <=> time;
+                                    vendas_mes <=> vendas_mes;
+                                    pedidos => {
+                                        activate(1);
+                                    }
+                                    estoque => {
+                                        activate(2);
+                                    }
+                                    impressoras => {
+                                        activate(3);
+                                    }
+                                    configuracoes => {
+                                        activate(4);
+                                    }
+                                }
+                    
+                                Settings-Screen := settings-screen {
+                                    width: parent.width;
+                                    height: parent.height;
+                                    visible: false;
+                                    settings_lucro <=> settings_lucro;
+                                    settings_energia <=> settings_energia;
+                                    tema <=> tema;
+                                    registrar_settings => {
+                                        registrar_settings();
+                                    }
+                                    dashboard => {
+                                        activate(5);
+                                    }
+                                    carregar_tema => {
+                                        carregar_tema();
+                                    }
+                                }
                             }
                         }
-            
-                        Estoque_Screen := estoque-screen {
-                            width: parent.width;
-                            height: parent.height;
-                            visible: false;
-                            estoque_database <=> estoque_database;
-                            estoque_material <=> estoque_material;
-                            estoque_quantidade <=> estoque_quantidade;
-                            estoque_quantidade_total <=> estoque_quantidade_total;
-                            estoque_medida <=> estoque_medida;
-                            estoque_preco_input <=> estoque_preco_input;
-                            selectec_estoque <=> selectec_estoque;
-                            preco_total_estoque <=>preco_total_estoque ;
-            
-            
-                            temp_estoque_material <=> temp_estoque_material;
-                            temp_estoque_quantidade <=> temp_estoque_quantidade;
-                            temp_estoque_quantidade_total <=> temp_estoque_quantidade_total;
-                            temp_estoque_preco <=>temp_estoque_preco;
-                            temp_estoque_medida <=> temp_estoque_medida;
-            
-                            registrar_estoque => {
-                                registrar_estoque();
-                            }
-                            dashboard => {
-                                activate(5);
-                            }
-                            impressoras => {
-                                activate(3);
-                            }
-                            estoque => {
-                                activate(2);
-                            }
-                            configuracoes => {
-                                activate(4);
-                            }
-                            pedidos => {
-                                activate(1);
-                            }
-                            atualizar_estoque => {
-                                atualizar_estoque();
-                            }
-                            estoque_total_preco => {
-                                estoque_total_preco();
-                            }
-                            excluir_estoque => {
-                                excluir_estoque();
-                            }
-                        }
-            
-                        Printer_Screen := printer-screen {
-                            visible: false;
-                            width: parent.width;
-                            height: parent.height;
-                            input_modelo <=> input_modelo;
-                            input_watts <=> input_watts;
-                            input_filamento <=> filamento_printer;
-                            impressoras_database <=> impressoras;
-                            filamento_total <=> filamento_total;
-                            selected_impressora <=> selected_impressora;
-            
-            
-                            temp_modelo <=> temp_modelo;
-                            temp_watts <=> temp_watts;
-                            temp_filamento <=> temp_filamento;
-                            temp_filamento_total <=>temp_filamento_total;
-                            temp_filamento_preco <=> temp_filamento_preco;
-                            input_filamento_preco <=> input_filamento_preco;
 
-                            input_tipo_filamento <=> input_tipo_filamento;
-                            input_nozzle <=> input_nozzle;
-                            input_area_impressao <=> input_area_impressao;
+                        moved => {
 
-                            temp_nozzle <=> temp_nozzle;
-                            temp_tipo_filamento <=> temp_tipo_filamento;
-                            temp_diametro <=> temp_diametro;
-            
-                            registrar_impressora => {
-                                root.registrar_impressora();
-                            }
-                            dashboard => {
-                                activate(5);
-                            }
-                            estoque => {
-                                activate(2);
-                            }
-                            configuracoes => {
-                                activate(4);
-                            }
-                            pedidos => {
-                                activate(1);
-                            }
-                            excluir_impressora => {
-                                excluir_impressora();
-                            }
-                            editar_impressora => {
-                                editar_impressora();
-                            }
-                        }
-            
-                        Dashboard_Screen := dashboard-screen {
-                            visible: true;
-                            width: parent.width;
-                            height: parent.height;
-                            clients_database <=> clients_database;
-                            vendas_total <=> vendas_total;
-                            selected_client <=> selected_client;
-                            estoque_database <=> estoque_database;
-                            filamento-total <=> filamento_total;
-                            time <=> time;
-                            vendas_mes <=> vendas_mes;
-                            pedidos => {
-                                activate(1);
-                            }
-                            estoque => {
-                                activate(2);
-                            }
-                            impressoras => {
-                                activate(3);
-                            }
-                            configuracoes => {
-                                activate(4);
-                            }
-                        }
-            
-                        Settings-Screen := settings-screen {
-                            width: parent.width;
-                            height: parent.height;
-                            visible: false;
-                            settings_lucro <=> settings_lucro;
-                            settings_energia <=> settings_energia;
-                            tema <=> tema;
-                            registrar_settings => {
-                                registrar_settings();
-                            }
-                            dashboard => {
-                                activate(5);
-                            }
-                            carregar_tema => {
-                                carregar_tema();
-                            }
-                        }
-                    }
+                            move_window(
+                                self.mouse-x - self.pressed-x,
+                                self.mouse-y - self.pressed-y,
+
+                            );
+                        }   
                 }
+            
+             
 
                
             }     

@@ -132,11 +132,12 @@ export component estoque_screen {
                                                 
                                                 atualizar_estoque();
                                                 Edit_Estoque_Screen.close();
-                                                temp_estoque_material = "";
-                                                temp_estoque_quantidade = "";
-                                                temp_estoque_quantidade_total = "";
-                                                temp_estoque_preco = "";
-                                                temp_estoque_medida = "";
+                                                // temp_estoque_material = "";
+                                                // temp_estoque_quantidade = "";
+                                                // temp_estoque_quantidade_total = "";
+                                                // temp_estoque_preco = "";
+                                                // temp_estoque_medida = "";
+                                                 
  
                                             }
                                         }
@@ -166,6 +167,7 @@ export component estoque_screen {
                                             texto: "Medida";
                                             model: ["g", "mm", "un", "ml"];
                                             background-color: Theme.onBackground;
+                                            current-value: temp_estoque_medida;
                                             selected(current-value) => {
                                                 temp_estoque_medida = current-value;
                                                 debug(temp_estoque_medida)
@@ -275,10 +277,11 @@ export component estoque_screen {
                                                     width: 30px;
                                                     height: 20px;
                                                     texto: "+";
-                                                    clicked => {
-                                                        selectec_estoque = estoque;
-                                                        estoque_quantidade = estoque.quantidade.to-float() + 1;
-                                                        atualizar_estoque()
+                                                    clicked => {             
+                                                        selectec_estoque = estoque;                                           
+                                                        temp_estoque_quantidade = estoque.quantidade.to-float() + 1;
+                                                        atualizar_estoque();    
+                                                        temp_estoque_quantidade;                                                      
                                                     }
                                                 }
 
@@ -288,8 +291,9 @@ export component estoque_screen {
                                                     texto: "-";
                                                     clicked => {
                                                         selectec_estoque = estoque;
-                                                        estoque_quantidade = estoque.quantidade.to-float() - 1;
-                                                        atualizar_estoque()
+                                                        temp_estoque_quantidade = estoque.quantidade.to-float() - 1;
+                                                        atualizar_estoque();
+                                                        temp_estoque_quantidade;                                                        
                                                     }
                                                 }
                                             }
@@ -374,7 +378,14 @@ export component estoque_screen {
                                         spacing: 10px;
                                         alignment: center;
                                         width: 3%;
-                                        BaloButton {height: 30px; width: 50px; texto: "Editar"; clicked => {Edit_Estoque_Screen.show();}}
+                                        BaloButton {height: 30px; width: 50px; texto: "Editar"; clicked => {Edit_Estoque_Screen.show(); 
+                                            temp_estoque_material = selectec_estoque.material;
+                                            temp_estoque_preco = selectec_estoque.preco;
+                                            temp_estoque_medida = selectec_estoque.medida;
+                                            temp_estoque_quantidade_total = selectec_estoque.quantidade-total;
+                                            temp_estoque_quantidade = selectec_estoque.quantidade;
+                                        
+                                        }}
                                         BaloButton {background:#f01414;height: 30px; width: 50px; texto: "🗑️"; clicked => {Confirm_screen.show()}}
                                 }
                                 }
@@ -471,7 +482,7 @@ export component estoque_screen {
                                                 Text { color: Theme.onSurface; text: "Custo Total:"; font-size: 20px; font-weight: 700;}
                                                 Text {
                                                     color: Theme.onSurface; 
-                                                    text:preco_total_estoque+"R$";
+                                                    text:"R$"+preco_total_estoque;
                                                     font-size: 20px;
                                                     font-weight: 700;
                                                 

@@ -18,7 +18,7 @@ use utils::settings_handle::{load_settings, load_tema, registrar_settings};
 
 slint::include_modules!();
 
-
+use i_slint_backend_winit::WinitWindowAccessor;
 fn main() {
     if let Err(e) = run_app() {
         eprintln!("Application error: {}", e);
@@ -112,6 +112,7 @@ fn register_callbacks(ui: &AppWindow) {
         move || {
             if let Some(ui) = ui_handle.upgrade() {
                 register_impressora(&ui);
+                ui.set_filamento_total(total_filamento(&ui));
             }
         }
     });
@@ -189,6 +190,38 @@ fn register_callbacks(ui: &AppWindow) {
         move || {
             if let Some(ui) = ui_handle.upgrade() {
                load_tema(&ui);
+            }
+        }
+    });
+
+    ui.on_move_window({
+        let ui_handle = ui.as_weak();
+        // Closure agora recebe dois argumentos
+        move |delta_x, delta_y| {
+            if let Some(ui) = ui_handle.upgrade() {
+                ui.window().with_winit_window(|win| {
+                    // Aqui dispara o arraste nativo
+                    let _ = win.drag_window();
+                });
+            }
+        }
+    });
+
+
+    ui.on_minimizar({
+        let ui_handle = ui.as_weak();
+        move || {
+            if let Some(ui) = ui_handle.upgrade() {
+             ui.window().set_minimized(true);
+            }
+        }
+    });
+
+    ui.on_fechar({
+        let ui_handle = ui.as_weak();
+            move || {
+                if let Some(ui) = ui_handle.upgrade() {
+                ui.window().hide().unwrap();
             }
         }
     });

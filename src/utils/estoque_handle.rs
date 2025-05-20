@@ -70,12 +70,12 @@ pub fn atualizar_estoque(ui: &AppWindow) {
              
         }
 
-        if !quantidade.is_empty(){
-            let quantidade_num:i32 = quantidade.parse().expect("erro ao converter quantidade para i32");
-            if !quantidade.is_empty() &&   quantidade_num<= estoque.quantidade_total && quantidade_num >=0{
-                updated.quantidade = quantidade.clone();
-            }
-        }
+        // if !quantidade.is_empty(){
+        //     let quantidade_num:i32 = quantidade.parse().expect("erro ao converter quantidade para i32");
+        //     if !quantidade.is_empty() &&   quantidade_num<= estoque.quantidade_total && quantidade_num >=0{
+        //         updated.quantidade = quantidade.clone();
+        //     }
+        // }
         
  
         

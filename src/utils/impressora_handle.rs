@@ -78,7 +78,7 @@ pub fn register_impressora(ui: &AppWindow) {
         filamento: filamento_txt.clone(),
         filamento_total:filamento_total.clone(),
         filamento_preco:filamento_preco.clone(),
-        tipo_filamento: SharedString::from(filamento_tipo.clone()),
+        filamento_tipo: SharedString::from(filamento_tipo.clone()),
         nozzle: SharedString::from(nozzle.clone()),
         diametro:SharedString::from(diametro.clone()),
     };
@@ -135,7 +135,7 @@ pub fn load_impressoras(ui: &AppWindow) -> std::io::Result<()> {
             filamento:json_impressora.filamento.into(),
             filamento_total:json_impressora.filamento_total.into(),
             filamento_preco:json_impressora.filamento_preco.into(),
-            tipo_filamento:json_impressora.filamento_tipo.into(),
+            filamento_tipo:json_impressora.filamento_tipo.into(),
             nozzle:json_impressora.nozzle.into(),
             diametro:json_impressora.diametro.into(),
             
@@ -177,7 +177,7 @@ pub fn excluir_impressora(ui: &AppWindow) {
     }
 
     // 3. Atualizar UI
-    ui.set_selected_impressora(Impressoras{id:"".into(),modelo:"".into(),filamento:0.into(),watts:"".into(),filamento_total:0.into(),filamento_preco:0.into(),tipo_filamento:"".into(),nozzle:"".into(),diametro:"".into()});
+    ui.set_selected_impressora(Impressoras{id:"".into(),modelo:"".into(),filamento:0.into(),watts:"".into(),filamento_total:0.into(),filamento_preco:0.into(),filamento_tipo:"".into(),nozzle:"".into(),diametro:"".into()});
     let new_model = VecModel::from(impressoras);
     ui.set_impressoras(ModelRc::new(new_model));
 }
@@ -245,7 +245,7 @@ pub fn editar_impressora(ui: &AppWindow) {
         }
 
         if !temp_filamento_tipo.is_empty(){
-            updated.tipo_filamento = temp_filamento.clone();
+            updated.filamento_tipo = temp_filamento_tipo.clone();
         }
 
         if !temp_diametro.is_empty(){
@@ -295,7 +295,7 @@ pub fn atualizar_impressora_json(updated: &Impressoras) -> std::io::Result<()> {
             rec.filamento = updated.filamento.clone();
             rec.filamento_total = updated.filamento_total.clone();
             rec.filamento_preco = updated.filamento_preco.clone();
-            rec.filamento_tipo = updated.tipo_filamento.to_string().clone();
+            rec.filamento_tipo = updated.filamento_tipo.to_string().clone();
             rec.diametro = updated.diametro.to_string().clone();
             rec.nozzle = updated.nozzle.to_string().clone();
             
