@@ -91,6 +91,8 @@ export component estoque_screen {
                         BaloButton {
                             
                             texto: "Adicionar Material";
+                            background:!self.has-hover  ? Theme.primary : Theme.secondaryLight;
+                            cor_texto: !self.has-hover ?  Theme.onPrimary :  Theme.onBackground;
                             clicked => {
                                 novo_material.visible = true;
                                 Estoques.visible = false;
@@ -238,9 +240,8 @@ export component estoque_screen {
                                     Rectangle {
                                         height: 90%;
                                         padding: 8px;
-                                         background: !selected_hover? Theme.background:Theme.secondaryLight;
-                                    // border-radius: 5px;
-                                    // drop-shadow-offset-y: 1px;  
+                                         background: !selected_hover && selectec_estoque.id != estoque.id ? Theme.background:Theme.secondaryLight;
+                                 
                                      
                                         HorizontalBox {
                                             alignment: center;

@@ -255,7 +255,9 @@ export component SideButton {
 
 export component BaloButton {
     in property <string> texto;
+    in property <color> cor_texto: Theme.onPrimary;
     in property <brush> background: Theme.primary;
+     out property <bool> has-hover <=> touch.has-hover;
     callback clicked;
     Rectangle {
         clip: true;
@@ -275,12 +277,12 @@ export component BaloButton {
                     horizontal-alignment: center;
                     text: root.texto;
                     font-size: Theme.fontSizeBody;
-                    color: Theme.onPrimary;
+                    color: cor_texto;
                 }
             }
         }
 
-        TouchArea {
+      touch :=  TouchArea {
             clicked => {
                 root.clicked();
             }

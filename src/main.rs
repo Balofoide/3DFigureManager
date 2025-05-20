@@ -15,10 +15,10 @@ use utils::impressora_handle::{
 };
 use utils::sell_calculator::{atualizar_filamento, calcular_venda, total_vendas};
 use utils::settings_handle::{load_settings, load_tema, registrar_settings};
-
+use i_slint_backend_winit::WinitWindowAccessor;
 slint::include_modules!();
 
-use i_slint_backend_winit::WinitWindowAccessor;
+
 fn main() {
     if let Err(e) = run_app() {
         eprintln!("Application error: {}", e);

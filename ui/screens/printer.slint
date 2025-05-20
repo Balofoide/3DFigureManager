@@ -57,6 +57,8 @@ export component printer_screen {
                     width: 150px;
                     height: 50px;
                     texto: "Adicionar Impressora";
+                    background:!self.has-hover  ? Theme.primary : Theme.secondaryLight;
+                    cor_texto: !self.has-hover ?  Theme.onPrimary :  Theme.onBackground;
                     clicked => {
                         nova_impressora.visible = true;
                         Impressoras_Tela.visible = false;
@@ -477,7 +479,7 @@ export component printer_screen {
                                                     Rectangle {
                                                     max-height: 10px;
                                                     border-radius: 5px;
-                                                    background: !selected_hover? Theme.background:Theme.secondaryLight;
+                                                    background: !selected_hover && selected_impressora.id != printer.id? Theme.background:Theme.secondaryLight;
 
                                                         HorizontalBox {
                                                             Text {

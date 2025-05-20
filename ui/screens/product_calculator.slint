@@ -108,7 +108,14 @@ export component calculator_screen {
                                 width: 150px;
                                 height: 50px;
                                 texto: "Adicionar Pedido";
+
+
+                                background:!self.has-hover  ? Theme.primary : Theme.secondaryLight;
+                                cor_texto: !self.has-hover ?  Theme.onPrimary :  Theme.onBackground;
                                  clicked => {Novo_Pedido.visible = true; Pedidos.visible=false;}
+
+
+                                   
                             }
                         } 
                     Edit_Screen := PopupWindow{
@@ -219,22 +226,28 @@ export component calculator_screen {
                                         height: 60%;
                                         for client[index] in clients_database: TouchArea {
                                             clicked => {
+                                                
                                                 root.selected_client = root.clients_database[index];
                                                 Detalhes_Pedido.visible = true;
                                                 Pedido_Status.current-value = selected_client.status;
+                                                 
                                             }
                                              property <bool> selected_hover <=> self.has-hover;
  
                                             
                                             // spacing: Theme.spacing;
                                             // padding: Theme.spacing;
-                                            Rectangle {
+                                           fundo_client := Rectangle {
                                                 width: 98%;
                                                 height: 90%;
                                                 padding: 8px;
                                                 // border-radius: 5px;
                                                 // drop-shadow-offset-y: 1px;  
-                                                background: !selected_hover? Theme.background:Theme.secondaryLight;
+                                                background: !selected_hover && selected_client.id != client.id? Theme.background:Theme.secondaryLight;
+
+                                                
+
+
                                                 HorizontalBox {
                                                     alignment: center;
                                                     Rectangle {

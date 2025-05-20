@@ -47,8 +47,14 @@ export component settings_screen {
                                 font-size: 40px;
                                 font-weight: 800;
                             }
-                            BaloButton {texto: "Voltar";clicked => {dashboard();}}
-                            BaloButton {texto: "Confirmar";clicked => {registrar_settings(); dashboard();}}
+                            BaloButton {texto: "Voltar";clicked => {dashboard();}
+                                background:!self.has-hover  ? Theme.primary : Theme.secondaryLight;
+                                cor_texto: !self.has-hover ?  Theme.onPrimary :  Theme.onBackground;
+                            }
+                            BaloButton {texto: "Confirmar";clicked => {registrar_settings(); dashboard();}
+                                background:!self.has-hover  ? Theme.primary : Theme.secondaryLight;
+                                cor_texto: !self.has-hover ?  Theme.onPrimary :  Theme.onBackground;
+                            }
                              
      
                         }
