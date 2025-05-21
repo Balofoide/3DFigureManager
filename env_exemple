@@ -1,0 +1,8 @@
+ACCESS_TOKEN = ""
+REFRESH_TOKEN =""
+EXPIRE_TIME =" "
+
+CLIENT_ID = ""
+CLIENT_SECRET = ""
+REDIRECT_URI = "https://exemple.com/token"
+CODE =""
