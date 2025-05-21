@@ -29,6 +29,7 @@ struct JsonClient {
     data_criacao:String,
     cep:String,
     telefone:String,
+    cpf:String,
 }
 
 
@@ -47,7 +48,7 @@ pub fn add_client(ui: &AppWindow, novo_cliente: Database) {
     ui.set_clients_database(ModelRc::new(vec_model));
 }
 
-pub fn save_cliente(id:String,nome: String, endereco: String, entrega: String,preco:f32,modelo:String,observacao:String,status:String,filamento_gasto:String,data_criacao:String,cep:String,telefone:String) -> std::io::Result<()> {
+pub fn save_cliente(id:String,nome: String, endereco: String, entrega: String,preco:f32,modelo:String,observacao:String,status:String,filamento_gasto:String,data_criacao:String,cep:String,telefone:String,cpf:String,) -> std::io::Result<()> {
   
     
     let client_data = JsonClient {
@@ -63,6 +64,7 @@ pub fn save_cliente(id:String,nome: String, endereco: String, entrega: String,pr
         data_criacao,
         cep,
         telefone,
+        cpf,
     };
 
     let mut file = OpenOptions::new()
@@ -89,8 +91,8 @@ pub fn register_client(ui: &AppWindow) {
     let data_criacao = Utc::now().date_naive().format("%d-%m-%Y").to_string();
     let cep = ui.get_cep().to_string();
     let telefone = ui.get_telefone().to_string();
-
-    save_cliente(id.clone(),nome_cliente.clone(), endereco.clone(), entrega.clone(),preco.clone(),modelo.clone(),observacao.clone(),status.clone(),filamento.clone(),data_criacao.clone(),cep.clone(),telefone.clone())
+    let cpf = ui.get_cpf().to_string();
+    save_cliente(id.clone(),nome_cliente.clone(), endereco.clone(), entrega.clone(),preco.clone(),modelo.clone(),observacao.clone(),status.clone(),filamento.clone(),data_criacao.clone(),cep.clone(),telefone.clone(),cpf.clone())
         .expect("Erro ao salvar os dados do cliente");
 
     let client = Database {
@@ -107,6 +109,7 @@ pub fn register_client(ui: &AppWindow) {
         data_criacao:data_criacao.into(),
         cep:cep.into(),
         telefone:telefone.into(),
+        cpf:cpf.into(),
     };
 
     add_client(&ui, client);
@@ -139,6 +142,7 @@ pub fn load_clients(ui: &AppWindow) -> std::io::Result<()> {
             data_criacao:json_client.data_criacao.into(),
             cep:json_client.cep.into(),
             telefone:json_client.telefone.into(),
+            cpf:json_client.cpf.into(),
         };
 
         add_client(ui, client);
@@ -158,7 +162,7 @@ pub fn atualizar_client(ui: &AppWindow) {
     let temp_status = ui.get_temp_status();
     let temp_cep = ui.get_temp_cep();
     let temp_telefone = ui.get_temp_telefone();
-
+    let temp_cpf = ui.get_temp_cpf();
     // 1. Obter a lista atual de clientes do UI
     let mut clientes = ui
         .get_clients_database()
@@ -192,7 +196,9 @@ pub fn atualizar_client(ui: &AppWindow) {
         if !temp_telefone.is_empty(){
             updated.telefone = temp_telefone.clone();
         }
-        
+        if !temp_cpf.is_empty(){
+            updated.cpf = temp_cpf.clone();
+        }
 
         // 3. Atualizar o JSON no disco
         if let Err(e) = atualizar_client_json(&updated) {
@@ -224,6 +230,7 @@ fn atualizar_client_json(updated: &Database) -> std::io::Result<()> {
             rec.observacao = updated.observacao.to_string().clone();
             rec.telefone = updated.telefone.to_string().clone();
             rec.cep = updated.cep.to_string().clone();
+            rec.cpf = updated.cpf.to_string().clone();
             // mantém preco e status originais
         }
         registros.push(rec);
@@ -260,7 +267,7 @@ pub fn excluir_client(ui: &AppWindow) {
     }
 
     // 3. Atualizar UI
-    ui.set_selected_client(Database{id:"".into(),endereco:"".into(),entrega:"".into(),modelo:"".into(),nome: "".into(),observacao: "".into(), preco:0.0.into(),status:"".into(),filamento_gasto:"".into(),data_criacao:"".into(),cep:"".into(),telefone:"".into()});
+    ui.set_selected_client(Database{id:"".into(),endereco:"".into(),entrega:"".into(),modelo:"".into(),nome: "".into(),observacao: "".into(), preco:0.0.into(),status:"".into(),filamento_gasto:"".into(),data_criacao:"".into(),cep:"".into(),telefone:"".into(),cpf:"".into()});
     let new_model = VecModel::from(clientes);
     ui.set_clients_database(ModelRc::new(new_model));
 }

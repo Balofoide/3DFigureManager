@@ -87,7 +87,7 @@ export component AppWindow inherits Window {
     in-out property <string> temp_filamento;
     in-out property <string> temp_filamento_total;
     in-out property <string> temp_filamento_preco;
-
+    in-out property <string> temp_cpf;
 
 
     in-out property <string> input_tipo_filamento;
@@ -101,7 +101,7 @@ export component AppWindow inherits Window {
 
     in-out property <string> cep;
     in-out property <string> telefone;
-
+    in-out property <string> cpf;
     in-out property <string> tema;
 
     callback calcular_preco();
@@ -351,7 +351,9 @@ export component AppWindow inherits Window {
                                     telefone <=> telefone;
                                     temp_cep <=> temp_cep;
                                     temp_telefone <=> temp_telefone;
-                                    
+                                    cpf <=> cpf;
+                                    temp_cpf <=> temp_cpf;
+
                                     registrar_cliente => {
                                         root.registrar_cliente();
                                     }

@@ -25,7 +25,8 @@ export component calculator_screen {
     in-out property <string> modelo;
     in-out property <string> status;
     in-out property <Database> selected_client;
- 
+    in-out property <string> cpf;
+    
     callback calcular_preco();
     callback registrar_cliente();
     callback resetar_inputs();
@@ -48,6 +49,7 @@ export component calculator_screen {
     in-out property <string> temp_status;
     in-out property <string> temp_cep;
     in-out property <string> temp_telefone;
+    in-out property <string> temp_cpf;
 
 
     width: 500px;
@@ -127,9 +129,9 @@ export component calculator_screen {
                         height: parent.height;
                         close-policy: close-on-click-outside;
                         x: parent.width / 200;
-                        y: parent.height *3;
+                        y: parent.height *0.5;
                         VerticalLayout {
-                            width: 500px;
+                            width: 600px;
                             height: 500px;
                              
                             Container {
@@ -141,6 +143,7 @@ export component calculator_screen {
                                 border_radius: 10px;
                                 
                                 VerticalBox {
+                                    
                                     HorizontalBox {
                                         Text {
                                             vertical-alignment: center;
@@ -152,12 +155,19 @@ export component calculator_screen {
                                         BaloButton { width:80px; height: 40px;texto: "Confirmar"; clicked => {editar_cliente(); Edit_Screen.close();}}
                                     }
                                     
-                                    InputField {texto: "Cliente ";max_lenght: 20; input<=> temp_nome_client;}
-                                    InputField {texto: "Telefone "; max_lenght: 30; input<=> temp_telefone;}                                  
-                                    DataInput {texto: "Entrega "; input<=> temp_entrega ;}       
-                                    InputField {texto: "Cep"; input<=> temp_cep;}                           
-                                    InputField {texto: "Observações: "; max_lenght: 50; input<=> temp_observacao;}
-                                    InputField {texto: "Endereço: "; max_lenght: 50; input<=> temp_endereco;}
+                                     InputField {texto: "Cliente ";max_lenght: 20; input<=> temp_nome_client;}
+                                             InputField {texto: "Telefone "; max_lenght: 30; input<=> temp_telefone;}                                  
+                                             DataInput {texto: "Entrega "; input<=> temp_entrega ;}       
+                                             InputField {texto: "Cep"; input<=> temp_cep;}   
+                                            InputField {texto: "Observações: "; max_lenght: 50; input<=> temp_observacao;}
+                                            InputField {texto: "Endereço: "; max_lenght: 50; input<=> temp_endereco;}
+                                            InputField {texto: "Cpf: "; max_lenght: 50; input<=> temp_cpf;}
+                                             
+                                           
+                                        
+                                    
+                                                   
+                                   
                                     
                                 }
                               
@@ -376,7 +386,8 @@ export component calculator_screen {
                                                 temp_observacao = selected_client.observacao;
                                                 temp_endereco = selected_client.endereco;                 
                                                 temp_cep = selected_client.cep;
-                                                temp_telefone = selected_client.telefone;                         
+                                                temp_telefone = selected_client.telefone;     
+                                                temp_cpf = selected_client.cpf;                    
                                             }}
                                             BaloButton {background:#f01414;height: 30px; width: 50px; texto: "🗑️"; clicked => {Confirm_screen.show()}}
                                         }
@@ -393,7 +404,7 @@ export component calculator_screen {
                                         spacing: Theme.spacing;
                                         Container {
                                             cor: Theme.background;
-     
+                                            height: 100px;
                                             
                                             GridBox {
                                                 
@@ -434,13 +445,13 @@ export component calculator_screen {
                                                             font-size: Theme.fontSizeBody;
                                                             font-weight: 500;
                                                         }
+                                                        
                                                     }
-
-                                                    VerticalBox {
+                                                     VerticalBox {
                                                         alignment: center;
                                                         Text {
                                                             horizontal-alignment: center;
-                                                            text: "Entrega";
+                                                            text: "Cpf";
                                                             color: Theme.onBackground;
                                                             font-size: Theme.fontSizeBody;
                                                             font-weight: 700;
@@ -448,14 +459,16 @@ export component calculator_screen {
     
                                                         Text {
                                                             horizontal-alignment: center;
-                                                            text: "\{root.selected_client.entrega}";
+                                                            text: "\{root.selected_client.cpf}";
                                                             color: Theme.onBackground;
                                                             font-size: Theme.fontSizeBody;
                                                             font-weight: 500;
                                                         }
                                                     }
+
+                                                   
                                                 }
-                                                
+                                               
                                             }
                                              
                                         }
@@ -631,8 +644,8 @@ export component calculator_screen {
                                                 }
 
                                                }
-
-                                               VerticalBox {
+                                               HorizontalBox {
+                                                   VerticalBox {
                                                  Text {
                                                     text: "Cep";
                                                     color: Theme.onBackground;
@@ -647,6 +660,27 @@ export component calculator_screen {
                                                     font-weight: 500;
                                                 }
                                                }
+                                               VerticalBox {
+                                                        
+                                                        Text {
+                                                            
+                                                            text: "Data de Entrega";
+                                                            color: Theme.onBackground;
+                                                            font-size: Theme.fontSizeBody;
+                                                            font-weight: 700;
+                                                        }
+    
+                                                        Text {
+                                                            
+                                                            text: "\{root.selected_client.entrega}";
+                                                            color: Theme.onBackground;
+                                                            font-size: Theme.fontSizeBody;
+                                                            font-weight: 500;
+                                                        }
+                                            }
+                                                
+                                               }
+                                            
                                                
                                             }
                                         }
@@ -706,21 +740,18 @@ export component calculator_screen {
                                             input <=> root.nome_cliente;
                                         }
                                         InputField {
+                                            texto: "Cpf";
+                                            max_lenght: 47;
+                                            input <=> root.cpf;
+                                        }
+
+                                        InputField {
                                             texto: "Telefone";
                                             max_lenght: 47;
                                             input <=> root.telefone;
                                         }
 
-                                        InputField {
-                                            texto: "Endereço";
-                                            max_lenght: 47;
-                                            input <=> root.endereco;
-                                        }
-                                        InputField {
-                                            texto: "Cep";
-                                            max_lenght: 47;
-                                            input <=> root.cep;
-                                        }
+                                        
                                         
                                     }
                                 }
@@ -741,6 +772,16 @@ export component calculator_screen {
                                     
                                     VerticalLayout {
                                         padding: Theme.spacing;
+                                        InputField {
+                                            texto: "Endereço";
+                                            max_lenght: 47;
+                                            input <=> root.endereco;
+                                        }
+                                        InputField {
+                                            texto: "Cep";
+                                            max_lenght: 47;
+                                            input <=> root.cep;
+                                        }
                                                  DataInput {
                                                     texto: "Data";
                                                     input <=> entrega;
@@ -782,7 +823,7 @@ export component calculator_screen {
                                     }
 
                                     VerticalBox {
-                                        padding: Theme.spacing;
+                                        
                                         alignment: start;
                                         InputField {
                                             max_lenght: 47;
@@ -794,6 +835,15 @@ export component calculator_screen {
                                             max_lenght: 4;
                                             texto: "Tempo Estimado [H]";
                                             input <=> root.tempo;
+                                            changed input => {
+                                                root.calcular_preco();
+                                            }
+                                            type: number;
+                                        }
+                                        InputField {
+                                            texto: "Gasto de Material [g]";
+                                            max_lenght: 5;
+                                            input <=> root.material;
                                             changed input => {
                                                 root.calcular_preco();
                                             }
@@ -813,21 +863,17 @@ export component calculator_screen {
                                                     }
                                                 }
 
-                                        InputField {
-                                            texto: "Gasto de Material [g]";
-                                            max_lenght: 5;
-                                            input <=> root.material;
-                                            changed input => {
-                                                root.calcular_preco();
-                                            }
-                                            type: number;
-                                        }
+                                        
 
                                         VerticalLayout {
+                                            spacing: Theme.spacing;
+                                        
                                             // width: 50%;
                                             height: 5%;
                                             // Rectangle{height: 90%;width: 100px;}
                                             VerticalBox {        
+                                                 spacing: Theme.spacing;
+                                            padding: Theme.spacing;
                                                 width: 50%;                                               
                                                 // height: 30px;
                                                 HorizontalLayout {
