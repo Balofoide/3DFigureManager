@@ -14,6 +14,8 @@ export component calculator_screen {
     in-out property <float> total;
     in-out property <string> nome_cliente;
     in-out property <string> endereco;
+    in-out property <string> cep;
+    in-out property <string> telefone;
     in-out property <string> entrega;
     in-out property <[string]> impressoras_string;
     in-out property <string> combobox_selected;
@@ -44,6 +46,8 @@ export component calculator_screen {
     in-out property <string> temp_endereco;
     in-out property <string> temp_observacao;
     in-out property <string> temp_status;
+    in-out property <string> temp_cep;
+    in-out property <string> temp_telefone;
 
 
     width: 500px;
@@ -148,11 +152,13 @@ export component calculator_screen {
                                         BaloButton { width:80px; height: 40px;texto: "Confirmar"; clicked => {editar_cliente(); Edit_Screen.close();}}
                                     }
                                     
-                                    InputField {texto: "Cliente: ";max_lenght: 20; input<=> temp_nome_client;}
-                                    DataInput {texto: "Entrega: "; input<=> temp_entrega ;}                                  
+                                    InputField {texto: "Cliente ";max_lenght: 20; input<=> temp_nome_client;}
+                                    InputField {texto: "Telefone "; max_lenght: 30; input<=> temp_telefone;}                                  
+                                    DataInput {texto: "Entrega "; input<=> temp_entrega ;}       
+                                    InputField {texto: "Cep"; input<=> temp_cep;}                           
                                     InputField {texto: "Observações: "; max_lenght: 50; input<=> temp_observacao;}
                                     InputField {texto: "Endereço: "; max_lenght: 50; input<=> temp_endereco;}
-                                    InputField {visible:false;texto: "Modelo: "; }
+                                    
                                 }
                               
                             }
@@ -368,7 +374,9 @@ export component calculator_screen {
                                                 temp_nome_client = selected_client.nome;
                                                 temp_entrega = selected_client.entrega;
                                                 temp_observacao = selected_client.observacao;
-                                                temp_endereco = selected_client.endereco;                                          
+                                                temp_endereco = selected_client.endereco;                 
+                                                temp_cep = selected_client.cep;
+                                                temp_telefone = selected_client.telefone;                         
                                             }}
                                             BaloButton {background:#f01414;height: 30px; width: 50px; texto: "🗑️"; clicked => {Confirm_screen.show()}}
                                         }
@@ -413,6 +421,25 @@ export component calculator_screen {
                                                         alignment: center;
                                                         Text {
                                                             horizontal-alignment: center;
+                                                            text: "Telefone";
+                                                            color: Theme.onBackground;
+                                                            font-size: Theme.fontSizeBody;
+                                                            font-weight: 700;
+                                                        }
+    
+                                                        Text {
+                                                            horizontal-alignment: center;
+                                                            text: "\{root.selected_client.telefone}";
+                                                            color: Theme.onBackground;
+                                                            font-size: Theme.fontSizeBody;
+                                                            font-weight: 500;
+                                                        }
+                                                    }
+
+                                                    VerticalBox {
+                                                        alignment: center;
+                                                        Text {
+                                                            horizontal-alignment: center;
                                                             text: "Entrega";
                                                             color: Theme.onBackground;
                                                             font-size: Theme.fontSizeBody;
@@ -428,9 +455,12 @@ export component calculator_screen {
                                                         }
                                                     }
                                                 }
+                                                
                                             }
+                                             
                                         }
-    
+                                        
+                                        
                                         Container {
                                             cor: Theme.background;
                                             HorizontalBox {
@@ -576,14 +606,17 @@ export component calculator_screen {
                                         Container {
                                             cor: Theme.background;
                                             VerticalBox {
-                                                Text {
+                                               VerticalBox {
+                                                 Text {
                                                     text: "Envio";
                                                     color: Theme.onBackground;
                                                     font-size: Theme.fontSizeBody;
                                                     font-weight: 800;
                                                 }
     
-                                                Text {
+                                               }
+                                               VerticalBox {
+                                                 Text {
                                                     text: "Endereço";
                                                     color: Theme.onBackground;
                                                     font-size: Theme.fontSizeBody;
@@ -596,6 +629,25 @@ export component calculator_screen {
                                                     font-size: Theme.fontSizeBody;
                                                     font-weight: 500;
                                                 }
+
+                                               }
+
+                                               VerticalBox {
+                                                 Text {
+                                                    text: "Cep";
+                                                    color: Theme.onBackground;
+                                                    font-size: Theme.fontSizeBody;
+                                                    font-weight: 700;
+                                                }
+    
+                                                Text {
+                                                    text: "\{root.selected_client.cep}";
+                                                    color: Theme.onBackground;
+                                                    font-size: Theme.fontSizeBody;
+                                                    font-weight: 500;
+                                                }
+                                               }
+                                               
                                             }
                                         }
                                     }
@@ -653,12 +705,23 @@ export component calculator_screen {
                                             max_lenght: 30;
                                             input <=> root.nome_cliente;
                                         }
+                                        InputField {
+                                            texto: "Telefone";
+                                            max_lenght: 47;
+                                            input <=> root.telefone;
+                                        }
 
                                         InputField {
                                             texto: "Endereço";
                                             max_lenght: 47;
                                             input <=> root.endereco;
                                         }
+                                        InputField {
+                                            texto: "Cep";
+                                            max_lenght: 47;
+                                            input <=> root.cep;
+                                        }
+                                        
                                     }
                                 }
                             }
@@ -667,6 +730,7 @@ export component calculator_screen {
                                 width: 50%;
                                 cor: Theme.surface;
                                 VerticalBox {
+                                    alignment: start;
                                     padding: Theme.spacing;
                                     Text {
                                         text: "Detalhes de Entrega";

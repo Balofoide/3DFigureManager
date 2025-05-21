@@ -138,19 +138,22 @@ export component dashboard_screen {
                                         vertical-alignment: center;
                                         horizontal-alignment: center;
                                     }
-
-                                    HorizontalBox {
+                                    VerticalBox {
                                         alignment: center;
-                                        CircularProgress {
-                                            width: 100px;
-                                            background-color: Theme.onPrimary;
-                                            progress-color: Theme.secondaryLight;
-                                            text-color:  Theme.onSurface;
-                                            height: 100px;
-                                            padding: Theme.spacing;
-                                            progress: ((filamento-total / 10000) * 10);
+                                        HorizontalBox {
+                                            alignment: center;
+                                            CircularProgress {
+                                                width: 200px;
+                                                background-color: Theme.onPrimary;
+                                                progress-color: Theme.secondaryLight;
+                                                text-color:  Theme.onSurface;
+                                                height: 200px;
+                                                padding: Theme.spacing;
+                                                progress: ((filamento-total / 10000) * 10);
+                                            }
                                         }
                                     }
+                                   
                                 }
                             }
                         }

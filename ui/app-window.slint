@@ -64,6 +64,9 @@ export component AppWindow inherits Window {
     in-out property <string> temp_entrega;
     in-out property <string> temp_endereco;
     in-out property <string> temp_observacao;
+    in-out property <string> temp_cep;
+    in-out property <string> temp_telefone;
+
     in-out property <string> estoque_preco_input;
     in-out property <string> settings_lucro;
     in-out property <string> settings_energia;
@@ -96,7 +99,9 @@ export component AppWindow inherits Window {
     in-out property <string> temp_diametro;
     in-out property <float> vendas_mes;
 
-    
+    in-out property <string> cep;
+    in-out property <string> telefone;
+
     in-out property <string> tema;
 
     callback calcular_preco();
@@ -117,11 +122,11 @@ export component AppWindow inherits Window {
     callback carregar_tema();
 
     no-frame: true;
-    width: 1280px;
+    width: 1480px;
     combobox-selected: "Teste";
     full-screen: false;
     background: transparent;
-    height: 820px;
+    height: 950px;
     title: "Figure Manager";
     default-font-family: "Comic Sans MS";
     
@@ -342,6 +347,11 @@ export component AppWindow inherits Window {
                                     temp_endereco <=> temp_endereco;
                                     temp_observacao <=> temp_observacao;
                                     temp_status <=> temp_status;
+                                    cep <=> cep;
+                                    telefone <=> telefone;
+                                    temp_cep <=> temp_cep;
+                                    temp_telefone <=> temp_telefone;
+                                    
                                     registrar_cliente => {
                                         root.registrar_cliente();
                                     }
