@@ -26,7 +26,7 @@ struct JsonEstoque {
 
 
 pub fn atualizar_estoque(ui: &AppWindow) {
-    let quantidade = ui.get_estoque_quantidade();
+     
     
     let selected = ui.get_selectec_estoque();
 

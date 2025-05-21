@@ -1,4 +1,3 @@
-// Prevent console window in addition to Slint window in Windows release builds when, e.g., starting the app via file manager. Ignored on other platforms.
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
  
 use std::error::Error;
@@ -197,7 +196,7 @@ fn register_callbacks(ui: &AppWindow) {
     ui.on_move_window({
         let ui_handle = ui.as_weak();
         // Closure agora recebe dois argumentos
-        move |delta_x, delta_y| {
+        move |_delta_x, _delta_y| {
             if let Some(ui) = ui_handle.upgrade() {
                 ui.window().with_winit_window(|win| {
                     // Aqui dispara o arraste nativo

@@ -219,8 +219,64 @@ export component printer_screen {
                                             }
                                         }
 
-                                        GridBox {
+                                       Detalhes_impressora := GridBox {
                                             visible: !selected_impressora.id.is-empty;
+
+                                                Confirm_screen := PopupWindow{
+                                                    width: parent.width;
+                                                    height: parent.height /2 ;
+                                                    close-policy: close-on-click-outside;
+                                                    x: parent.width / 1.5;
+                                                    y: parent.height * 0.2;
+                                                    VerticalLayout {
+                                                        
+                                                        
+                                                        Container {
+                                                            cor: Theme.background;
+                                                            width: 100%;
+                                                            height: 100%;
+                                                            shadow_blur: 10px;
+                                                            border_width: 1px;
+                                                            border_radius: 10px;
+                                                            
+                                                            VerticalBox {
+                                                                HorizontalBox {
+                                                                    Text {
+                                                                    
+                                                                        text: "Confirmação";
+                                                                        color: Theme.onBackground;
+                                                                        font-weight: 800;
+                                                                        font-size: 20px;
+                                                                    }
+                                                                
+                                                                }
+                                                                HorizontalBox {
+                                                                    
+                                                                Text {
+                                                                    
+                                                                        text: "Deseja excluir o pedido de "+selected_impressora.modelo+" ?";
+                                                                        color: Theme.onBackground;
+                                                                        font-weight: 800;
+                                                                        font-size: Theme.fontSizeBody;
+                                                                    }
+                                                                }
+                                                                
+                                                                HorizontalBox {
+                                                                    spacing: Theme.spacing;
+                                                                    BaloButton { width:80px; height: 40px;texto: "Cancelar"; clicked => {Confirm_screen.close()}}
+                                                                    BaloButton { width:80px; height: 40px;texto: "Confirmar"; clicked => { excluir_impressora(); Confirm_screen.close();  }}
+                                                                }
+                                                                
+                            
+                                                            }
+                                                        
+                                                        }
+                                                    }
+                                    
+                                                }
+
+
+
                                             Row {
                                                 HorizontalBox {
                                                     spacing: Theme.spacing;
@@ -260,7 +316,7 @@ export component printer_screen {
                                                         width: 60px;
                                                         texto: "Excluir";
                                                         clicked => {
-                                                            excluir_impressora();
+                                                           Confirm_screen.show();
                                                         }
                                                     }
                                                 }
@@ -388,7 +444,7 @@ export component printer_screen {
                                                             Text {
                                                                 horizontal-alignment: center;
                                                                 color: Theme.onSurface;
-                                                                text: "Nozzle:";
+                                                                text: "Nozzle[mm]:";
                                                                 font-size: 15px;
                                                                 font-weight: 600;
                                                             }
@@ -406,7 +462,7 @@ export component printer_screen {
                                                             Text {
                                                                 horizontal-alignment: center;
                                                                 color: Theme.onSurface;
-                                                                text: "Watts:";
+                                                                text: "Watts[W]:";
                                                                 font-size: 15px;
                                                                 font-weight: 600;
                                                             }
@@ -614,10 +670,10 @@ export component printer_screen {
                                     input <=> root.input_filamento_preco;
                                 }
 
-                                VerticalBox {
-                                    Text {text: "Tipo de Filamento:"; color: black;}
+                              
 
                                     CustomComboBox {
+                                        texto: "Tipo de Filamento";
                                         model: ["PLA","ABS","PETG","Nylon"];
                                         selected(current-value) => {
                                             input_tipo_filamento = current-value;
@@ -625,7 +681,7 @@ export component printer_screen {
                                         }
                                     }
 
-                                }
+                                
                                   
                                   InputField {
                                     visible: false;
