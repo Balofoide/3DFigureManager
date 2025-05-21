@@ -6,7 +6,7 @@ use reqwest::{Request, Url};
 use serde_json::json;
 use dotenv::dotenv;
 use std::env;
-use serde::Serialize;
+
 
 
 
@@ -14,7 +14,7 @@ fn main() {
     dotenv().ok();
     let token = env::var("ACCESS_TOKEN").expect("Token não encontrado");
 
-    let envio_id = "9ef76a9a-43c9-401b-bcf0-150acd6d9c7a"; // Substitua com o ID retornado da Parte 1
+    let envio_id = ""; // Substitua com o ID retornado da Parte 1
     let client = Client::new();
 
     // Etapa 1: pagar o envio
