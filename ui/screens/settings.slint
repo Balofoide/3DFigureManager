@@ -19,6 +19,7 @@ export component settings_screen {
     callback dashboard();
     callback carregar_tema();
     Rectangle {
+        clip: true;
         background:Theme.background;
         width: parent.width;
         height: parent.height;
@@ -58,55 +59,116 @@ export component settings_screen {
                              
      
                         }
-                        Container {
+
+                        GridLayout {
+                            spacing: Theme.spacing;
                             padding: Theme.spacing;
-                            
-                            cor: Theme.surface;
-                             VerticalBox {
-                                GridBox {
+                            Row {
                                 
-                                    spacing: Theme.spacing;
+                                   Container {
+                                    width: 50%;
                                     padding: Theme.spacing;
-                                    height: 20%;
-                                    Row {
+                                    
+                                    cor: Theme.surface;
+                                    VerticalBox {
+
+
+
                                         InputField {
-                                            input <=> settings_energia;
-                                            texto: "Taxa de Energia";
-                                        }
-                
-                                        InputField {
-                                            texto: "Lucro padrão:";
-                                            input <=> settings_lucro;
+                                                    input <=> settings_energia;
+                                                    texto: "Taxa de Energia";
+                                                }
+                        
+                                                InputField {
+                                                    texto: "Lucro padrão:";
+                                                    input <=> settings_lucro;
+                                                }
+                                    }
+                                    }   
+                                    Container {
+                                        width: 50%;
+                                        cor:Theme.surface;
+
+                                        CustomComboBox {
+                                                        model: ["Light","Dark","TealSunsetLight","TealSunsetDark","PastelDreamLight","PastelDreamDark"];
+                                                        texto: "Tema";
+                                                        current-value: tema;
+                                                        selected (current-value) => {
+                                                            tema = current-value;
+                                                                carregar_tema();
+                                                        }
+                                                    
+                                                    }
+                                    }      
+                                    
+
+                            }
+
+                            Row{
+                                     
+                                    Container {
+                                        
+                                        VerticalLayout {
+
+                                            HorizontalLayout {
+                                                 
+                                                    VerticalLayout {
+                                                        width: 50%;
+                                                        InputField {
+                                                        texto: "Nome da Loja:";
+                                                        input <=> settings_lucro;
+                                                    }
+                                                    InputField {
+                                                        texto: "Cpf:";
+                                                        input <=> settings_lucro;
+                                                    }
+                                                    
+                                                    InputField {
+                                                        texto: "Endereço:";
+                                                        input <=> settings_lucro;
+                                                    }
+                                                    
+                                                      InputField {
+                                                        texto: "Numero:";
+                                                        input <=> settings_lucro;
+                                                    }
+                                                   
+
+                                                }
+
+                                              
+                                                VerticalLayout {
+                                                    width: 50%;
+                                                     InputField {
+                                                        texto: "Bairo:";
+                                                        input <=> settings_lucro;
+                                                    }
+                                                      InputField {
+                                                        texto: "Cidade:";
+                                                        input <=> settings_lucro;
+                                                    }
+                                                    InputField {
+                                                        texto: "Cep:";
+                                                        input <=> settings_lucro;
+                                                    }
+                                                    InputField {
+                                                        texto: "Estado:";
+                                                        input <=> settings_lucro;
+                                                    }
+                                                }
+                                            
+                                            
+                                            }
+                                                    
+                                            
                                         }
 
-                                        // VerticalLayout {
-                                        //     alignment: center;
-                                        //     spacing: Theme.spacing;
-                                        //     Text {
-                                        //         text: "Theme";
-                                        //     color: Theme.onBackground;
-                                        //     font-size: Theme.fontSizeBody;
-                                        // }
-                                          
-                                       
-                                        // }
-                                    }         
-                                    Row {
-                                        CustomComboBox {
-                                            model: ["Light","Dark","TealSunsetLight","TealSunsetDark","PastelDreamLight","PastelDreamDark"];
-                                            texto: "Tema";
-                                            current-value: tema;
-                                            selected (current-value) => {
-                                                tema = current-value;
-                                                	carregar_tema();
-                                            }
-                                        
-                                        }
-                                           
-                                    }                                 
+
+                                    }
                                 }
-                             }
-                        }                        
+                                }
+                               
+                    
                     }
                 }
             }

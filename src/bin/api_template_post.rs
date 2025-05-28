@@ -68,7 +68,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             reverse: false,
             non_commercial: true,
         },
-        services: vec![], // vazio = retornar todos disponíveis
+        services: vec![ ], // vazio = retornar todos disponíveis
     };
 
     let response = client

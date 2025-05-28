@@ -146,13 +146,13 @@ async fn main() -> Result<()> {
         from: Address {
             postal_code: "01001000".to_string(), // CEP sem hífen
             name: "Loja Exemplo Ltda".to_string(),
-            phone: "1133334444".to_string(), // Telefone com DDD
-            email: "loja@exemplo.com".to_string(),
+            phone: "".to_string(), // Telefone com DDD
+            email: "".to_string(),
             document: "12345678909".to_string(), // CPF/CNPJ
             address: "Rua Principal".to_string(),
-            complement: "Sala 4".to_string(),
+            complement: "".to_string(),
             number: "123".to_string(),
-            district: "Centro".to_string(),
+            district: "Jardim Paulista".to_string(),
             city: "São Paulo".to_string(),
             state_abbr: "SP".to_string(), // UF com 2 caracteres
             country_id: "BR".to_string(),
@@ -161,12 +161,12 @@ async fn main() -> Result<()> {
         // Endereço de destino
         to: Address {
             postal_code: "02002000".to_string(),
-            name: "Cliente Exemplo".to_string(),
-            phone: "1199998888".to_string(),
-            email: "cliente@exemplo.com".to_string(),
+            name: "Balofoide".to_string(),
+            phone: "".to_string(),
+            email: "".to_string(),
             document: "98765432100".to_string(),
             address: "Avenida Secundária".to_string(),
-            complement: "Ap 102".to_string(),
+            complement: "".to_string(),
             number: "456".to_string(),
             district: "Jardim Paulista".to_string(),
             city: "São Paulo".to_string(),
@@ -177,17 +177,17 @@ async fn main() -> Result<()> {
         // Volumes do pacote
         volumes: vec![
             Volume {
-                height: 2.0,  // em cm
-                width: 1.0,   // em cm
-                length: 1.0,  // em cm
-                weight: 0.2,   // em kg
+                height: 3.0,  // em cm
+                width: 2.0,   // em cm
+                length: 2.0,  // em cm
+                weight: 0.23,   // em kg
             }
         ],
         products: vec![
             Products{
-            name: "Venom Figure".to_string(),
+            name: "Power Figure".to_string(),
             quantity:1.0,
-            unitary_value:100.0,
+            unitary_value:150.0,
             }
         ],
         

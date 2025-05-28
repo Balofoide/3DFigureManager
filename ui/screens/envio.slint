@@ -1,0 +1,268 @@
+import { Theme } from "../styling.slint";
+import { Container, SideButton, InputField, OverviewCard, BaloButton, CustomComboBox } from "../components.slint";
+import { Button, ComboBox, LineEdit, VerticalBox, HorizontalBox, GridBox, ListView } from "std-widgets.slint";
+import { Database, Impressoras, Estoque-Database,Calculo_Entrega } from "../shared.slint";
+
+
+
+export component envio_screen {
+    
+in-out property <[Database]> clients_database;
+in-out property <Database> selected_client;
+in-out property <[Calculo-Entrega]> calculo_entrega_database;
+
+in-out property <string> frete;
+in-out property <string> cep_origem;
+in-out property <string> cep_destino;
+
+
+callback  calcular_frete();
+    Rectangle {
+        width: parent.width;
+        height: parent.height;
+        background: Theme.background;
+
+        Impressoras_Tela := VerticalBox {
+            visible: true;
+
+            HorizontalBox {
+                spacing: Theme.spacing;
+                alignment: start;
+
+                Text {
+                    vertical-alignment: center;
+                    width: 81%;
+                    text: "Envio";
+                    color: Theme.onBackground;
+                    font-weight: 800;
+                    font-size: 40px;
+                }
+
+                BaloButton {
+                    width: 150px;
+                    height: 50px;
+                    texto: "Carrinho";
+                    background:!self.has-hover  ? Theme.primary : Theme.secondaryLight;
+                    cor_texto: !self.has-hover ?  Theme.onPrimary :  Theme.onBackground;
+                   
+                    clicked => {
+                        Carrinho_Screen.show();
+                    }
+                }
+            }
+
+            HorizontalBox {
+                VerticalLayout {
+                    spacing: Theme.spacing;
+                        Carrinho_Screen := PopupWindow{
+                        width: parent.width;
+                        height: parent.height;
+                        close-policy: close-on-click-outside;
+                        x: parent.width / 200;
+                        y: parent.height *0.5;
+                        VerticalLayout {
+                            width: 600px;
+                            height: 500px;
+                             
+                            Container {
+                                cor: Theme.background;
+                                width: 100%;
+                                height: 100%;
+                                shadow_blur: 10px;
+                                border_width: 1px;
+                                border_radius: 10px;
+                                
+                                VerticalBox {
+                                    
+                                    HorizontalBox {
+                                        Text {
+                                            vertical-alignment: center;
+                                            text: "Editar Pedido";
+                                            color: Theme.onBackground;
+                                            font-weight: 800;
+                                            font-size: 20px;
+                                        }
+                                        BaloButton { width:80px; height: 40px;texto: "Voltar"; clicked => { Carrinho_Screen.close();}}
+                                        BaloButton {  width:80px; height: 40px; texto: "Confirmar";}     
+                                    }
+
+                                     HorizontalBox {
+
+                                         VerticalLayout {
+                                                InputField {texto: "Nome";}
+                                                InputField {texto: "Cep Origem";}
+                                                InputField {texto: "Cep Destino";}
+                                                InputField {texto: "Cpf";}
+                                                InputField {texto: "Endereço";}
+                                           } 
+                                 
+                                 
+                                    
+                                       
+                                            VerticalLayout {
+                                                InputField {texto: "Numero";}
+                                                InputField {texto: "Distrito";}
+                                                InputField {texto: "Cidade";}
+                                                InputField {texto: "Estado_Abrev";}
+                                            }
+                                    }
+                                                                  
+ 
+                                             
+                                           
+                                        
+                                    
+                                                   
+                                   
+                                    
+                                }
+                              
+                            }
+                        }
+                        
+                    }
+                    GridBox {
+                        Row {
+                            VerticalBox {
+                                HorizontalBox {
+                                    Container {
+                                        cor: Theme.surface;
+
+                                        VerticalBox {
+                                            HorizontalBox {
+                                                Text {
+                                                    text: "Cliente";
+                                                    color: Theme.onSurface;
+                                                    font-weight: 700;
+                                                    horizontal-alignment: center;
+                                                }
+
+                                                Text {
+                                                    text: "Modelo";
+                                                    color: Theme.onSurface;
+                                                    font-weight: 700;
+                                                    horizontal-alignment: center;
+                                                }
+                                            }
+
+                                            for client[index] in clients_database: TouchArea {
+                                            clicked => {
+                                                
+                                                root.selected_client = root.clients_database[index];
+                                                cep_destino = selected_client.cep;
+                                                // Detalhes_Pedido.visible = true;
+                                                // Pedido_Status.current-value = selected_client.status;
+                                                 
+                                            }
+                                             property <bool> selected_hover <=> self.has-hover;
+ 
+                                            
+                                            // spacing: Theme.spacing;
+                                            // padding: Theme.spacing;
+                                           fundo_client := Rectangle {
+                                                width: 98%;
+                                                height: 90%;
+                                                padding: 8px;
+                                                // border-radius: 5px;
+                                                // drop-shadow-offset-y: 1px;  
+                                                background: !selected_hover && selected_client.id != client.id? Theme.background:Theme.secondaryLight;
+
+                                                
+
+
+                                                HorizontalBox {
+                                                    alignment: center;
+                                                    Rectangle {
+                                                        width: 25%;
+                                                        Text {
+                                                            text: client.nome;
+                                                            color: Theme.onSurface;
+                                                            horizontal-alignment: center;
+                                                            overflow: elide;
+                                                        }
+                                                    }
+    
+                                                    Rectangle {
+                                                        width: 25%;
+                                                        Text {
+                                                            text: client.modelo;
+                                                            color: Theme.onSurface;
+                                                            horizontal-alignment: center;
+                                                        }
+                                                    }
+    
+                                                    
+    
+                                                    
+                                                }
+                                            }
+                                        }
+                                          
+                                        }
+                                    }
+                                }
+                            }
+                            HorizontalBox {
+                                VerticalBox {
+                                    
+ 
+                                    Container {
+                                        cor: Theme.surface;
+                                        
+                                        Text {
+                                          
+                                            Text {
+                                                visible: false; 
+                                                text: "Selecione um pedido!";
+                                                color: Theme.onSurface;
+                                                font-size: 25px;
+                                            }
+                                        }
+
+                                       Detalhes_impressora := GridBox {
+                                        Row {
+                                             VerticalBox {
+                                             Text {text: "Frete"; color: Theme.onSurface; font-size: 25px;}
+                                            VerticalBox {
+                                            
+                                                height: 10%;
+                                                 InputField {texto: "Cep Destino"; input<=>cep_destino;}
+                                                  InputField {texto: "Cep Origem"; input<=>cep_origem;}
+                                                  BaloButton {texto: "Calcular Frete"; clicked => {calcular_frete()}}
+                                            }
+
+                                           
+                                            for transportadora in  calculo_entrega_database: Container{
+
+                                                VerticalBox {
+                                                    Text {text: "Nome:"+transportadora.nome-transportadora;color: Theme.onSurface;}
+                                                    Text {text: "Preço:"+transportadora.preco-entrega;color: Theme.onSurface;}
+                                                    Text {text: "Tempo de Entrega:"+transportadora.tempo_de_entrega; color: Theme.onSurface;}
+
+                                                }
+                                              
+
+                                            }
+                                        }   
+                                       
+                                        }     
+                                       
+
+ 
+
+                                       
+                                        }
+                                    }
+                                }
+                            }
+
+                            
+                        }
+                    }
+                }
+            }
+        }
+
+      
+    }
+}

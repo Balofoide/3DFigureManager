@@ -13,6 +13,9 @@ chrono = "0.4.41"
 i-slint-backend-winit = "1.11.0"
 dotenv = "0.15"
 reqwest = { version = "0.12", features = ["json", "blocking"] }
+anyhow = "1.0.98"
+tokyo = "1.0.0"
+tokio = { version = "1.45.0", features = ["rt-multi-thread", "macros"] }
 
 [build-dependencies]
 slint-build = "1.11.0"

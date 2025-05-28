@@ -4,9 +4,10 @@ import {Button, ComboBox, LineEdit,VerticalBox, HorizontalBox, GridBox, ListView
 import { dashboard_screen, dashboard-screen } from "screens/dashboard.slint";
 import { calculator_screen } from "screens/product_calculator.slint";
 import { estoque_screen} from "screens/estoque.slint";
-import { Database, Impressoras, Estoque-Database } from "shared.slint";
+import { Database, Impressoras, Estoque-Database,Calculo_Entrega } from "shared.slint";
 import { printer-screen } from "screens/printer.slint";
 import {settings_screen} from "screens/settings.slint";
+import { envio_screen } from "screens/envio.slint";
 
 export component AppWindow inherits Window {
     function activate(i: int) {
@@ -15,6 +16,7 @@ export component AppWindow inherits Window {
         Printer_Screen.visible = (i == 3);
         Settings_Screen.visible = (i == 4);
         Dashboard_Screen.visible = (i == 5);
+        Envio_Screen.visible = (i ==6);
     }
     
     in-out property <color> primary <=> Theme.primary;
@@ -34,7 +36,7 @@ export component AppWindow inherits Window {
     in-out property <color> onError  <=> Theme.onError;
 
     in-out property <string> filamento;
-    in-out property <string> material;
+    in-out property <string> material; 
     in-out property <string> tempo;
     in-out property <string> energia;
     in-out property <string> lucro;
@@ -50,6 +52,7 @@ export component AppWindow inherits Window {
     in-out property <[string]> impressoras_string;
     in-out property <[Database]> clients_database;
     in-out property <[Estoque-Database]> estoque_database;
+    in-out property <[Calculo-Entrega]> calculo_entrega_database;
     in-out property <string> estoque_material;
     in-out property <string> estoque_quantidade;
     in-out property <string> estoque_quantidade_total;
@@ -104,6 +107,11 @@ export component AppWindow inherits Window {
     in-out property <string> cpf;
     in-out property <string> tema;
 
+
+    in-out property <string> cep_origem;
+    in-out property <string> cep_destino;
+    in-out property <string> frete;
+
     callback calcular_preco();
     callback registrar_cliente();
     callback registrar_impressora();
@@ -120,7 +128,7 @@ export component AppWindow inherits Window {
     callback editar_impressora();
     callback atualizar_f_preco();
     callback carregar_tema();
-
+    callback calcular_frete();
     no-frame: true;
     width: 1480px;
     combobox-selected: "Teste";
@@ -279,6 +287,29 @@ export component AppWindow inherits Window {
                                         texto: "Impressoras";
                                         clicked => {
                                             activate(3)
+                                        }
+                                    }
+                                    
+                                      SideButton {
+                                        shadow_color: transparent;
+                                        text-color: !Envio-Screen.visible && !self.has-hover ?  Theme.onPrimary :  Theme.onSurface;
+                                    
+                                        animate text-color{
+                                            iteration-count: 1;
+                                            duration: 250ms;
+                                            easing: ease-in-out;
+                                        }
+                                        backgroud: !Envio-Screen.visible   && !self.has-hover  ? Theme.primary : Theme.secondary;
+                                        animate backgroud {
+                                            iteration-count: 1;
+                                            duration: 250ms;
+                                            easing: ease-in-out;
+                                            
+                                        }
+                                        height: 50px;
+                                        texto: "Envio";
+                                        clicked => {
+                                            activate(6)
                                         }
                                     }
                         
@@ -501,7 +532,7 @@ export component AppWindow inherits Window {
                                 }
                     
                                 Dashboard_Screen := dashboard-screen {
-                                    visible: true;
+                                    visible: false;
                                     width: parent.width;
                                     height: parent.height;
                                     clients_database <=> clients_database;
@@ -542,6 +573,22 @@ export component AppWindow inherits Window {
                                         carregar_tema();
                                     }
                                 }
+                                Envio-Screen := envio-screen{
+                                    clients_database <=>clients_database;
+                                    cep_origem <=>cep_origem;
+                                    cep_destino <=> cep_destino;
+                                    frete <=> frete;
+                                    calculo_entrega_database <=>calculo_entrega_database;
+                                    visible: true;
+                                    width: parent.width;
+                                    height: parent.height;
+
+                                    calcular_frete => {
+                                        calcular_frete();
+                                    }
+ 
+                                }
+
                             }
                         }
 
