@@ -11,6 +11,8 @@ in-out property <[Database]> clients_database;
 in-out property <Database> selected_client;
 in-out property <[Calculo-Entrega]> calculo_entrega_database;
 
+in-out property <Calculo_Entrega> selected_transportadora;
+
 in-out property <string> frete;
 in-out property <string> cep_origem;
 in-out property <string> cep_destino;
@@ -54,7 +56,7 @@ callback  calcular_frete();
             HorizontalBox {
                 VerticalLayout {
                     spacing: Theme.spacing;
-                        Carrinho_Screen := PopupWindow{
+                    Carrinho_Screen := PopupWindow{
                         width: parent.width;
                         height: parent.height;
                         close-policy: close-on-click-outside;
@@ -77,7 +79,7 @@ callback  calcular_frete();
                                     HorizontalBox {
                                         Text {
                                             vertical-alignment: center;
-                                            text: "Editar Pedido";
+                                            text: "Endereço Cliente";
                                             color: Theme.onBackground;
                                             font-weight: 800;
                                             font-size: 20px;
@@ -113,6 +115,73 @@ callback  calcular_frete();
                                         
                                     
                                                    
+                                   
+                                    
+                                }
+                              
+                            }
+                        }
+                        
+                    }
+                    Transportadoras := PopupWindow{
+                        width: parent.width;
+                        height: parent.height;
+                        close-policy: close-on-click-outside;
+                        x: parent.width / 200;
+                        y: parent.height *0.5;
+                        VerticalLayout {
+                            width: 600px;
+                            height: 500px;
+                             
+                            Container {
+                                cor: Theme.background;
+                                width: 100%;
+                                height: 100%;
+                                shadow_blur: 10px;
+                                border_width: 1px;
+                                border_radius: 10px;
+                                
+                                VerticalBox {
+                                    
+                                    HorizontalBox {
+                                        Text {
+                                            vertical-alignment: center;
+                                            text: "Transportadoras";
+                                            color: Theme.onBackground;
+                                            font-weight: 800;
+                                            font-size: 20px;
+                                        }
+                                        BaloButton { width:80px; height: 40px;texto: "Voltar"; clicked => { Carrinho_Screen.close();}}
+                                          
+                                    }
+
+                                       VerticalBox {
+                                             
+                                            
+                                           
+                                            for transportadora in  calculo_entrega_database: TouchArea{
+
+                                                clicked => {selected_transportadora = transportadora;}
+                                                property <bool> selected_hover <=> self.has-hover;
+
+                                                Container {
+                                                      cor: !selected_hover && selected_transportadora.id != transportadora.id? Theme.background:Theme.secondaryLight;
+                                                     VerticalBox {
+                                                    Text {text: "Nome:"+transportadora.nome-transportadora;color: Theme.onSurface;}
+                                                    Text {text: "Preço:"+transportadora.preco-entrega;color: Theme.onSurface;}
+                                                    Text {text: "Tempo de Entrega:"+transportadora.tempo_de_entrega; color: Theme.onSurface;}
+
+                                                }
+                                              
+
+                                                }
+                                               
+
+                                            }
+                                        }   
+                                                 
+ 
+                                    
                                    
                                     
                                 }
@@ -228,21 +297,21 @@ callback  calcular_frete();
                                                 height: 10%;
                                                  InputField {texto: "Cep Destino"; input<=>cep_destino;}
                                                   InputField {texto: "Cep Origem"; input<=>cep_origem;}
-                                                  BaloButton {texto: "Calcular Frete"; clicked => {calcular_frete()}}
+                                                  BaloButton {texto: "Calcular Frete"; clicked => {calcular_frete(); Transportadoras.show()}}
                                             }
 
                                            
-                                            for transportadora in  calculo_entrega_database: Container{
+                                            // for transportadora in  calculo_entrega_database: Container{
 
-                                                VerticalBox {
-                                                    Text {text: "Nome:"+transportadora.nome-transportadora;color: Theme.onSurface;}
-                                                    Text {text: "Preço:"+transportadora.preco-entrega;color: Theme.onSurface;}
-                                                    Text {text: "Tempo de Entrega:"+transportadora.tempo_de_entrega; color: Theme.onSurface;}
+                                            //     VerticalBox {
+                                            //         Text {text: "Nome:"+transportadora.nome-transportadora;color: Theme.onSurface;}
+                                            //         Text {text: "Preço:"+transportadora.preco-entrega;color: Theme.onSurface;}
+                                            //         Text {text: "Tempo de Entrega:"+transportadora.tempo_de_entrega; color: Theme.onSurface;}
 
-                                                }
+                                            //     }
                                               
 
-                                            }
+                                            // }
                                         }   
                                        
                                         }     

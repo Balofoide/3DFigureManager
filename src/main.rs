@@ -13,7 +13,7 @@ use utils::impressora_handle::{
     editar_impressora, excluir_impressora, load_impressoras, load_price, register_impressora, total_filamento
 };
 use utils::sell_calculator::{atualizar_filamento, calcular_venda, total_vendas};
-use utils::api::frete::{resetar_transportadora, Calcular_Frete};
+use utils::api::frete::{resetar_transportadora, calcular_frete};
 use utils::settings_handle::{load_settings, load_tema, registrar_settings};
 use i_slint_backend_winit::WinitWindowAccessor;
 slint::include_modules!();
@@ -231,7 +231,7 @@ fn register_callbacks(ui: &AppWindow) {
             move || {
                 if let Some(ui) = ui_handle.upgrade() {
                 resetar_transportadora(&ui);
-                Calcular_Frete(&ui);
+                calcular_frete(&ui);
             }
         }
     });

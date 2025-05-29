@@ -1,10 +1,10 @@
 use reqwest::blocking::Client;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 use std::env;
 use slint::VecModel;
 use slint::Model;
 use slint::ModelRc;
-use crate::{AppWindow, Database, Calculo_Entrega};
+use crate::{AppWindow,Calculo_Entrega};
 
 
 #[derive(Serialize)]
@@ -39,14 +39,7 @@ struct Options {
     non_commercial: bool,
 }
 
-#[derive(Deserialize, Debug)]
-struct FreightResult {
-    name: String,
-    price: String,
- 
- 
-    delivery_time: u32,
-}
+
 
 
 pub fn add_transportadora(ui: &AppWindow, nova_transportadora: Calculo_Entrega) {
@@ -70,7 +63,7 @@ pub fn resetar_transportadora(ui: &AppWindow){
     ui.set_calculo_entrega_database(ModelRc::new(vec_model));
 }
 
-pub fn Calcular_Frete(ui: &AppWindow){
+pub fn calcular_frete(ui: &AppWindow){
     dotenv::dotenv().ok();
     let cep_origem: String = ui.get_cep_origem().to_string();
     let cep_destino: String = ui.get_cep_destino().to_string();
