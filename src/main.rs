@@ -12,6 +12,7 @@ use utils::estoque_handle::{
 use utils::impressora_handle::{
     editar_impressora, excluir_impressora, load_impressoras, load_price, register_impressora, total_filamento
 };
+use crate::utils::api::carrinho::get_carrinho;
 use utils::sell_calculator::{atualizar_filamento, calcular_venda, total_vendas};
 use utils::api::frete::{resetar_transportadora, calcular_frete};
 use utils::settings_handle::{load_settings, load_tema, registrar_settings};
@@ -43,6 +44,7 @@ fn initialize_ui(ui: &AppWindow) -> Result<(), Box<dyn Error>> {
     load_settings(ui).expect("Erro ao carregar Settings");
     load_price(ui).expect("erro ao carregar preco do filamento");
     vendas_mes(ui).expect("erro ao somar vendas do mês");
+    get_carrinho(ui);
     // clock(ui);
     ui.set_vendas_total(total_vendas(ui));
     ui.set_filamento_total(total_filamento(ui));

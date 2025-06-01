@@ -80,18 +80,18 @@ pub fn calcular_frete(ui: &AppWindow){
             postal_code: cep_destino, // Destinatário
         },
         products: vec![Product {
-            width: 11.0,
-            height: 17.0,
-            length: 20.0,
-            weight: 0.3,
+            width: 0.0,
+            height: 0.0,
+            length: 0.0,
+            weight: 0.0,
             quantity: 1,
         }],
         options: Options {
-            insurance_value: 100.0,
+            insurance_value: 0.0,
             receipt: false,
             own_hand: false,
             reverse: false,
-            non_commercial: true,
+            non_commercial: false,
         },
         services: vec![], // vazio = retornar todos disponíveis
     };

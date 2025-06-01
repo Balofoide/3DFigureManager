@@ -4,7 +4,7 @@ import {Button, ComboBox, LineEdit,VerticalBox, HorizontalBox, GridBox, ListView
 import { dashboard_screen, dashboard-screen } from "screens/dashboard.slint";
 import { calculator_screen } from "screens/product_calculator.slint";
 import { estoque_screen} from "screens/estoque.slint";
-import { Database, Impressoras, Estoque-Database,Calculo_Entrega } from "shared.slint";
+import { Database, Impressoras, Estoque-Database,Calculo_Entrega,Carrinho} from "shared.slint";
 import { printer-screen } from "screens/printer.slint";
 import {settings_screen} from "screens/settings.slint";
 import { envio_screen } from "screens/envio.slint";
@@ -48,11 +48,14 @@ export component AppWindow inherits Window {
     in-out property <string> modelo;
     in-out property <string> input_modelo;
     in-out property <string> input_watts;
+    
     in-out property <[Impressoras]> impressoras;
     in-out property <[string]> impressoras_string;
     in-out property <[Database]> clients_database;
     in-out property <[Estoque-Database]> estoque_database;
     in-out property <[Calculo-Entrega]> calculo_entrega_database;
+    in-out property <[Carrinho]> carrinho_database;
+
     in-out property <string> estoque_material;
     in-out property <string> estoque_quantidade;
     in-out property <string> estoque_quantidade_total;
@@ -129,6 +132,7 @@ export component AppWindow inherits Window {
     callback atualizar_f_preco();
     callback carregar_tema();
     callback calcular_frete();
+    callback load_carrinho();
     no-frame: true;
     width: 1480px;
     combobox-selected: "Teste";
@@ -579,6 +583,7 @@ export component AppWindow inherits Window {
                                     cep_destino <=> cep_destino;
                                     frete <=> frete;
                                     calculo_entrega_database <=>calculo_entrega_database;
+                                    carrinho_database <=> carrinho_database;
                                     visible: true;
                                     width: parent.width;
                                     height: parent.height;
@@ -586,7 +591,9 @@ export component AppWindow inherits Window {
                                     calcular_frete => {
                                         calcular_frete();
                                     }
- 
+                                    load_carrinho => {
+                                        load_carrinho();
+                                    }
                                 }
 
                             }

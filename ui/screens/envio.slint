@@ -1,7 +1,7 @@
 import { Theme } from "../styling.slint";
 import { Container, SideButton, InputField, OverviewCard, BaloButton, CustomComboBox } from "../components.slint";
 import { Button, ComboBox, LineEdit, VerticalBox, HorizontalBox, GridBox, ListView } from "std-widgets.slint";
-import { Database, Impressoras, Estoque-Database,Calculo_Entrega } from "../shared.slint";
+import { Database, Impressoras, Estoque-Database,Calculo_Entrega,Carrinho} from "../shared.slint";
 
 
 
@@ -11,12 +11,15 @@ in-out property <[Database]> clients_database;
 in-out property <Database> selected_client;
 in-out property <[Calculo-Entrega]> calculo_entrega_database;
 
+
+in-out property <[Carrinho]> carrinho_database;
 in-out property <Calculo_Entrega> selected_transportadora;
 
 in-out property <string> frete;
 in-out property <string> cep_origem;
 in-out property <string> cep_destino;
 
+callback load_carrinho();
 
 callback  calcular_frete();
     Rectangle {
@@ -43,7 +46,7 @@ callback  calcular_frete();
                 BaloButton {
                     width: 150px;
                     height: 50px;
-                    texto: "Carrinho";
+                    texto: "Novo Envio";
                     background:!self.has-hover  ? Theme.primary : Theme.secondaryLight;
                     cor_texto: !self.has-hover ?  Theme.onPrimary :  Theme.onBackground;
                    
@@ -56,6 +59,7 @@ callback  calcular_frete();
             HorizontalBox {
                 VerticalLayout {
                     spacing: Theme.spacing;
+
                     Carrinho_Screen := PopupWindow{
                         width: parent.width;
                         height: parent.height;
@@ -73,56 +77,51 @@ callback  calcular_frete();
                                 shadow_blur: 10px;
                                 border_width: 1px;
                                 border_radius: 10px;
-                                
+
                                 VerticalBox {
-                                    
-                                    HorizontalBox {
-                                        Text {
-                                            vertical-alignment: center;
-                                            text: "Endereço Cliente";
-                                            color: Theme.onBackground;
-                                            font-weight: 800;
-                                            font-size: 20px;
-                                        }
-                                        BaloButton { width:80px; height: 40px;texto: "Voltar"; clicked => { Carrinho_Screen.close();}}
-                                        BaloButton {  width:80px; height: 40px; texto: "Confirmar";}     
-                                    }
 
-                                     HorizontalBox {
+                                        Text {text: "Carrinho"; color: Theme.onSurface; font-size: 20px;}
+                                        ListView {
+                                         
+                                            for item in carrinho_database : Container{
+                                                 
+                                                VerticalLayout {
 
-                                         VerticalLayout {
-                                                InputField {texto: "Nome";}
-                                                InputField {texto: "Cep Origem";}
-                                                InputField {texto: "Cep Destino";}
-                                                InputField {texto: "Cpf";}
-                                                InputField {texto: "Endereço";}
-                                           } 
-                                 
-                                 
-                                    
-                                       
-                                            VerticalLayout {
-                                                InputField {texto: "Numero";}
-                                                InputField {texto: "Distrito";}
-                                                InputField {texto: "Cidade";}
-                                                InputField {texto: "Estado_Abrev";}
+                                                    HorizontalLayout {
+                                                        Text {text: "Nome Destinatario: "; color:Theme.onSurface;}
+                                                        Text {text: item.nome_cliente_carrinho; color:Theme.onSurface;}
+                                                    }   
+                                                    
+                                                    HorizontalLayout {
+                                                        Text {text: "Id Pedido: "; color:Theme.onSurface;}
+                                                        Text {text: item.id-pedido; color:Theme.onSurface;}
+                                                    }
+                                                     
+                                                    HorizontalLayout {
+                                                        Text {text: "Preço: "; color:Theme.onSurface;}
+                                                        Text {text: item.preco; color:Theme.onSurface;}
+                                                    }
+                                                      HorizontalLayout {
+                                                        Text {text: "Transportadora: "; color:Theme.onSurface;}
+                                                        Text {text: item.transportadora; color:Theme.onSurface;}
+                                                    }
+                                                      
+                                                }
+
+
+
+
                                             }
-                                    }
-                                                                  
- 
-                                             
-                                           
-                                        
-                                    
-                                                   
-                                   
-                                    
-                                }
-                              
+                                        }
+
+
+
+                                        }   
                             }
                         }
                         
                     }
+
                     Transportadoras := PopupWindow{
                         width: parent.width;
                         height: parent.height;
@@ -192,13 +191,245 @@ callback  calcular_frete();
                     }
                     GridBox {
                         Row {
-                            VerticalBox {
-                                HorizontalBox {
-                                    Container {
-                                        cor: Theme.surface;
+                            // VerticalBox {
+                            //     HorizontalBox {
+                            //         Container {
+                            //             cor: Theme.surface;
 
-                                        VerticalBox {
-                                            HorizontalBox {
+                            //             VerticalBox {
+                            //                 HorizontalBox {
+                            //                     Text {
+                            //                         text: "Cliente";
+                            //                         color: Theme.onSurface;
+                            //                         font-weight: 700;
+                            //                         horizontal-alignment: center;
+                            //                     }
+
+                            //                     Text {
+                            //                         text: "Modelo";
+                            //                         color: Theme.onSurface;
+                            //                         font-weight: 700;
+                            //                         horizontal-alignment: center;
+                            //                     }
+                            //                 }
+
+                            //                 for client[index] in clients_database: TouchArea {
+                            //                 clicked => {
+                                                
+                            //                     root.selected_client = root.clients_database[index];
+                            //                     cep_destino = selected_client.cep;
+                            //                     // Detalhes_Pedido.visible = true;
+                            //                     // Pedido_Status.current-value = selected_client.status;
+                                                 
+                            //                 }
+                            //                  property <bool> selected_hover <=> self.has-hover;
+ 
+                                            
+                            //                 // spacing: Theme.spacing;
+                            //                 // padding: Theme.spacing;
+                            //                fundo_client := Rectangle {
+                            //                     width: 98%;
+                            //                     height: 90%;
+                            //                     padding: 8px;
+                            //                     // border-radius: 5px;
+                            //                     // drop-shadow-offset-y: 1px;  
+                            //                     background: !selected_hover && selected_client.id != client.id? Theme.background:Theme.secondaryLight;
+
+                                                
+
+
+                            //                     HorizontalBox {
+                            //                         alignment: center;
+                            //                         Rectangle {
+                            //                             width: 25%;
+                            //                             Text {
+                            //                                 text: client.nome;
+                            //                                 color: Theme.onSurface;
+                            //                                 horizontal-alignment: center;
+                            //                                 overflow: elide;
+                            //                             }
+                            //                         }
+    
+                            //                         Rectangle {
+                            //                             width: 25%;
+                            //                             Text {
+                            //                                 text: client.modelo;
+                            //                                 color: Theme.onSurface;
+                            //                                 horizontal-alignment: center;
+                            //                             }
+                            //                         }
+    
+                                                    
+    
+                                                    
+                            //                     }
+                            //                 }
+                            //             }
+                                          
+                            //             }
+                            //         }
+
+                               
+                            //     }
+                            // }
+                            // HorizontalBox {
+                            //     VerticalBox {
+                                    
+ 
+                            //         Container {
+                            //             cor: Theme.surface;
+                                        
+                            //             Text {
+                                          
+                            //                 Text {
+                            //                     visible: false; 
+                            //                     text: "Selecione um pedido!";
+                            //                     color: Theme.onSurface;
+                            //                     font-size: 25px;
+                            //                 }
+                            //             }
+
+                            //            Detalhes_impressora := GridBox {
+                            //             Row {
+                            //                  VerticalBox {
+                            //                  Text {text: "Frete"; color: Theme.onSurface; font-size: 25px;}
+                            //                 VerticalBox {
+                                            
+                            //                     height: 10%;
+                            //                      InputField {texto: "Cep Destino"; input<=>cep_destino;}
+                            //                       InputField {texto: "Cep Origem"; input<=>cep_origem;}
+                            //                       BaloButton {texto: "Calcular Frete"; clicked => {calcular_frete(); Transportadoras.show()}}
+                            //                 }
+
+                                           
+                            //                 // for transportadora in  calculo_entrega_database: Container{
+
+                            //                 //     VerticalBox {
+                            //                 //         Text {text: "Nome:"+transportadora.nome-transportadora;color: Theme.onSurface;}
+                            //                 //         Text {text: "Preço:"+transportadora.preco-entrega;color: Theme.onSurface;}
+                            //                 //         Text {text: "Tempo de Entrega:"+transportadora.tempo_de_entrega; color: Theme.onSurface;}
+
+                            //                 //     }
+                                              
+
+                            //                 // }
+                            //             }   
+                                       
+                            //             }     
+                                       
+
+ 
+
+                                       
+                            //             }
+                            //         }
+                            //     }
+                            // }
+                            Container {
+
+                                   VerticalBox {
+
+                                        Text {text: "Carrinho"; color: Theme.onSurface; font-size: 20px;}
+                                        ListView {
+                                         
+                                            for item in carrinho_database : Container{
+                                                 
+                                                HorizontalBox {
+
+                                                    HorizontalBox {
+                                                        Text {text: "Nome Destinatario:"; color:Theme.onSurface;font-size: Theme.fontSizeBody;}
+                                                        Text {text: item.nome_cliente_carrinho; color:Theme.onSurface;font-size: Theme.fontSizeBody;}        
+                                                    }
+                                                 
+                                                    HorizontalBox {
+                                                        Text {text: "Preço:"; color:Theme.onSurface;font-size: Theme.fontSizeBody;}
+                                                        Text {text: item.preco; color:Theme.onSurface;font-size: Theme.fontSizeBody;}
+                                                    }                       
+                                                    
+                                                    HorizontalBox {     
+                                                        Text {text: "Transportadora:"; color:Theme.onSurface;font-size: Theme.fontSizeBody;}
+                                                        Text {text: item.transportadora; color:Theme.onSurface;font-size: Theme.fontSizeBody;}
+                                                    }
+                                                   
+                                                      
+                                                }
+
+
+
+
+                                            }
+                                        }
+
+
+
+                                        }   
+                            }
+                            Container {}
+                            
+                        }
+
+                        Row {
+                            Container {
+                                VerticalBox {
+                                    Text {text: "Calcular Frete"; color: Theme.onSurface; font-size:20px;}
+
+
+                                    HorizontalBox {
+                                        Container {
+                                            width: 200px;
+                                            min-height: 400px;
+                                            VerticalLayout {
+                                                alignment: center;
+                                                InputField {texto: "Cep Destino"; input<=>cep_destino;}
+                                                InputField {texto: "Cep Origem"; input<=>cep_origem;}
+                                               
+                                            }
+                                         
+                                            VerticalBox {
+                                                alignment: end;
+                                                 BaloButton {texto: "Calcular Frete"; clicked => {calcular_frete();   Alerta_transportadora.visible=false; Transportadora_title.visible=true;}}
+                                            }
+                                        }
+                                        Container {
+                                            VerticalBox {
+                                              Transportadora_title :=  Text { visible:false;text: "Transportadoras"; color: Theme.onSurface; font-size: 20px; horizontal-alignment: center;}
+                                               
+                                                
+                                                ListView { 
+                                                    for transportadora in  calculo_entrega_database: Container{   
+
+                                                            VerticalBox {
+                                                            Text {text: "Nome:"+transportadora.nome-transportadora;color: Theme.onSurface;}
+                                                            Text {text: "Preço:"+transportadora.preco-entrega+"R$";color: Theme.onSurface;}
+                                                            Text {text: "Tempo de Entrega:"+transportadora.tempo_de_entrega+" Dias"; color: Theme.onSurface;}
+                                                            }                                                  
+                                                    }
+
+                                                }
+
+                                            }
+                                            Alerta_transportadora:=Text { horizontal-alignment:center;vertical-alignment:center;text: "Vazio!"; color: Theme.onSurface; font-size: 20px;}
+                                          
+                                        }
+                                    }
+
+                                }
+
+                                           
+                                
+
+                            }
+                            
+                            
+                            
+                            
+                            Container {
+                                min-width: 500px;
+                                min-height: 500px;
+                                VerticalBox {
+                                    alignment: start;
+                                    Text {text: "Pedidos"; color: Theme.onSurface; font-size: Theme.fontSizeTitle;}
+                                     HorizontalBox {
                                                 Text {
                                                     text: "Cliente";
                                                     color: Theme.onSurface;
@@ -213,8 +444,9 @@ callback  calcular_frete();
                                                     horizontal-alignment: center;
                                                 }
                                             }
-
-                                            for client[index] in clients_database: TouchArea {
+                                       VerticalBox {
+                                          
+                                        for client[index] in clients_database: TouchArea {
                                             clicked => {
                                                 
                                                 root.selected_client = root.clients_database[index];
@@ -266,66 +498,13 @@ callback  calcular_frete();
                                                 }
                                             }
                                         }
+                                    }
                                           
                                         }
-                                    }
-                                }
+                                  
+                       
+
                             }
-                            HorizontalBox {
-                                VerticalBox {
-                                    
- 
-                                    Container {
-                                        cor: Theme.surface;
-                                        
-                                        Text {
-                                          
-                                            Text {
-                                                visible: false; 
-                                                text: "Selecione um pedido!";
-                                                color: Theme.onSurface;
-                                                font-size: 25px;
-                                            }
-                                        }
-
-                                       Detalhes_impressora := GridBox {
-                                        Row {
-                                             VerticalBox {
-                                             Text {text: "Frete"; color: Theme.onSurface; font-size: 25px;}
-                                            VerticalBox {
-                                            
-                                                height: 10%;
-                                                 InputField {texto: "Cep Destino"; input<=>cep_destino;}
-                                                  InputField {texto: "Cep Origem"; input<=>cep_origem;}
-                                                  BaloButton {texto: "Calcular Frete"; clicked => {calcular_frete(); Transportadoras.show()}}
-                                            }
-
-                                           
-                                            // for transportadora in  calculo_entrega_database: Container{
-
-                                            //     VerticalBox {
-                                            //         Text {text: "Nome:"+transportadora.nome-transportadora;color: Theme.onSurface;}
-                                            //         Text {text: "Preço:"+transportadora.preco-entrega;color: Theme.onSurface;}
-                                            //         Text {text: "Tempo de Entrega:"+transportadora.tempo_de_entrega; color: Theme.onSurface;}
-
-                                            //     }
-                                              
-
-                                            // }
-                                        }   
-                                       
-                                        }     
-                                       
-
- 
-
-                                       
-                                        }
-                                    }
-                                }
-                            }
-
-                            
                         }
                     }
                 }
@@ -334,4 +513,58 @@ callback  calcular_frete();
 
       
     }
+
+        //  HorizontalBox {
+        //                         VerticalBox {
+                                    
+ 
+        //                             // Container {
+        //                             //     cor: Theme.surface;
+                                        
+        //                             //     Text {
+                                          
+        //                             //         Text {
+        //                             //             visible: false; 
+        //                             //             text: "Selecione um pedido!";
+        //                             //             color: Theme.onSurface;
+        //                             //             font-size: 25px;
+        //                             //         }
+        //                             //     }
+
+        //                             //    Detalhes_impressora := GridBox {
+        //                             //     Row {
+        //                             //          VerticalBox {
+        //                             //          Text {text: "Frete"; color: Theme.onSurface; font-size: 25px;}
+        //                             //         VerticalBox {
+                                            
+        //                             //             height: 10%;
+        //                             //              InputField {texto: "Cep Destino"; input<=>cep_destino;}
+        //                             //               InputField {texto: "Cep Origem"; input<=>cep_origem;}
+        //                             //               BaloButton {texto: "Calcular Frete"; clicked => {calcular_frete(); Transportadoras.show()}}
+        //                             //         }
+
+                                           
+        //                             //         // for transportadora in  calculo_entrega_database: Container{
+
+        //                             //         //     VerticalBox {
+        //                             //         //         Text {text: "Nome:"+transportadora.nome-transportadora;color: Theme.onSurface;}
+        //                             //         //         Text {text: "Preço:"+transportadora.preco-entrega;color: Theme.onSurface;}
+        //                             //         //         Text {text: "Tempo de Entrega:"+transportadora.tempo_de_entrega; color: Theme.onSurface;}
+
+        //                             //         //     }
+                                              
+
+        //                             //         // }
+        //                             //     }   
+                                       
+        //                             //     }     
+                                       
+
+ 
+
+                                       
+        //                             //     }
+        //                             // }
+        //                         }
+        //                     }
 }
