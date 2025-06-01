@@ -36,9 +36,9 @@ struct Options {
 
 #[derive(Deserialize, Debug)]
 struct FreightResult {
-    name: String,
-    price: String,
-    delivery_time: u32,
+    // name: String,
+    // price: String,
+    // delivery_time: u32,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {

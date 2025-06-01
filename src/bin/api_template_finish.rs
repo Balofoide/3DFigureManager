@@ -2,7 +2,6 @@
 
 use reqwest::blocking::Client;
 use reqwest::header::{AUTHORIZATION, CONTENT_TYPE};
-use reqwest::{Request, Url};
 use serde_json::json;
 use dotenv::dotenv;
 use std::env;
