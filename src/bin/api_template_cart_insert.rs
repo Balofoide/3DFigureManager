@@ -152,7 +152,7 @@ async fn main() -> Result<()> {
             address: "Rua Principal".to_string(),
             complement: "".to_string(),
             number: "123".to_string(),
-            district: "Jardim Paulista".to_string(),
+            district: "".to_string(),
             city: "São Paulo".to_string(),
             state_abbr: "SP".to_string(), // UF com 2 caracteres
             country_id: "BR".to_string(),
@@ -168,7 +168,7 @@ async fn main() -> Result<()> {
             address: "Avenida Secundária".to_string(),
             complement: "".to_string(),
             number: "456".to_string(),
-            district: "Jardim Paulista".to_string(),
+            district: "".to_string(),
             city: "São Paulo".to_string(),
             state_abbr: "SP".to_string(),
             country_id: "BR".to_string(),

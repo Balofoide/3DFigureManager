@@ -1,6 +1,6 @@
 import { Theme } from "../styling.slint";
 import { Container, SideButton, InputField, OverviewCard, BaloButton, CustomComboBox } from "../components.slint";
-import { Button, ComboBox, LineEdit, VerticalBox, HorizontalBox, GridBox, ListView } from "std-widgets.slint";
+import { Button, ComboBox, LineEdit, VerticalBox, HorizontalBox, GridBox, ListView, CheckBox } from "std-widgets.slint";
 import { Database, Impressoras, Estoque-Database,Calculo_Entrega,Carrinho} from "../shared.slint";
 
 
@@ -15,14 +15,41 @@ in-out property <[Calculo-Entrega]> calculo_entrega_database;
 in-out property <[Carrinho]> carrinho_database;
 in-out property <Calculo_Entrega> selected_transportadora;
 
+
 in-out property <string> frete;
 in-out property <string> cep_origem;
 in-out property <string> cep_destino;
 
-callback load_carrinho();
+// Remetente
+in-out property <string> remetente_nome;
+in-out property <string> remetente_cpf;
+in-out property <string> remetente_cep;
+in-out property <string> remetente_endereco;
+in-out property <string> remetente_numero;
+in-out property <string> remetente_estado;
+in-out property <string> remetente_cidade;
+// Destinatario
+in-out property <string> destinatario_nome;
+in-out property <string> destinatario_cpf;
+in-out property <string> destinatario_cep;
+in-out property <string> destinatario_endereco;
+in-out property <string> destinatario_numero;
+in-out property <string> destinatario_estado;
+in-out property <string> destinatario_cidade;
+// Pacote
 
+in-out property <string> pacote_widht;
+in-out property <string> pacote_height;
+in-out property <string> pacote_largura;
+in-out property <string> pacote_peso;
+in-out property <string> pacote_nome_produto;
+in-out property <string> pacote_quantidade;
+in-out property <string> pacote_preco;
+
+callback load_carrinho();
 callback  calcular_frete();
-    Rectangle {
+
+  Envio_menu :=  Rectangle { visible: true;
         width: parent.width;
         height: parent.height;
         background: Theme.background;
@@ -51,7 +78,8 @@ callback  calcular_frete();
                     cor_texto: !self.has-hover ?  Theme.onPrimary :  Theme.onBackground;
                    
                     clicked => {
-                        Carrinho_Screen.show();
+                        Envio_menu.visible=false;
+                        Novo_envio.visible=true;
                     }
                 }
             }
@@ -65,7 +93,7 @@ callback  calcular_frete();
                         height: parent.height;
                         close-policy: close-on-click-outside;
                         x: parent.width / 200;
-                        y: parent.height *0.5;
+                        y: parent.height * 0.5;
                         VerticalLayout {
                             width: 600px;
                             height: 500px;
@@ -364,7 +392,13 @@ callback  calcular_frete();
 
                                         }   
                             }
-                            Container {}
+                            Container {
+                                VerticalBox {
+                                    Text {text: "Etiquetas"; color: Theme.onSurface; font-size: 20px;}
+                                }
+
+
+                            }
                             
                         }
 
@@ -399,16 +433,16 @@ callback  calcular_frete();
                                                     for transportadora in  calculo_entrega_database: Container{   
 
                                                             VerticalBox {
-                                                            Text {text: "Nome:"+transportadora.nome-transportadora;color: Theme.onSurface;}
-                                                            Text {text: "Preço:"+transportadora.preco-entrega+"R$";color: Theme.onSurface;}
-                                                            Text {text: "Tempo de Entrega:"+transportadora.tempo_de_entrega+" Dias"; color: Theme.onSurface;}
+                                                                Text {text: "Nome:"+transportadora.nome-transportadora;color: Theme.onSurface;}
+                                                                Text {text: "Preço:"+transportadora.preco-entrega+"R$";color: Theme.onSurface;}
+                                                                Text {text: "Tempo de Entrega:"+transportadora.tempo_de_entrega+" Dias"; color: Theme.onSurface;}
                                                             }                                                  
                                                     }
 
                                                 }
 
                                             }
-                                            Alerta_transportadora:=Text { horizontal-alignment:center;vertical-alignment:center;text: "Vazio!"; color: Theme.onSurface; font-size: 20px;}
+                                            Alerta_transportadora := Text { horizontal-alignment:center;vertical-alignment:center;text: "Vazio!"; color: Theme.onSurface; font-size: 20px;}
                                           
                                         }
                                     }
@@ -512,59 +546,346 @@ callback  calcular_frete();
         }
 
       
+}
+ 
+
+    Novo_envio := Rectangle {visible: false;
+
+             HorizontalBox {
+            alignment: center;
+            GridBox {
+                width: 90%;
+                VerticalLayout {
+                    Text {
+                        text: "Novo Envio";
+                        color: Theme.onSurface;
+                        font-weight: 800;
+                        font-size: 40px;
+                    }
+                }
+
+                Row {
+                    GridBox {
+                        width: 90%;
+                        spacing: Theme.spacing;
+                        padding: Theme.spacing;
+                        Row {
+                            Container {
+                                width: 50%;
+                                cor: Theme.surface;
+                                VerticalBox {
+                                    padding: Theme.spacing;
+                                    Text {
+                                        text: "Remetente";
+                                        color: Theme.onSurface;
+                                        font-weight: 800;
+                                        font-size: 20px;
+                                    }
+
+                                    VerticalBox {
+                                        alignment: start;
+                                        padding: Theme.spacing;
+
+                                        HorizontalBox {
+                                            
+                                            alignment: center;
+                                        InputField {
+                                            width: 30%;
+                                            texto: "Nome da Loja";
+                                            max_lenght: 30;
+                                            input <=> remetente_nome;
+                                             
+                                        }
+                                        InputField {
+                                             width: 30%;
+                                            texto: "Cpf da Loja";
+                                            max_lenght: 47;
+                                            input <=> remetente_cpf;
+                                        }
+
+                                        InputField {
+                                             width: 30%;
+                                            texto: "Cep";
+                                            max_lenght: 47;
+                                            input <=> remetente_cep;
+                                             
+                                        }
+                                    }
+                                    HorizontalBox {
+                                        alignment: center;
+                                        InputField {
+                                             width: 30%;
+                                            texto: "Endereço";
+                                            max_lenght: 47;
+                                              input <=> remetente_endereco;
+                                        }
+                                        
+                                        InputField {
+                                             width: 30%;
+                                            texto: "Numero";
+                                            max_lenght: 47;
+                                            input <=> remetente_numero;
+                                             
+                                        }
+                                        
+                                        InputField {
+                                             width: 30%;
+                                            texto: "Estado Abrev";
+                                            max_lenght: 47;
+                                             input <=> remetente_estado;
+                                        }
+                                    }
+
+                                     HorizontalBox {
+                                        alignment: center;
+                                          InputField {
+                                             width: 30%;
+                                            texto: "Cidade";
+                                            max_lenght: 47;
+                                            input <=> remetente_cidade;
+                                             
+                                        }
+                                         
+                                     
+                                    }
+                                 
+                                        
+                                        
+                                    }
+                                }
+                            }
+
+                            Container {
+                                width: 50%;
+                                cor: Theme.surface;
+                                  VerticalBox {
+                                    padding: Theme.spacing;
+                                    Text {
+                                        text: "Destinatario";
+                                        color: Theme.onSurface;
+                                        font-weight: 800;
+                                        font-size: 20px;
+                                    }
+
+                                    VerticalBox {
+                                        alignment: start;
+                                        padding: Theme.spacing;
+
+                                        HorizontalBox {
+                                            
+                                            alignment: center;
+                                        InputField {
+                                            width: 30%;
+                                            texto: "Nome do cliente";
+                                            max_lenght: 30;
+                                             
+                                        }
+                                        InputField {
+                                             width: 30%;
+                                            texto: "Cpf do cliente";
+                                            max_lenght: 47;
+                                            
+                                        }
+
+                                        InputField {
+                                             width: 30%;
+                                            texto: "Cep";
+                                            max_lenght: 47;
+                                             
+                                        }
+                                    }
+                                    HorizontalBox {
+                                        alignment: center;
+                                        InputField {
+                                             width: 30%;
+                                            texto: "Endereço";
+                                            max_lenght: 47;
+                                             
+                                        }
+                                        
+                                        InputField {
+                                             width: 30%;
+                                            texto: "Numero";
+                                            max_lenght: 47;
+                                             
+                                        }
+                                        
+                                        InputField {
+                                             width: 30%;
+                                            texto: "Estado Abrev";
+                                            max_lenght: 47;
+                                             
+                                        }
+                                    }
+
+                                     HorizontalBox {
+                                        alignment: center;
+                                          InputField {
+                                             width: 30%;
+                                            texto: "Cidade";
+                                            max_lenght: 47;
+                                             
+                                        }
+                                        
+                                     
+                                    }
+                                 
+                                        
+                                        
+                                    }
+                                }
+                            }
+                        }
+
+                        Row {
+                            Container {
+                                cor: Theme.surface;
+                                VerticalBox {
+                                    padding: Theme.spacing;
+                                    Text {
+                                        text: "Pacote"; 
+                                        color: Theme.onSurface;
+                                        font-weight: 800;
+                                        font-size: 20px;
+                                    }
+
+                                    VerticalBox {
+                                        
+                                        alignment: start;
+                                        HorizontalBox {
+                                            alignment: center;
+                                           
+                                            InputField {
+                                                width: 20%;
+                                            max_lenght: 47;
+                                            texto: "Tamanho";
+                                             
+                                            }
+                                            InputField {
+                                                
+                                                width: 20%;
+                                                max_lenght: 47;
+                                                texto: "Altura";
+                                                
+                                            }
+                                            InputField {
+                                                width: 20%;
+                                                max_lenght: 47;
+                                                texto: "Largura";
+                                                
+                                            }
+                                            InputField {
+                                                width: 20%;
+                                                max_lenght: 47;
+                                                texto: "Peso";
+                                                
+                                            }
+                                        }
+                                        
+                                        HorizontalBox {
+                                            alignment: center;
+                                           
+                                            InputField {
+                                                width: 20%;
+                                            max_lenght: 47;
+                                            texto: "Nome do produto";
+                                             
+                                            }
+                                            InputField {
+                                                
+                                                width: 20%;
+                                                max_lenght: 47;
+                                                texto: "Quantidade";
+                                                
+                                            }
+                                            InputField {
+                                                width: 20%;
+                                                max_lenght: 47;
+                                                texto: "Preço";
+                                                
+                                            }
+                                            
+                                        }
+
+                                          
+
+                                        
+
+                                        VerticalLayout {
+                                            spacing: Theme.spacing;
+                                        
+                                            // width: 50%;
+                                            height: 5%;
+                                            // Rectangle{height: 90%;width: 100px;}
+                                            VerticalBox {        
+                                                 spacing: Theme.spacing;
+                                            padding: Theme.spacing;
+                                                width: 50%;                                               
+                                                // height: 30px;
+                                                HorizontalLayout {
+                                                    spacing: Theme.spacing;
+                                                    Rectangle { 
+                                                        
+                                                        background: black;
+                                                            // width: 100px;
+                                                            BaloButton {
+                                                                width: 100%;
+                                                            
+                                                                texto: "Voltar";
+                                                                
+                                                                 
+                                                            }
+                                                        }
+
+                                                }
+                                                
+                                               
+                                                
+                                            }
+                                        }
+
+                                    }
+                                    
+                                }
+                                
+                            }
+
+                            Container {
+                                cor: Theme.surface;
+                                VerticalBox {
+                                    alignment: start;
+                                    padding: Theme.spacing;
+                                    Text {
+                                        text: "Opções de Serviço";
+                                        color: Theme.onSurface;
+                                        font-weight: 800;
+                                        font-size: 20px;
+                                    }
+                                    InputField {
+                                                width: 20%;
+                                                max_lenght: 47;
+                                                texto: "Seguro";
+                                                
+                                            }
+                                            // width: 50%;
+                                            height: 20px;
+                                    SideButton {
+                                                texto: "Concluir";
+                                                
+                                            }
+                                            
+                          
+                                     
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
     }
 
-        //  HorizontalBox {
-        //                         VerticalBox {
-                                    
- 
-        //                             // Container {
-        //                             //     cor: Theme.surface;
-                                        
-        //                             //     Text {
-                                          
-        //                             //         Text {
-        //                             //             visible: false; 
-        //                             //             text: "Selecione um pedido!";
-        //                             //             color: Theme.onSurface;
-        //                             //             font-size: 25px;
-        //                             //         }
-        //                             //     }
 
-        //                             //    Detalhes_impressora := GridBox {
-        //                             //     Row {
-        //                             //          VerticalBox {
-        //                             //          Text {text: "Frete"; color: Theme.onSurface; font-size: 25px;}
-        //                             //         VerticalBox {
-                                            
-        //                             //             height: 10%;
-        //                             //              InputField {texto: "Cep Destino"; input<=>cep_destino;}
-        //                             //               InputField {texto: "Cep Origem"; input<=>cep_origem;}
-        //                             //               BaloButton {texto: "Calcular Frete"; clicked => {calcular_frete(); Transportadoras.show()}}
-        //                             //         }
-
-                                           
-        //                             //         // for transportadora in  calculo_entrega_database: Container{
-
-        //                             //         //     VerticalBox {
-        //                             //         //         Text {text: "Nome:"+transportadora.nome-transportadora;color: Theme.onSurface;}
-        //                             //         //         Text {text: "Preço:"+transportadora.preco-entrega;color: Theme.onSurface;}
-        //                             //         //         Text {text: "Tempo de Entrega:"+transportadora.tempo_de_entrega; color: Theme.onSurface;}
-
-        //                             //         //     }
-                                              
-
-        //                             //         // }
-        //                             //     }   
-                                       
-        //                             //     }     
-                                       
-
- 
-
-                                       
-        //                             //     }
-        //                             // }
-        //                         }
-        //                     }
 }

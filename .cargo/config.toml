@@ -1,5 +1,5 @@
 [target.x86_64-pc-windows-msvc]
-rustflags = ["-C", "link-arg=/STACK:2000000"]
+rustflags = ["-C", "link-arg=/STACK:3000000"]
 
 [target.x86_64-pc-windows-gnu]
-rustflags = ["-C", "link-arg=--stack=2000000"]
+rustflags = ["-C", "link-arg=--stack=3000000"]

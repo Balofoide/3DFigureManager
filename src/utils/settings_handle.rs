@@ -14,6 +14,14 @@ struct JsonSettings {
     lucro: String,
     energia: String,
     tema: String,
+    remetente_nome: String,
+    remetente_cep: String,
+    remetente_endereco: String,
+    remetente_cpf: String,
+    remetente_numero: String,
+    remetente_estado: String,
+    remetente_cidade: String,
+    
 }
 
 pub fn set_settings(ui: &AppWindow) {
@@ -24,8 +32,8 @@ pub fn set_settings(ui: &AppWindow) {
     ui.set_lucro(settings_lucro.into());
 }
 
-pub fn save_settings(energia: String, lucro: String,tema: String) -> std::io::Result<()> {
-    let client_data = JsonSettings { energia, lucro, tema};
+pub fn save_settings(energia: String, lucro: String,tema: String,remetente_nome:String, remetente_cep:String,remetente_endereco:String,remetente_cpf:String, remetente_numero:String, remetente_estado:String,remetente_cidade:String) -> std::io::Result<()> {
+    let client_data = JsonSettings { energia, lucro, tema, remetente_nome, remetente_cep, remetente_endereco, remetente_cpf, remetente_numero, remetente_estado, remetente_cidade };
 
     let mut file = OpenOptions::new()
         .write(true)
@@ -41,7 +49,7 @@ pub fn save_settings(energia: String, lucro: String,tema: String) -> std::io::Re
 
 pub fn registrar_settings(ui: &AppWindow) {
     set_settings(ui);
-   let _= save_settings(ui.get_energia().to_string(), ui.get_lucro().to_string(),ui.get_tema().to_string());
+   let _= save_settings(ui.get_energia().to_string(), ui.get_lucro().to_string(),ui.get_tema().to_string(),ui.get_remetente_nome().to_string(),ui.get_remetente_cep().to_string(),ui.get_remetente_endereco().to_string(),ui.get_remetente_cpf().to_string(),ui.get_remetente_numero().to_string(),ui.get_remetente_estado().to_string(),ui.get_remetente_cidade().to_string());
 }
 
 pub fn load_settings(ui: &AppWindow) -> std::io::Result<()> {
@@ -60,10 +68,24 @@ pub fn load_settings(ui: &AppWindow) -> std::io::Result<()> {
         let energia_json = json_client.energia;
         let lucro_json = json_client.lucro;
         let tema = json_client.tema;
+        let remetente_nome = json_client.remetente_nome;
+        let remetente_cep = json_client.remetente_cep;
+        let remetente_endereco = json_client.remetente_endereco;
+        let remetente_cpf = json_client.remetente_cpf;
+        let remetente_numero = json_client.remetente_numero;
+        let remetente_estado = json_client.remetente_estado;
+        let remetente_cidade = json_client.remetente_cidade;
 
         ui.set_settings_energia(energia_json.clone().into());
         ui.set_settings_lucro(lucro_json.clone().into());
         ui.set_tema(tema.clone().into());
+        ui.set_remetente_nome(remetente_nome.clone().into());
+        ui.set_remetente_cep(remetente_cep.into());
+        ui.set_remetente_endereco(remetente_endereco .into());
+        ui.set_remetente_cpf(remetente_cpf.into());
+        ui.set_remetente_numero(remetente_numero.into());
+        ui.set_remetente_estado(remetente_estado.into());
+        ui.set_remetente_cidade(remetente_cidade.into());
 
         ui.set_energia(energia_json.clone().into());
         ui.set_lucro(lucro_json.clone().into());

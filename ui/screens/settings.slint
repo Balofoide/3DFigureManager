@@ -15,6 +15,15 @@ export component settings_screen {
     in-out property <string> settings_lucro;
     in-out property <string> tema : "Light";
 
+
+    in-out property <string> remetente_nome;
+    in-out property <string> remetente_cpf;
+    in-out property <string> remetente_cep;
+    in-out property <string> remetente_endereco;
+    in-out property <string> remetente_numero;
+    in-out property <string> remetente_estado;
+    in-out property <string> remetente_cidade;
+
     callback registrar_settings();
     callback dashboard();
     callback carregar_tema();
@@ -115,22 +124,26 @@ export component settings_screen {
                                                     VerticalLayout {
                                                         width: 50%;
                                                         InputField {
+                                                            max_lenght: 60;
                                                         texto: "Nome da Loja:";
-                                                        input <=> settings_lucro;
+                                                        input <=> remetente_nome;
                                                     }
                                                     InputField {
                                                         texto: "Cpf:";
-                                                        input <=> settings_lucro;
+                                                         max_lenght: 60;
+                                                        input <=> remetente_cpf;
                                                     }
                                                     
                                                     InputField {
                                                         texto: "Endereço:";
-                                                        input <=> settings_lucro;
+                                                         max_lenght: 60;
+                                                        input <=> remetente_endereco;
                                                     }
                                                     
                                                       InputField {
                                                         texto: "Numero:";
-                                                        input <=> settings_lucro;
+                                                         max_lenght: 60;
+                                                        input <=> remetente_numero;
                                                     }
                                                    
 
@@ -139,21 +152,21 @@ export component settings_screen {
                                               
                                                 VerticalLayout {
                                                     width: 50%;
-                                                     InputField {
-                                                        texto: "Bairo:";
-                                                        input <=> settings_lucro;
-                                                    }
+                                                   
                                                       InputField {
                                                         texto: "Cidade:";
-                                                        input <=> settings_lucro;
+                                                         max_lenght: 60;
+                                                        input <=> remetente_cidade;
                                                     }
                                                     InputField {
                                                         texto: "Cep:";
-                                                        input <=> settings_lucro;
+                                                         max_lenght: 60;
+                                                        input <=> remetente_cep;
                                                     }
                                                     InputField {
                                                         texto: "Estado:";
-                                                        input <=> settings_lucro;
+                                                         max_lenght: 60;
+                                                        input <=> remetente_estado;
                                                     }
                                                 }
                                             

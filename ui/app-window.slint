@@ -115,6 +115,35 @@ export component AppWindow inherits Window {
     in-out property <string> cep_destino;
     in-out property <string> frete;
 
+
+
+    
+    // Remetente
+    in-out property <string> remetente_nome;
+    in-out property <string> remetente_cpf;
+    in-out property <string> remetente_cep;
+    in-out property <string> remetente_endereco;
+    in-out property <string> remetente_numero;
+    in-out property <string> remetente_estado;
+    in-out property <string> remetente_cidade;
+    // Destinatario
+    in-out property <string> destinatario_nome;
+    in-out property <string> destinatario_cpf;
+    in-out property <string> destinatario_cep;
+    in-out property <string> destinatario_endereco;
+    in-out property <string> destinatario_numero;
+    in-out property <string> destinatario_estado;
+    in-out property <string> destinatario_cidade;
+    // Pacote
+
+    in-out property <string> pacote_widht;
+    in-out property <string> pacote_height;
+    in-out property <string> pacote_largura;
+    in-out property <string> pacote_peso;
+    in-out property <string> pacote_nome_produto;
+    in-out property <string> pacote_quantidade;
+    in-out property <string> pacote_preco;
+
     callback calcular_preco();
     callback registrar_cliente();
     callback registrar_impressora();
@@ -567,6 +596,14 @@ export component AppWindow inherits Window {
                                     settings_lucro <=> settings_lucro;
                                     settings_energia <=> settings_energia;
                                     tema <=> tema;
+                                    
+                                    remetente_nome  <=> remetente_nome;
+                                    remetente_cpf <=> remetente_cpf;
+                                    remetente_cep <=> remetente_cep;
+                                    remetente_endereco <=> remetente_endereco;
+                                    remetente_numero <=> remetente_numero;
+                                    remetente_estado <=> remetente_estado;
+                                    remetente_cidade <=> remetente_cidade;
                                     registrar_settings => {
                                         registrar_settings();
                                     }
@@ -587,6 +624,30 @@ export component AppWindow inherits Window {
                                     visible: true;
                                     width: parent.width;
                                     height: parent.height;
+
+
+                                    remetente_nome  <=> remetente_nome;
+                                    remetente_cpf <=> remetente_cpf;
+                                    remetente_cep <=> remetente_cep;
+                                    remetente_endereco <=> remetente_endereco;
+                                    remetente_numero <=> remetente_numero;
+                                    remetente_estado <=> remetente_estado;
+                                    remetente_cidade <=> remetente_cidade;
+                                    destinatario_nome <=> destinatario_nome;
+                                    destinatario_cpf <=> destinatario_cpf;
+                                    destinatario_cep <=> destinatario_cep;
+                                    destinatario_endereco <=> destinatario_endereco;
+                                    destinatario_numero <=> destinatario_numero;
+                                    destinatario_estado <=>  destinatario_estado;
+                                    destinatario_cidade <=> destinatario_cidade;
+                                    pacote_widht <=> pacote_widht;
+                                    pacote_height <=> pacote_height;
+                                    pacote_largura <=> pacote_largura;
+                                    pacote_peso <=> pacote_peso;
+                                    pacote_nome_produto <=> pacote_nome_produto;
+                                    pacote_quantidade <=> pacote_quantidade;
+                                    pacote_preco <=> pacote_preco;
+
 
                                     calcular_frete => {
                                         calcular_frete();
