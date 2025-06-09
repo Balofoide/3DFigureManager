@@ -139,14 +139,14 @@ async fn add_to_cart(request: CartRequest) -> Result<CartResponse> {
 #[tokio::main]
 async fn main() -> Result<()> {
    let request = CartRequest {
-        service: 2, // ID do serviço (ex: 2 = Sedex)
+        service: 3, // ID do serviço (ex: 2 = Sedex)
         agency: None, // Preencher se necessário
         
         // Endereço de origem
         from: Address {
             postal_code: "01001000".to_string(), // CEP sem hífen
             name: "Loja Exemplo Ltda".to_string(),
-            phone: "".to_string(), // Telefone com DDD
+            phone: "11111111111".to_string(), // Telefone com DDD
             email: "".to_string(),
             document: "12345678909".to_string(), // CPF/CNPJ
             address: "Rua Principal".to_string(),
@@ -162,7 +162,7 @@ async fn main() -> Result<()> {
         to: Address {
             postal_code: "02002000".to_string(),
             name: "Balofoide".to_string(),
-            phone: "".to_string(),
+            phone: "11111111111".to_string(),
             email: "".to_string(),
             document: "98765432100".to_string(),
             address: "Avenida Secundária".to_string(),
@@ -193,7 +193,7 @@ async fn main() -> Result<()> {
         
         // Opções do serviço
         options: CartOptions {
-            insurance_value: 100.00, // Valor do seguro
+            insurance_value: 1.0, // Valor do seguro
             receipt: true,           // Aviso de recebimento
             own_hand: false,         // Entrega mão própria
         }

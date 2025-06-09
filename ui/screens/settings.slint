@@ -81,7 +81,7 @@ export component settings_screen {
                                     cor: Theme.surface;
                                     VerticalBox {
 
-
+                                        	alignment: center;
 
                                         InputField {
                                                     input <=> settings_energia;
@@ -97,7 +97,7 @@ export component settings_screen {
                                     Container {
                                         width: 50%;
                                         cor:Theme.surface;
-
+                                        
                                         CustomComboBox {
                                                         model: ["Light","Dark","TealSunsetLight","TealSunsetDark","PastelDreamLight","PastelDreamDark"];
                                                         texto: "Tema";
@@ -118,6 +118,7 @@ export component settings_screen {
                                     Container {
                                         
                                         VerticalLayout {
+                                            alignment: center;
 
                                             HorizontalLayout {
                                                  
@@ -164,6 +165,12 @@ export component settings_screen {
                                                         input <=> remetente_cep;
                                                     }
                                                     InputField {
+                                                        texto: "Estado:";
+                                                         max_lenght: 60;
+                                                        input <=> remetente_estado;
+                                                    }
+                                                     InputField {
+                                                        visible: false;
                                                         texto: "Estado:";
                                                          max_lenght: 60;
                                                         input <=> remetente_estado;

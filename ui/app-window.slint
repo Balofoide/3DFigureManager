@@ -126,6 +126,7 @@ export component AppWindow inherits Window {
     in-out property <string> remetente_numero;
     in-out property <string> remetente_estado;
     in-out property <string> remetente_cidade;
+    in-out property <string> remetente_telefone;
     // Destinatario
     in-out property <string> destinatario_nome;
     in-out property <string> destinatario_cpf;
@@ -134,15 +135,23 @@ export component AppWindow inherits Window {
     in-out property <string> destinatario_numero;
     in-out property <string> destinatario_estado;
     in-out property <string> destinatario_cidade;
+    in-out property <string> destinatario_telefone;
     // Pacote
 
-    in-out property <string> pacote_widht;
+    in-out property <string> pacote_width;
     in-out property <string> pacote_height;
     in-out property <string> pacote_largura;
     in-out property <string> pacote_peso;
     in-out property <string> pacote_nome_produto;
     in-out property <string> pacote_quantidade;
     in-out property <string> pacote_preco;
+    in-out property <string> pacote_seguro;
+
+    in-out property <bool> aviso_recebimento;
+    in-out property <bool> own_hand;
+    in-out property <bool> entrega_reversa;
+
+    in-out property <string> servico_entrega;
 
     callback calcular_preco();
     callback registrar_cliente();
@@ -162,6 +171,8 @@ export component AppWindow inherits Window {
     callback carregar_tema();
     callback calcular_frete();
     callback load_carrinho();
+
+    callback adicionar_carrinho();
     no-frame: true;
     width: 1480px;
     combobox-selected: "Teste";
@@ -169,7 +180,7 @@ export component AppWindow inherits Window {
     background: transparent;
     height: 950px;
     title: "Figure Manager";
-    default-font-family: "Comic Sans MS";
+    default-font-family: "Times New Roman";
     
    
     callback move_window(length,length);
@@ -640,20 +651,29 @@ export component AppWindow inherits Window {
                                     destinatario_numero <=> destinatario_numero;
                                     destinatario_estado <=>  destinatario_estado;
                                     destinatario_cidade <=> destinatario_cidade;
-                                    pacote_widht <=> pacote_widht;
+                                    pacote_width <=> pacote_width;
                                     pacote_height <=> pacote_height;
                                     pacote_largura <=> pacote_largura;
                                     pacote_peso <=> pacote_peso;
                                     pacote_nome_produto <=> pacote_nome_produto;
                                     pacote_quantidade <=> pacote_quantidade;
                                     pacote_preco <=> pacote_preco;
+                                    pacote_seguro <=> pacote_seguro;
+                                    aviso_recebimento <=> aviso_recebimento;
+                                    own_hand <=> own_hand;
+                                    entrega_reversa <=> entrega_reversa;
 
-
+                                    servico_entrega <=> servico_entrega;
+                                    remetente_telefone <=> remetente_telefone;
+                                    destinatario_telefone <=> destinatario_telefone;
                                     calcular_frete => {
                                         calcular_frete();
                                     }
                                     load_carrinho => {
                                         load_carrinho();
+                                    }
+                                    adicionar_carrinho => {
+                                        adicionar_carrinho();
                                     }
                                 }
 

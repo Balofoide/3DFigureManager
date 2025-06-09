@@ -13,6 +13,7 @@ use utils::impressora_handle::{
     editar_impressora, excluir_impressora, load_impressoras, load_price, register_impressora, total_filamento
 };
 use crate::utils::api::carrinho::get_carrinho;
+use crate::utils::api::add_pedido::inserir_carrinho;
 use utils::sell_calculator::{atualizar_filamento, calcular_venda, total_vendas};
 use utils::api::frete::{resetar_transportadora, calcular_frete};
 use utils::settings_handle::{load_settings, load_tema, registrar_settings};
@@ -234,6 +235,15 @@ fn register_callbacks(ui: &AppWindow) {
                 if let Some(ui) = ui_handle.upgrade() {
                 resetar_transportadora(&ui);
                 calcular_frete(&ui);
+            }
+        }
+    });
+    ui.on_adicionar_carrinho({
+        let ui_handle = ui.as_weak();
+        move || {
+            if let Some(ui) = ui_handle.upgrade() {
+                inserir_carrinho(&ui);
+                get_carrinho(&ui);
             }
         }
     });

@@ -22,6 +22,8 @@ pub fn add_carrinho(ui: &AppWindow, novo_carrinho: Carrinho) {
 }
 
 pub fn get_carrinho(ui: &AppWindow) {
+    ui.set_carrinho_database(ModelRc::new(VecModel::default()));
+    
     dotenv::dotenv().ok();
     let token = env::var("ACCESS_TOKEN").expect("Erro ao acessar token");
     let client = Client::new();

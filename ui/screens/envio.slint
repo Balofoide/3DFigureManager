@@ -28,6 +28,7 @@ in-out property <string> remetente_endereco;
 in-out property <string> remetente_numero;
 in-out property <string> remetente_estado;
 in-out property <string> remetente_cidade;
+in-out property <string> remetente_telefone;
 // Destinatario
 in-out property <string> destinatario_nome;
 in-out property <string> destinatario_cpf;
@@ -36,18 +37,29 @@ in-out property <string> destinatario_endereco;
 in-out property <string> destinatario_numero;
 in-out property <string> destinatario_estado;
 in-out property <string> destinatario_cidade;
+in-out property <string> destinatario_telefone;
 // Pacote
 
-in-out property <string> pacote_widht;
+in-out property <string> pacote_width;
 in-out property <string> pacote_height;
 in-out property <string> pacote_largura;
 in-out property <string> pacote_peso;
 in-out property <string> pacote_nome_produto;
 in-out property <string> pacote_quantidade;
 in-out property <string> pacote_preco;
+in-out property <string> pacote_seguro;
+
+
+in-out property <bool> aviso_recebimento;
+in-out property <bool> own_hand;
+in-out property <bool> entrega_reversa;
+
+in-out property <string> servico_entrega;
 
 callback load_carrinho();
-callback  calcular_frete();
+callback calcular_frete();
+callback adicionar_carrinho();
+
 
   Envio_menu :=  Rectangle { visible: true;
         width: parent.width;
@@ -80,6 +92,14 @@ callback  calcular_frete();
                     clicked => {
                         Envio_menu.visible=false;
                         Novo_envio.visible=true;
+
+                        destinatario_cep = selected_client.cep;
+                        destinatario_cpf = selected_client.cpf;
+                        destinatario_nome = selected_client.nome;
+                        destinatario_endereco = selected_client.endereco;
+                        
+
+
                     }
                 }
             }
@@ -354,9 +374,9 @@ callback  calcular_frete();
                             //     }
                             // }
                             Container {
-
+                                 
                                    VerticalBox {
-
+                                   
                                         Text {text: "Carrinho"; color: Theme.onSurface; font-size: 20px;}
                                         ListView {
                                          
@@ -405,14 +425,17 @@ callback  calcular_frete();
                         Row {
                             Container {
                                 VerticalBox {
-                                    Text {text: "Calcular Frete"; color: Theme.onSurface; font-size:20px;}
+                                    
 
 
                                     HorizontalBox {
+                                        
                                         Container {
+                                            
                                             width: 200px;
-                                            min-height: 400px;
+                                            // min-height: 400px;
                                             VerticalLayout {
+                                                
                                                 alignment: center;
                                                 InputField {texto: "Cep Destino"; input<=>cep_destino;}
                                                 InputField {texto: "Cep Origem"; input<=>cep_origem;}
@@ -458,8 +481,8 @@ callback  calcular_frete();
                             
                             
                             Container {
-                                min-width: 500px;
-                                min-height: 500px;
+                                max-width: 500px;
+                                // min-height: 500px;
                                 VerticalBox {
                                     alignment: start;
                                     Text {text: "Pedidos"; color: Theme.onSurface; font-size: Theme.fontSizeTitle;}
@@ -525,10 +548,25 @@ callback  calcular_frete();
                                                             horizontal-alignment: center;
                                                         }
                                                     }
-    
-                                                    
-    
-                                                    
+                                                    HorizontalLayout {
+                                                        alignment: end;
+                                                        BaloButton {height:20px;texto: "Enviar";clicked => {
+                                                             selected_client =   root.clients_database[index];
+                                                                    Envio_menu.visible=false;
+                                                                    Novo_envio.visible=true;
+                                                                    Frete.visible = true;
+                                                                    Envio.visible = false;
+
+                                                                    destinatario_cep = selected_client.cep;
+                                                                    destinatario_cpf = selected_client.cpf;
+                                                                    destinatario_nome = selected_client.nome;
+                                                                    destinatario_endereco = selected_client.endereco;
+                                                                    pacote_preco = selected_client.preco;
+                                                                    pacote_nome_produto = selected_client.modelo;
+                                                                    pacote_quantidade = 1;
+                                                                }
+                                                        }
+                                                    }                                                    
                                                 }
                                             }
                                         }
@@ -550,10 +588,90 @@ callback  calcular_frete();
  
 
     Novo_envio := Rectangle {visible: false;
+          Frete := VerticalBox{
+                height: 100%;
+                width: 100%;
+                 VerticalLayout {
+                    Text {
+                        text: "Novo Envio";
+                        color: Theme.onSurface;
+                        font-weight: 800;
+                        font-size: 40px;
+                    }
+                }
+                HorizontalBox {
+                    
+                               Container {
+                                VerticalBox {
+                                    
+
+
+                                    HorizontalBox {
+                                        
+                                        Container {
+                                            
+                                            width: 200px;
+                                            // min-height: 400px;
+                                            VerticalLayout {
+                                                
+                                                alignment: center;
+                                                InputField {texto: "Cep Destino"; input<=>cep_destino;}
+                                                InputField {texto: "Cep Origem"; input<=>cep_origem;}
+                                               
+                                            }
+                                         
+                                            VerticalBox {
+                                                alignment: end;
+                                                 BaloButton {texto: "Calcular Frete"; clicked => {calcular_frete();   Alerta_transportadora2.visible=false; Transportadora_title2.visible=true; }}
+                                            }
+                                        }
+                                        Container {
+                                            VerticalBox {
+                                              Transportadora_title2 :=  Text { visible:false;text: "Transportadoras"; color: Theme.onSurface; font-size: 20px; horizontal-alignment: center;}
+                                               
+                                                
+                                                ListView { 
+                                                    for transportadora in  calculo_entrega_database: TouchArea{
+                                                        clicked => {selected_transportadora = transportadora; Frete.visible = false; Envio.visible = true;}
+                                                        property <bool> selected_hover <=> self.has-hover;
+
+                                                        
+                                                    Container{   
+                                                        cor: !selected_hover && selected_transportadora.id != transportadora.id? Theme.background:Theme.secondaryLight;
+                                                            VerticalBox {
+                                                                Text {text: "Nome:"+transportadora.nome-transportadora;color: Theme.onSurface;}
+                                                                Text {text: "Preço:"+transportadora.preco-entrega+"R$";color: Theme.onSurface;}
+                                                                Text {text: "Tempo de Entrega:"+transportadora.tempo_de_entrega+" Dias"; color: Theme.onSurface;}
+                                                            }                                                  
+                                                    }
+                                                    }
+                                                }
+
+                                            }
+                                            Alerta_transportadora2 := Text { horizontal-alignment:center;vertical-alignment:center;text: "Vazio!"; color: Theme.onSurface; font-size: 20px;}
+                                          
+                                        }
+                                    }
+
+                                }
+
+                                           
+                                
+
+                            }
+                            
+
+
+            }
+        }
 
              HorizontalBox {
             alignment: center;
-            GridBox {
+
+          
+
+           
+      Envio :=     GridBox {visible: false;
                 width: 90%;
                 VerticalLayout {
                     Text {
@@ -645,6 +763,13 @@ callback  calcular_frete();
                                             input <=> remetente_cidade;
                                              
                                         }
+                                        InputField {
+                                             width: 30%;
+                                            texto: "Telefone";
+                                            max_lenght: 47;
+                                            input <=> remetente_telefone;
+                                             
+                                        }
                                          
                                      
                                     }
@@ -678,12 +803,13 @@ callback  calcular_frete();
                                             width: 30%;
                                             texto: "Nome do cliente";
                                             max_lenght: 30;
-                                             
+                                            input <=> destinatario_nome;
                                         }
                                         InputField {
                                              width: 30%;
                                             texto: "Cpf do cliente";
                                             max_lenght: 47;
+                                            input <=> destinatario_cpf;
                                             
                                         }
 
@@ -691,6 +817,7 @@ callback  calcular_frete();
                                              width: 30%;
                                             texto: "Cep";
                                             max_lenght: 47;
+                                            input <=> destinatario_cep;
                                              
                                         }
                                     }
@@ -700,6 +827,7 @@ callback  calcular_frete();
                                              width: 30%;
                                             texto: "Endereço";
                                             max_lenght: 47;
+                                            input <=> destinatario_endereco;
                                              
                                         }
                                         
@@ -707,6 +835,7 @@ callback  calcular_frete();
                                              width: 30%;
                                             texto: "Numero";
                                             max_lenght: 47;
+                                            input <=> destinatario_numero;
                                              
                                         }
                                         
@@ -714,6 +843,7 @@ callback  calcular_frete();
                                              width: 30%;
                                             texto: "Estado Abrev";
                                             max_lenght: 47;
+                                            input <=> destinatario_estado;
                                              
                                         }
                                     }
@@ -724,8 +854,15 @@ callback  calcular_frete();
                                              width: 30%;
                                             texto: "Cidade";
                                             max_lenght: 47;
-                                             
+                                            input <=>destinatario_cidade;
                                         }
+                                         InputField {
+                                             width: 30%;
+                                            texto: "Telefone";
+                                            max_lenght: 47;
+                                            input <=>destinatario_telefone;
+                                        }
+                                        
                                         
                                      
                                     }
@@ -759,6 +896,7 @@ callback  calcular_frete();
                                                 width: 20%;
                                             max_lenght: 47;
                                             texto: "Tamanho";
+                                            input <=> pacote_height;
                                              
                                             }
                                             InputField {
@@ -766,19 +904,20 @@ callback  calcular_frete();
                                                 width: 20%;
                                                 max_lenght: 47;
                                                 texto: "Altura";
+                                                input <=> pacote_width;
                                                 
                                             }
                                             InputField {
                                                 width: 20%;
                                                 max_lenght: 47;
                                                 texto: "Largura";
-                                                
+                                                input <=> pacote_largura;
                                             }
                                             InputField {
                                                 width: 20%;
                                                 max_lenght: 47;
                                                 texto: "Peso";
-                                                
+                                                input <=> pacote_peso;
                                             }
                                         }
                                         
@@ -789,27 +928,26 @@ callback  calcular_frete();
                                                 width: 20%;
                                             max_lenght: 47;
                                             texto: "Nome do produto";
-                                             
+                                             input <=> pacote_nome_produto;
                                             }
                                             InputField {
                                                 
                                                 width: 20%;
                                                 max_lenght: 47;
                                                 texto: "Quantidade";
-                                                
+                                                input <=> pacote_quantidade;
                                             }
                                             InputField {
                                                 width: 20%;
                                                 max_lenght: 47;
                                                 texto: "Preço";
+                                                input <=> pacote_preco;
                                                 
                                             }
                                             
                                         }
 
-                                          
 
-                                        
 
                                         VerticalLayout {
                                             spacing: Theme.spacing;
@@ -833,7 +971,10 @@ callback  calcular_frete();
                                                             
                                                                 texto: "Voltar";
                                                                 
-                                                                 
+                                                                 clicked => {
+                                                                    Novo_envio.visible=false;
+                                                                    Envio_menu.visible=true;
+                                                                 }
                                                             }
                                                         }
 
@@ -853,9 +994,11 @@ callback  calcular_frete();
                             Container {
                                 cor: Theme.surface;
                                 VerticalBox {
-                                    alignment: start;
+               
                                     padding: Theme.spacing;
-                                    Text {
+                                   VerticalBox {
+                                    alignment: end;
+                                     Text {
                                         text: "Opções de Serviço";
                                         color: Theme.onSurface;
                                         font-weight: 800;
@@ -865,14 +1008,52 @@ callback  calcular_frete();
                                                 width: 20%;
                                                 max_lenght: 47;
                                                 texto: "Seguro";
-                                                
+                                                input <=> pacote_seguro;
                                             }
                                             // width: 50%;
                                             height: 20px;
-                                    SideButton {
-                                                texto: "Concluir";
-                                                
+
+
+                                            HorizontalBox {
+                                                CheckBox {toggled => {
+                                                    aviso_recebimento = self.checked ? true : false;
+                                                     
+                                                }}
+                                                Text {text: "Aviso de Recebimento"; color:Theme.onSurface; font-size: Theme.fontSizeBody;}
                                             }
+                                             HorizontalBox {
+                                                CheckBox {toggled => {
+                                                        own_hand = self.checked ? true : false;
+                                                    }
+                                                }
+                                                Text {text: "Entrega exclusiva para o Destinatario"; color:Theme.onSurface; font-size: Theme.fontSizeBody;}
+                                            }
+                                             HorizontalBox {
+                                                CheckBox {toggled => {
+                                                    entrega_reversa = self.checked ? true : false;
+                                                }}
+                                                Text {text: "Entrega Reversa"; color:Theme.onSurface; font-size: Theme.fontSizeBody;}
+                                            }
+                                        
+                                           
+                                   }
+                                   
+                                   VerticalBox {
+                                    alignment: end;
+                                     SideButton {
+                                                texto: "Concluir";
+                                                clicked => {
+                                                   
+                                                    servico_entrega = selected_transportadora.id;
+                                                    adicionar_carrinho();
+                                                    load_carrinho();
+                                                     Novo_envio.visible=false;
+                                                     Envio_menu.visible=true;
+                                                     
+                                                }
+                                                
+                                            } 
+                                   }
                                             
                           
                                      
