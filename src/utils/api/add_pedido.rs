@@ -3,11 +3,7 @@ use reqwest::header;
 use serde::{Deserialize, Serialize};
 use dotenv::dotenv;
 use std::env;
-
-use slint::VecModel;
-use slint::Model;
-use slint::ModelRc;
-use crate::{AppWindow,Carrinho};
+use crate::{AppWindow};
 
 
 #[derive(Debug, Serialize)]
@@ -22,7 +18,7 @@ struct CartRequest {
     service: u32,
     agency: Option<u32>,
     from: Address,
-    to: Address,
+    to: Address,    
     products: Vec<Products>,
     volumes: Vec<Volume>,
     options: CartOptions,
@@ -62,17 +58,17 @@ struct CartOptions {
 #[derive(Debug, Deserialize)]
 struct CartResponse {
     id: String,
-    protocol: String,
+    // protocol: String,
     // service_id: u32,
     // agency_id: Option<u32>,
     // contract: Option<String>,
     // service_code: Option<String>,
     // quote: f64,
-    price: f64,
+    // price: f64,
     // coupon: Option<f64>,
     // discount: f64,
-    delivery_min: u32,
-    delivery_max: u32,
+    // delivery_min: u32,
+    // delivery_max: u32,
     // status: String,
     // reminder: Option<String>,
     // insurance_value: f64,

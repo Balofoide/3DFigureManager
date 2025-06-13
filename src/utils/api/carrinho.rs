@@ -65,13 +65,18 @@ pub fn get_carrinho(ui: &AppWindow) {
                 .and_then(|p| p.as_f64())
                 .unwrap_or(0.0);
 
-                 
+                 let figure = item.get("products")
+                    .and_then(|t| t.get("name"))
+                    .and_then(|n| n.as_str())
+                    .unwrap_or("")
+                    .to_string();
+
                 // Criando struct com todos os campos
                 let carrinho = Carrinho {
                     nome_cliente_carrinho: nome_cliente.clone().into(),
                     id_pedido: id_pedido.clone().into(),
                     transportadora: transportadora.clone().into(),
-                    figure: "".to_string().into(), // Pode ser preenchido depois
+                    figure: figure.clone().into(),
                     preco:preco as f32,
                 };
 
@@ -79,6 +84,7 @@ pub fn get_carrinho(ui: &AppWindow) {
                 println!("id: {}", id_pedido);
                 println!("transportadora: {}", transportadora);
                 println!("preco: {}", preco);
+                println!("figure: {}", figure);
 
                 add_carrinho(&ui, carrinho);
             }

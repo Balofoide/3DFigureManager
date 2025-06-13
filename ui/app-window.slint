@@ -4,7 +4,7 @@ import {Button, ComboBox, LineEdit,VerticalBox, HorizontalBox, GridBox, ListView
 import { dashboard_screen, dashboard-screen } from "screens/dashboard.slint";
 import { calculator_screen } from "screens/product_calculator.slint";
 import { estoque_screen} from "screens/estoque.slint";
-import { Database, Impressoras, Estoque-Database,Calculo_Entrega,Carrinho} from "shared.slint";
+import { Database, Impressoras, Estoque-Database,Calculo_Entrega,Carrinho, Etiqueta } from "shared.slint";
 import { printer-screen } from "screens/printer.slint";
 import {settings_screen} from "screens/settings.slint";
 import { envio_screen } from "screens/envio.slint";
@@ -55,6 +55,7 @@ export component AppWindow inherits Window {
     in-out property <[Estoque-Database]> estoque_database;
     in-out property <[Calculo-Entrega]> calculo_entrega_database;
     in-out property <[Carrinho]> carrinho_database;
+    in-out property <[Etiqueta]> etiquetas_database;
 
     in-out property <string> estoque_material;
     in-out property <string> estoque_quantidade;
@@ -150,8 +151,11 @@ export component AppWindow inherits Window {
     in-out property <bool> aviso_recebimento;
     in-out property <bool> own_hand;
     in-out property <bool> entrega_reversa;
-
     in-out property <string> servico_entrega;
+    
+    in-out property <string> id_pedido;
+
+    callback finalizar_envio();
 
     callback calcular_preco();
     callback registrar_cliente();
@@ -666,6 +670,13 @@ export component AppWindow inherits Window {
                                     servico_entrega <=> servico_entrega;
                                     remetente_telefone <=> remetente_telefone;
                                     destinatario_telefone <=> destinatario_telefone;
+                                    id_pedido <=> id_pedido;
+                                    etiquetas_database <=> etiquetas_database;
+                                    
+                                    finalizar_envio => {
+                                        finalizar_envio();
+                                    
+                                    }
                                     calcular_frete => {
                                         calcular_frete();
                                     }

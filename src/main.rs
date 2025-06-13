@@ -14,9 +14,12 @@ use utils::impressora_handle::{
 };
 use crate::utils::api::carrinho::get_carrinho;
 use crate::utils::api::add_pedido::inserir_carrinho;
+use crate::utils::api::etiquetas::get_etiqueta;
 use utils::sell_calculator::{atualizar_filamento, calcular_venda, total_vendas};
 use utils::api::frete::{resetar_transportadora, calcular_frete};
 use utils::settings_handle::{load_settings, load_tema, registrar_settings};
+use utils::api::finalizar_pedido::finalizar_pedido;
+
 use i_slint_backend_winit::WinitWindowAccessor;
 slint::include_modules!();
 
@@ -45,6 +48,7 @@ fn initialize_ui(ui: &AppWindow) -> Result<(), Box<dyn Error>> {
     load_settings(ui).expect("Erro ao carregar Settings");
     load_price(ui).expect("erro ao carregar preco do filamento");
     vendas_mes(ui).expect("erro ao somar vendas do mês");
+    get_etiqueta(ui);
     get_carrinho(ui);
     // clock(ui);
     ui.set_vendas_total(total_vendas(ui));
@@ -244,6 +248,15 @@ fn register_callbacks(ui: &AppWindow) {
             if let Some(ui) = ui_handle.upgrade() {
                 inserir_carrinho(&ui);
                 get_carrinho(&ui);
+            }
+        }
+    });
+
+    ui.on_finalizar_envio({
+        let ui_handle = ui.as_weak();
+        move || {
+            if let Some(ui) = ui_handle.upgrade() {
+                finalizar_pedido(&ui);
             }
         }
     });
